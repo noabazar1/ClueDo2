@@ -8,13 +8,14 @@ namespace ClueDo.ModelsLogic
         internal void AddGame()
         {
             IsBusy = true;
-            Game game= new (SelectedGameSize);
-            game.SetDocument(OnComplete);
+            currentGame = new();
+            currentGame.IsHost = true;
+            currentGame.SetDocument(OnComplete);
         }
         private void OnComplete(Task task)
         {
             IsBusy = false;
-            OnGameAdded?.Invoke(this, task.IsCompletedSuccessfully);
+            OnGameAdded?.Invoke(this, currentGame!);
         }
     }
 }

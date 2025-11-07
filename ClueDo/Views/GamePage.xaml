@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="ClueDo.Views.GamePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:ClueDo.ViewModels"
+    Title="GamePage"
+    x:DataType="vm:GamePageVM">
+    <VerticalStackLayout>
+        <Label HorizontalOptions="Center" Text="{Binding OpponentName}" />
+        <Label HorizontalOptions="Center" Text="{Binding MyName}" />
+    </VerticalStackLayout>
+</ContentPage>

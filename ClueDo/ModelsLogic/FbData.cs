@@ -4,7 +4,7 @@ using ClueDo.Models;
 
 namespace ClueDo.ModelsLogic
 {
-    partial class FbData:FbDataModel
+    public partial class FbData:FbDataModel
     {
         public override async void CreateUserWithEmailAndPasswordAsync(string email, string password, string name, Action<System.Threading.Tasks.Task> OnComplete)
         {

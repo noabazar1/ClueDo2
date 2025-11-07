@@ -4,14 +4,15 @@ using ClueDo.Models;
 
 namespace ClueDo.ModelsLogic
 {
-    internal class Game:GameModel
+    public class Game:GameModel
     {
-        internal Game(GameSize selectedGameSize)
+        internal Game()
         {
             HostName = new User().Name;
-            RowSize = selectedGameSize.Size;
             Created = DateTime.Now;
         }
+
+        public override string OpponentName => IsHost ? GuestName : HostName;
 
         public override void SetDocument(Action<System.Threading.Tasks.Task> OnComplete)
         {

@@ -4,7 +4,7 @@ using Plugin.CloudFirestore;
 
 namespace ClueDo.Models
 {
-    abstract class FbDataModel
+    public abstract class FbDataModel
     {
         protected FirebaseAuthClient facl;
         protected IFirestore fs;
