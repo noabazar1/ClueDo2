@@ -16,21 +16,30 @@ namespace ClueDo.ViewModels
         public string OpponentName => game.OpponentName;
         public GamePageVM(Game game)
         {
+            game.OnGameChanged += OnGameChanged;
             this.game = game;
-            if (!game.IsHost)
-            {
-                game.GuestName = MyName;
-                game.IsFull = true;
-                game.SetDocument(OnComplete);
-            }
+            if (!game.IsHostUser)
+                game.UpdateGuestUser(OnComplete);
         }
-
+        private void OnGameChanged(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(OpponentName));
+        }
         private void OnComplete(Task task)
         {
             if (!task.IsCompletedSuccessfully)
-            {
-                Toast.Make(Strings.JoinGameError, CommunityToolkit.Maui.Core);
-            }
+                Toast.Make(Strings.JoinGameError, CommunityToolkit.Maui.Core.ToastDuration.Long, 14);
+
+        }
+
+        internal void AddSnapshotListener()
+        {
+            game.AddSnapshotListener();
+        }
+
+        internal void RemoveSnapshotListener()
+        {
+            game.RemoveSnapshotListener();
         }
     }
 }

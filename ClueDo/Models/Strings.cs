@@ -15,6 +15,7 @@
         public const string Email = "Email";
         public const string Register = "Register";
         public const string Login = "Login";
-        public static string JoinGameError = "Error joining game";
+        public const string JoinGameError = "Error joining game";
+        public const string GameDeleted = "Game Deleted";
     }
 }

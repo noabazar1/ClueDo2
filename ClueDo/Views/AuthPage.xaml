@@ -13,70 +13,70 @@
             WidthRequest="400"
             HeightRequest="400"
             CornerRadius="20">
-            <Grid RowDefinitions="Auto,Auto,Auto,Auto, Auto">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto">
                 <Label
-            Margin="15"
-            FontSize="40"
-            HorizontalOptions="Center"
-            Text="{Binding UserStateAction}"
-            TextColor="White" 
-            FontAttributes="Bold"
-            />
-                <Grid IsVisible="{Binding IsRegistered, Converter={StaticResource invertBoolConvert}}" Grid.Row="1" Margin="15,0,15,25">
-                    <Border>
-                        <Entry Placeholder="{x:Static m:Strings.Name}" Text="{Binding Name}" TextColor="White"/>
-                    </Border>
-                </Grid>
-                <Grid Grid.Row="2" Margin="15,0,15,25">
-                    <Border>
-                        <Entry
-                    Keyboard="Email"
-                    Placeholder="{x:Static m:Strings.Email}"
-                    Text="{Binding Email}" 
-                    TextColor="White"/>
-                    </Border>
-                </Grid>
-                <Grid Grid.Row="3" Margin="15,0,15,25">
-                    <Border>
-                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
-                            <Entry
-                        IsPassword="{Binding IsPassword}"
-                        Placeholder="{x:Static m:Strings.Password}"
-                        ReturnType="Done"
-                        Text="{Binding Password}" 
+                    Margin="15"
+                    FontSize="40"
+                    HorizontalOptions="Center"
+                    Text="{Binding UserStateAction}"
+                    TextColor="White" 
+                    FontAttributes="Bold"
+                />
+            <Grid IsVisible="{Binding IsRegistered, Converter={StaticResource invertBoolConvert}}" Grid.Row="1" Margin="15,0,15,25">
+                <Border>
+                    <Entry Placeholder="{x:Static m:Strings.Name}" Text="{Binding Name}" TextColor="White"/>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="2" Margin="15,0,15,25">
+                <Border>
+                    <Entry
+                        Keyboard="Email"
+                        Placeholder="{x:Static m:Strings.Email}"
+                        Text="{Binding Email}" 
                         TextColor="White"/>
-                            <Button
-                        BackgroundColor="Transparent"
-                        BorderWidth="0"
-                        Command="{Binding ToggleIsPasswordCommand}"
-                        FontFamily="MaterialSymbols"
-                        FontSize="24"
-                        HorizontalOptions="End"
-                        Style="{StaticResource IconButtonStyle}"
-                        Text="{Binding IsPassword, Converter={StaticResource passwordIconConvert}}"
-                        TextColor="Olive"
-                        VerticalOptions="Center"
-                        WidthRequest="80" />
-                        </Grid>
-                    </Border>
-                    <Label Text="{x:Static m:Strings.Password}" />
-                </Grid>
-                <Button
-            Command="{Binding AuthCommand}"
-            CornerRadius="8"
-            FontSize="18"
-            HeightRequest="50"
-            Text="{Binding UserStateAction}"
-            TextColor="White"
-            BackgroundColor="#003c00"
-            Grid.Row="4"
-            Margin="15,0,15,0">
-                    <Button.ImageSource>
-                        <FontImageSource Glyph="{StaticResource IconApp_registration}">
-                            <FontImageSource.FontFamily>MaterialSymbols</FontImageSource.FontFamily>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="3" Margin="15,0,15,25">
+                <Border>
+                    <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                        <Entry
+                            IsPassword="{Binding IsPassword}"
+                            Placeholder="{x:Static m:Strings.Password}"
+                            ReturnType="Done"
+                            Text="{Binding Password}" 
+                            TextColor="White"/>
+                        <Button
+                            BackgroundColor="Transparent"
+                            BorderWidth="0"
+                            Command="{Binding ToggleIsPasswordCommand}"
+                            FontFamily="MaterialSymbols"
+                            FontSize="24"
+                            HorizontalOptions="End"
+                            Style="{StaticResource IconButtonStyle}"
+                            Text="{Binding IsPassword, Converter={StaticResource passwordIconConvert}}"
+                            TextColor="Olive"
+                            VerticalOptions="Center"
+                            WidthRequest="80" />
+                    </Grid>
+                </Border>
+                <Label Text="{x:Static m:Strings.Password}" />
+            </Grid>
+            <Button
+                Command="{Binding AuthCommand}"
+                CornerRadius="8"
+                FontSize="18"
+                HeightRequest="50"
+                Text="{Binding UserStateAction}"
+                TextColor="White"
+                BackgroundColor="#003c00"
+                Grid.Row="4"
+                Margin="15,0,15,0">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="{StaticResource IconApp_registration}">
+                        <FontImageSource.FontFamily>MaterialSymbols</FontImageSource.FontFamily>
                         </FontImageSource>
-                    </Button.ImageSource>
-                </Button>
+                </Button.ImageSource>
+            </Button>
             </Grid>
         </Frame>
     </VerticalStackLayout>

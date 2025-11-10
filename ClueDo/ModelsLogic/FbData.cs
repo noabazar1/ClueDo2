@@ -20,6 +20,16 @@ namespace ClueDo.ModelsLogic
             dr.SetAsync(obj).ContinueWith(OnComplete);
             return dr.Id;
         }
+        public override async void UpdateFields(string collectonName, string id, Dictionary<string,object> dict, Action<Task> OnComplete)
+        {
+            IDocumentReference dr = fs.Collection(collectonName).Document(id);
+            await dr.UpdateAsync(dict).ContinueWith(OnComplete);
+        }
+        public override async void DeleteDocument(string collectonName, string id, Action<Task> OnComplete)
+        {
+            IDocumentReference dr = fs.Collection(collectonName).Document(id);
+            await dr.DeleteAsync().ContinueWith(OnComplete);
+        }
 
         public override string GetErrorMessage(string errMessage)
         {
@@ -45,6 +55,22 @@ namespace ClueDo.ModelsLogic
             //else
             //    retMessage = errMessage;
             return retMessage;
+        }
+        public override IListenerRegistration AddSnapshotListener(string collectonName, Plugin.CloudFirestore.QuerySnapshotHandler OnChange)
+        {
+            ICollectionReference dr = fs.Collection(collectonName);
+            return dr.AddSnapshotListener(OnChange);
+        }
+        public override IListenerRegistration AddSnapshotListener(string collectonName, string id, Plugin.CloudFirestore.DocumentSnapshotHandler OnChange)
+        {
+            IDocumentReference dr = fs.Collection(collectonName).Document(id);
+            return dr.AddSnapshotListener(OnChange);
+        }
+        public async void GetDocumentsWhereEqualTo(string collectonName, string fName, object fValue, Action<IQuerySnapshot> OnComplete)
+        {
+            ICollectionReference dr = fs.Collection(collectonName);
+            IQuerySnapshot qs = await dr.WhereEqualsTo(fName, fValue).GetAsync();
+            OnComplete(qs);
         }
     }
 }
