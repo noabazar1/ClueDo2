@@ -7,7 +7,11 @@
     Title="GamePage"
     x:DataType="vm:GamePageVM">
     <VerticalStackLayout>
-        <Label HorizontalOptions="Center" Text="{Binding OpponentName}" />
-        <Label HorizontalOptions="Center" Text="{Binding MyName}" />
+        <Label HorizontalOptions="Center" Text="{Binding Player1}"/>
+        <Label HorizontalOptions="Center" Text="{Binding Player2}"/>
+        <Label HorizontalOptions="Center" Text="{Binding Player3}"/>
+        <Label HorizontalOptions="Center" Text="{Binding Player4}"/>
+        <Label HorizontalOptions="Center" Text="{Binding Player5}"/>
+        <Label HorizontalOptions="Center" Text="{Binding MyName}"/>
     </VerticalStackLayout>
 </ContentPage>

@@ -19,8 +19,17 @@ namespace ClueDo.Models
         public DateTime Created { get; set; }
         public int RowSize { get; set; }
         public bool IsFull { get; set; }
+        
         [Ignored]
-        public abstract string OpponentName { get; }
+        public abstract string Player1 { get; }
+        [Ignored]
+        public abstract string Player2 { get; }
+        [Ignored]
+        public abstract string Player3 { get; }
+        [Ignored]
+        public abstract string Player4 { get; }
+        [Ignored]
+        public abstract string Player5 { get; }
         [Ignored]
         public string MyName { get; set; } = new User().Name;
         [Ignored]

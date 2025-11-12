@@ -8,7 +8,12 @@ namespace ClueDo.ViewModels
     {
         private readonly Game game;
         public string MyName => game.MyName;
-        public string OpponentName => game.OpponentName;
+        public string Player1 => game.Player1;
+        public string Player2 => game.Player2;
+        public string Player3 => game.Player3;
+        public string Player4 => game.Player4;
+        public string Player5 => game.Player5;
+
         public GamePageVM(Game game)
         {
             game.OnGameChanged += OnGameChanged;
@@ -19,7 +24,11 @@ namespace ClueDo.ViewModels
 
         private void OnGameChanged(object? sender, EventArgs e)
         {
-            OnPropertyChanged(nameof(OpponentName));
+            OnPropertyChanged(nameof(Player1));
+            OnPropertyChanged(nameof(Player2));
+            OnPropertyChanged(nameof(Player3));
+            OnPropertyChanged(nameof(Player4));
+            OnPropertyChanged(nameof(Player5));
         }
 
         private void OnComplete(Task task)

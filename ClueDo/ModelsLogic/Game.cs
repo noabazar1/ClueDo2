@@ -6,7 +6,11 @@ namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
     {
-        public override string OpponentName => IsHostUser ? GuestName : HostName;
+        public override string Player1 => IsHostUser ? GuestName : HostName;
+        public override string Player2 => IsHostUser ? GuestName : HostName;
+        public override string Player3 => IsHostUser ? GuestName : HostName;
+        public override string Player4 => IsHostUser ? GuestName : HostName;
+        public override string Player5 => IsHostUser ? GuestName : HostName;
 
         public Game(GameSize selectedGameSize)
         {
