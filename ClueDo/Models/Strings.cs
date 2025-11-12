@@ -17,5 +17,7 @@
         public const string Login = "Login";
         public const string JoinGameError = "Error joining game";
         public const string GameDeleted = "Game Deleted";
+        public const string AppTitle = "Clue Do";
+        public const string AddGame = "Add Game";
     }
 }

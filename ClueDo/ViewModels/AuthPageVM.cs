@@ -4,14 +4,14 @@ using ClueDo.ModelsLogic;
 
 namespace ClueDo.ViewModels
 {
-    internal partial class AuthPageVM : ObservableObject
+    public partial class AuthPageVM : ObservableObject
     {
         private readonly User user = new();
         public ICommand AuthCommand { get; }
         public ICommand ToggleIsPasswordCommand { get; }
         public bool IsBusy => user.IsBusy;
         public bool IsRegistered => user.IsRegistered;
-        public string UserStateAction => user.IsRegistered?Strings.Login:Strings.Register;
+        public string UserStateAction => user.IsRegistered ? Strings.Login : Strings.Register;
         public string Name
         {
             get => user.Name;
@@ -36,7 +36,7 @@ namespace ClueDo.ViewModels
                 }
             }
         }
-        
+
         public string Password
         {
             get => user.Password;
@@ -53,28 +53,28 @@ namespace ClueDo.ViewModels
 
         public AuthPageVM()
         {
-            AuthCommand = user.IsRegistered? new Command(Login, CanAuth): new Command(Register, CanAuth);
+            AuthCommand = user.IsRegistered ? new Command(Login, CanAuth) : new Command(Register, CanAuth);
             ToggleIsPasswordCommand = new Command(ToggleIsPassword);
             user.OnAuthComplete += OnAuthComplete;
         }
 
-       
+
 
         private void OnAuthComplete(object? sender, bool success)
         {
             OnPropertyChanged(nameof(IsBusy));
-            if (success && Application.Current!=null)
+            if (success && Application.Current != null)
             {
                 MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    Application.Current.MainPage = new MainPage();
+                    Application.Current.MainPage = new AppShell();
                 });
             }
         }
 
         private bool CanAuth()
         {
-            return user.IsValid() ;
+            return user.IsValid();
         }
         private void Login()
         {
@@ -92,6 +92,5 @@ namespace ClueDo.ViewModels
             IsPassword = !IsPassword;
             OnPropertyChanged(nameof(IsPassword));
         }
-        
     }
 }

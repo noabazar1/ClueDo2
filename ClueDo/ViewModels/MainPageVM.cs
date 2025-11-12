@@ -6,14 +6,15 @@ using ClueDo.Views;
 
 namespace ClueDo.ViewModels
 {
-    internal class MainPageVM:ObservableObject
+    public partial class MainPageVM : ObservableObject
     {
-        private Games games = new();
-        public bool IsBusy => games.IsBusy;
-        public  IList<GameSize>? GameSizes { get => games.GameSizes; set => games.GameSizes = value; }
-        public GameSize SelectedGameSize { get => games.SelectedGameSize; set => games.SelectedGameSize = value; }
+        private readonly Games games = new();
         public ICommand AddGameCommand => new Command(AddGame);
-        public Game SelectedItem
+        public bool IsBusy => games.IsBusy;
+        public ObservableCollection<GameSize>? GameSizes { get => games.GameSizes; set => games.GameSizes = value; }
+        public GameSize SelectedGameSize { get => games.SelectedGameSize; set => games.SelectedGameSize = value; }
+        public ObservableCollection<Game>? GamesList => games.GamesList;
+        public Game? SelectedItem
         {
             get => games.CurrentGame;
             set
@@ -33,12 +34,15 @@ namespace ClueDo.ViewModels
             games.AddGame();
             OnPropertyChanged(nameof(IsBusy));
         }
-        public IList<Game>? GamesList => games.GamesList;
         public MainPageVM()
         {
             games.OnGameAdded += OnGameAdded;
+            games.OnGamesChanged += OnGamesChanged;
         }
-
+        private void OnGamesChanged(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(GamesList));
+        }
         private void OnGameAdded(object? sender, Game game)
         {
             OnPropertyChanged(nameof(IsBusy));
@@ -46,6 +50,14 @@ namespace ClueDo.ViewModels
             {
                 Shell.Current.Navigation.PushAsync(new GamePage(game), true);
             });
+        }
+        public void AddSnapshotListener()
+        {
+            games.AddSnapshotListener();
+        }
+        public void RemoveSnapshotListener()
+        {
+            games.RemoveSnapshotListener();
         }
     }
 }

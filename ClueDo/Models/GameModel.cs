@@ -1,6 +1,6 @@
-﻿using Plugin.CloudFirestore.Attributes;
-using ClueDo.ModelsLogic;
+﻿using ClueDo.ModelsLogic;
 using Plugin.CloudFirestore;
+using Plugin.CloudFirestore.Attributes;
 
 namespace ClueDo.Models
 {
@@ -17,8 +17,9 @@ namespace ClueDo.Models
         public string HostName { get; set; } = string.Empty;
         public string GuestName { get; set; } = string.Empty;
         public DateTime Created { get; set; }
-        public int RowSize {  get; set; }
+        public int RowSize { get; set; }
         public bool IsFull { get; set; }
+        [Ignored]
         public abstract string OpponentName { get; }
         [Ignored]
         public string MyName { get; set; } = new User().Name;
@@ -27,8 +28,8 @@ namespace ClueDo.Models
         [Ignored]
         public bool IsHostUser { get; set; }
         public abstract void SetDocument(Action<System.Threading.Tasks.Task> OnComplete);
-        public abstract void AddSnapshotListener();
         public abstract void RemoveSnapshotListener();
+        public abstract void AddSnapshotListener();
         public abstract void DeleteDocument(Action<System.Threading.Tasks.Task> OnComplete);
     }
 }

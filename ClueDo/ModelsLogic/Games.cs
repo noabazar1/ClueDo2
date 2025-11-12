@@ -1,15 +1,16 @@
-﻿using ClueDo.Models;
+﻿using ClueDo.ModelsLogic;
 using CommunityToolkit.Maui.Alerts;
 using Plugin.CloudFirestore;
+using ClueDo.Models;
 
 namespace ClueDo.ModelsLogic
 {
-    internal class Games : GamesModel
+    public class Games : GamesModel
     {
-        internal void AddGame()
+        public void AddGame()
         {
             IsBusy = true;
-            currentGame = new()
+            currentGame = new(SelectedGameSize)
             {
                 IsHostUser = true
             };
@@ -21,7 +22,7 @@ namespace ClueDo.ModelsLogic
         {
             MainThread.InvokeOnMainThreadAsync(() =>
             {
-                Toast.Make(Strings.GameDeleted, CommunityToolkit.Maui.Core.ToastDuration.Short).Show();
+                Toast.Make(Strings.GameDeleted, CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
             });
         }
 
@@ -30,18 +31,36 @@ namespace ClueDo.ModelsLogic
             IsBusy = false;
             OnGameAdded?.Invoke(this, currentGame!);
         }
+        public Games()
+        {
+
+        }
+        public override void AddSnapshotListener()
+        {
+            ilr = fbd.AddSnapshotListener(Keys.GamesCollection, OnChange!);
+        }
+        public override void RemoveSnapshotListener()
+        {
+            ilr?.Remove();
+        }
         private void OnChange(IQuerySnapshot snapshot, Exception error)
         {
             fbd.GetDocumentsWhereEqualTo(Keys.GamesCollection, nameof(GameModel.IsFull), false, OnComplete);
         }
-        public override void AddSnapshotListener()
-        {
-            ilr = fbd.AddSnapshotListener(Keys.GamesCollection, OnChange?);
-        }
 
-        public override void RemoveSnapshotListener()
+        private void OnComplete(IQuerySnapshot qs)
         {
-            
+            GamesList!.Clear();
+            foreach (IDocumentSnapshot ds in qs.Documents)
+            {
+                Game? game = ds.ToObject<Game>();
+                if (game != null)
+                {
+                    game.Id = ds.Id;
+                    GamesList.Add(game);
+                }
+            }
+            OnGamesChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -1,28 +1,49 @@
-﻿using ClueDo.Models;
-using Plugin.CloudFirestore;
+﻿using Plugin.CloudFirestore;
+using System.Xml.Linq;
+using ClueDo.Models;
 
 namespace ClueDo.ModelsLogic
 {
-    public class Game:GameModel
+    public class Game : GameModel
     {
-        public Game()
-        {
-            HostName = new User().Name;
-            Created = DateTime.Now;
-        }
-
         public override string OpponentName => IsHostUser ? GuestName : HostName;
 
-
+        public Game(GameSize selectedGameSize)
+        {
+            HostName = new User().Name;
+            RowSize = selectedGameSize.Size;
+            Created = DateTime.Now;
+        }
+        public Game()
+        {
+        }
         public override void SetDocument(Action<Task> OnComplete)
         {
-           Id = fbd.SetDocument(this, Keys.GamesCollection, Id, OnComplete);
+            Id = fbd.SetDocument(this, Keys.GamesCollection, Id, OnComplete);
+        }
+
+        public void UpdateGuestUser(Action<Task> OnComplete)
+        {
+            IsFull = true;
+            GuestName = MyName;
+            UpdateFbJoinGame(OnComplete);
+        }
+
+        private void UpdateFbJoinGame(Action<Task> OnComplete)
+        {
+            Dictionary<string, object> dict = new()
+            {
+                { nameof(IsFull), IsFull },
+                { nameof(GuestName), GuestName }
+            };
+            fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
 
         public override void AddSnapshotListener()
         {
             ilr = fbd.AddSnapshotListener(Keys.GamesCollection, Id, OnChange);
         }
+
         public override void RemoveSnapshotListener()
         {
             ilr?.Remove();
@@ -44,22 +65,6 @@ namespace ClueDo.ModelsLogic
                 GuestName = updatedGame.GuestName;
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
             }
-        }
-        public void UpdateGuestUser(Action<Task> OnComplete)
-        {
-            IsFull = true;
-            GuestName = MyName;
-            UpdateFbJoinGame(OnComplete);
-        }
-
-        private void UpdateFbJoinGame(Action<Task> OnComplete)
-        {
-            Dictionary<string, object> dict = new()
-            {
-                {nameof(IsFull), IsFull },
-                {nameof(GuestName), GuestName},
-            };
-            fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
 
         public override void DeleteDocument(Action<Task> OnComplete)

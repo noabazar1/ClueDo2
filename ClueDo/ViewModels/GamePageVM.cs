@@ -1,17 +1,12 @@
-﻿using ClueDo.Models;
+﻿using CommunityToolkit.Maui.Alerts;
+using ClueDo.Models;
 using ClueDo.ModelsLogic;
-using CommunityToolkit.Maui.Alerts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClueDo.ViewModels
 {
-    internal class GamePageVM(Game game) : ObservableObject 
+    public partial class GamePageVM : ObservableObject
     {
-        private Game game = game;
+        private readonly Game game;
         public string MyName => game.MyName;
         public string OpponentName => game.OpponentName;
         public GamePageVM(Game game)
@@ -21,10 +16,12 @@ namespace ClueDo.ViewModels
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);
         }
+
         private void OnGameChanged(object? sender, EventArgs e)
         {
             OnPropertyChanged(nameof(OpponentName));
         }
+
         private void OnComplete(Task task)
         {
             if (!task.IsCompletedSuccessfully)
@@ -32,12 +29,12 @@ namespace ClueDo.ViewModels
 
         }
 
-        internal void AddSnapshotListener()
+        public void AddSnapshotListener()
         {
             game.AddSnapshotListener();
         }
 
-        internal void RemoveSnapshotListener()
+        public void RemoveSnapshotListener()
         {
             game.RemoveSnapshotListener();
         }

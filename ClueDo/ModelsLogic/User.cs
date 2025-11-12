@@ -4,15 +4,15 @@ using ClueDo.Models;
 
 namespace ClueDo.ModelsLogic
 {
-    internal class User : UserModel
+    public class User : UserModel
     {
         public override void Register()
         {
             IsBusy = true;
-            CurrentAction= Actions.Register;
+            CurrentAction = Actions.Register;
             fbd.CreateUserWithEmailAndPasswordAsync(Email, Password, Name, OnComplete);
         }
-        internal void Login()
+        public void Login()
         {
             IsBusy = true;
             fbd.SignInWithEmailAndPasswordAsync(Email, Password, OnComplete);
@@ -45,9 +45,6 @@ namespace ClueDo.ModelsLogic
                 Toast.Make(errMessage, ToastDuration.Long).Show();
             });
         }
-
-       
-
         private void SaveToPreferences()
         {
             Preferences.Set(Keys.NameKey, Name);
@@ -57,11 +54,8 @@ namespace ClueDo.ModelsLogic
 
         public override bool IsValid()
         {
-           return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email);
+            return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email);
         }
-
-        
-
         public User()
         {
             Name = Preferences.Get(Keys.NameKey, string.Empty);
