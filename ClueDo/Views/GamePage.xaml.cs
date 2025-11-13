@@ -1,5 +1,7 @@
 using ClueDo.ModelsLogic;
 using ClueDo.ViewModels;
+using System.Security.Cryptography.Xml;
+
 namespace ClueDo.Views;
 
 public partial class GamePage : ContentPage
@@ -8,10 +10,10 @@ public partial class GamePage : ContentPage
 	public GamePage(Game game)
 	{
 		InitializeComponent();
-		gpVM = new GamePageVM(game);
+        gpVM = new GamePageVM(game, grdBoard);
 		BindingContext = gpVM;
 	}
-	protected override void OnAppearing()
+    protected override void OnAppearing()
 	{
 		base.OnAppearing();
 		gpVM.AddSnapshotListener();

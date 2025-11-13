@@ -11,21 +11,19 @@
         <HorizontalStackLayout FlowDirection="LeftToRight">
             <Label
                 FontAttributes="Bold"
+                FontFamily="ClueFont"
                 FontSize="Medium"
                 Text="{x:Static m:Strings.AppTitle}"
                 VerticalTextAlignment="Center" />
         </HorizontalStackLayout>
     </Shell.TitleView>
     <VerticalStackLayout>
-        <Grid
-            Padding="5"
-            ColumnDefinitions="*,1.4*"
-            ColumnSpacing="5">
+        <Grid Padding="5" ColumnSpacing="5">
             <Button
-                Grid.Column="1"
                 Margin="10"
                 Command="{Binding AddGameCommand}"
                 FontSize="Body"
+                FontFamily="ClueFont"
                 HorizontalOptions="Fill"
                 Text="{x:Static m:Strings.AddGame}" />
         </Grid>
@@ -39,17 +37,14 @@
                                 Margin="20,0,0,0"
                                 FontAttributes="Bold"
                                 FontSize="20"
+                                FontFamily="ClueFont"
                                 HorizontalTextAlignment="Start"
                                 Text="{Binding HostName}" />
                             <Label
                                 Grid.Column="1"
                                 FontSize="20"
+                                FontFamily="ClueFont"
                                 Text="{Binding Created}" />
-                            <Label
-                                Grid.Column="2"
-                                FontSize="20"
-                                HorizontalOptions="Center"
-                                Text="{Binding RowSizeName}" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

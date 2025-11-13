@@ -12,7 +12,7 @@ namespace ClueDo.ModelsLogic
             CurrentAction = Actions.Register;
             fbd.CreateUserWithEmailAndPasswordAsync(Email, Password, Name, OnComplete);
         }
-        public void Login()
+        public override void Login()
         {
             IsBusy = true;
             fbd.SignInWithEmailAndPasswordAsync(Email, Password, OnComplete);

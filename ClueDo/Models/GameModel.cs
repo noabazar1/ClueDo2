@@ -17,7 +17,6 @@ namespace ClueDo.Models
         public string HostName { get; set; } = string.Empty;
         public string GuestName { get; set; } = string.Empty;
         public DateTime Created { get; set; }
-        public int RowSize { get; set; }
         public bool IsFull { get; set; }
         
         [Ignored]
@@ -33,12 +32,11 @@ namespace ClueDo.Models
         [Ignored]
         public string MyName { get; set; } = new User().Name;
         [Ignored]
-        public string RowSizeName => $"{RowSize} X {RowSize}";
-        [Ignored]
         public bool IsHostUser { get; set; }
         public abstract void SetDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void RemoveSnapshotListener();
         public abstract void AddSnapshotListener();
         public abstract void DeleteDocument(Action<System.Threading.Tasks.Task> OnComplete);
+        public abstract void InitGrid(Grid board);
     }
 }

@@ -1,6 +1,8 @@
-﻿using Plugin.CloudFirestore;
+﻿using ClueDo.Models;
+using ClueDo.Views;
+using CommunityToolkit.Maui.Alerts;
+using Plugin.CloudFirestore;
 using System.Xml.Linq;
-using ClueDo.Models;
 
 namespace ClueDo.ModelsLogic
 {
@@ -12,15 +14,12 @@ namespace ClueDo.ModelsLogic
         public override string Player4 => IsHostUser ? GuestName : HostName;
         public override string Player5 => IsHostUser ? GuestName : HostName;
 
-        public Game(GameSize selectedGameSize)
-        {
-            HostName = new User().Name;
-            RowSize = selectedGameSize.Size;
-            Created = DateTime.Now;
-        }
         public Game()
         {
+            HostName = new User().Name;
+            Created = DateTime.Now;
         }
+        
         public override void SetDocument(Action<Task> OnComplete)
         {
             Id = fbd.SetDocument(this, Keys.GamesCollection, Id, OnComplete);
@@ -69,11 +68,35 @@ namespace ClueDo.ModelsLogic
                 GuestName = updatedGame.GuestName;
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
             }
+            else
+            {
+                MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    Shell.Current.Navigation.PopAsync();
+                    Toast.Make(Strings.GameDeleted, CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
+                });
+            }
         }
 
         public override void DeleteDocument(Action<Task> OnComplete)
         {
             fbd.DeleteDocument(Keys.GamesCollection, Id, OnComplete);
+        }
+        public override void InitGrid(Grid board)
+        {
+            for (int i = 0; i < 15; i++)
+            {
+                board.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                board.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+            }
+            for (int i = 0; i < 15; i++)
+                for (int j = 0; j < 15; j++)
+                {
+                    board.Add(new IndexButton(i, j), j, i);
+                }
+            IndexButton white = new IndexButton(15, 11);
+            white.BackgroundColor = Colors.White;
+            board.Add(15, 11);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace ClueDo.ModelsLogic
         public void AddGame()
         {
             IsBusy = true;
-            currentGame = new(SelectedGameSize)
+            currentGame = new()
             {
                 IsHostUser = true
             };

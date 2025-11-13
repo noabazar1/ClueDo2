@@ -11,8 +11,6 @@ namespace ClueDo.ViewModels
         private readonly Games games = new();
         public ICommand AddGameCommand => new Command(AddGame);
         public bool IsBusy => games.IsBusy;
-        public ObservableCollection<GameSize>? GameSizes { get => games.GameSizes; set => games.GameSizes = value; }
-        public GameSize SelectedGameSize { get => games.SelectedGameSize; set => games.SelectedGameSize = value; }
         public ObservableCollection<Game>? GamesList => games.GamesList;
         public Game? SelectedItem
         {

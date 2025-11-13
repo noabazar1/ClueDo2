@@ -17,6 +17,7 @@
                 <Label
                     Margin="15"
                     FontSize="40"
+                    FontFamily="ClueFont"
                     HorizontalOptions="Center"
                     Text="{Binding UserStateAction}"
                     TextColor="White" 
@@ -24,7 +25,7 @@
                 />
             <Grid IsVisible="{Binding IsRegistered, Converter={StaticResource invertBoolConvert}}" Grid.Row="1" Margin="15,0,15,25">
                 <Border>
-                    <Entry Placeholder="{x:Static m:Strings.Name}" Text="{Binding Name}" TextColor="White"/>
+                        <Entry Placeholder="{x:Static m:Strings.Name}" Text="{Binding Name}" TextColor="White" FontFamily="ClueFont"/>
                 </Border>
             </Grid>
             <Grid Grid.Row="2" Margin="15,0,15,25">
@@ -33,7 +34,8 @@
                         Keyboard="Email"
                         Placeholder="{x:Static m:Strings.Email}"
                         Text="{Binding Email}" 
-                        TextColor="White"/>
+                        TextColor="White"
+                        FontFamily="ClueFont"/>
                 </Border>
             </Grid>
             <Grid Grid.Row="3" Margin="15,0,15,25">
@@ -44,12 +46,13 @@
                             Placeholder="{x:Static m:Strings.Password}"
                             ReturnType="Done"
                             Text="{Binding Password}" 
-                            TextColor="White"/>
+                            TextColor="White"
+                            FontFamily="ClueFont"/>
                         <Button
                             BackgroundColor="Transparent"
                             BorderWidth="0"
                             Command="{Binding ToggleIsPasswordCommand}"
-                            FontFamily="MaterialSymbols"
+                            FontFamily="ClueFont"                            
                             FontSize="24"
                             HorizontalOptions="End"
                             Style="{StaticResource IconButtonStyle}"
@@ -65,6 +68,7 @@
                 Command="{Binding AuthCommand}"
                 CornerRadius="8"
                 FontSize="18"
+                FontFamily="ClueFont"
                 HeightRequest="50"
                 Text="{Binding UserStateAction}"
                 TextColor="White"
