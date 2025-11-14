@@ -6,17 +6,8 @@
     xmlns:m="clr-namespace:ClueDo.Models"
     xmlns:vm="clr-namespace:ClueDo.ViewModels"
     x:DataType="vm:MainPageVM"
-    IsBusy="{Binding IsBusy}">
-    <Shell.TitleView>
-        <HorizontalStackLayout FlowDirection="LeftToRight">
-            <Label
-                FontAttributes="Bold"
-                FontFamily="ClueFont"
-                FontSize="Medium"
-                Text="{x:Static m:Strings.AppTitle}"
-                VerticalTextAlignment="Center" />
-        </HorizontalStackLayout>
-    </Shell.TitleView>
+    IsBusy="{Binding IsBusy}"
+    BackgroundImageSource="background.jpg">
     <VerticalStackLayout>
         <Grid Padding="5" ColumnSpacing="5">
             <Button
@@ -25,7 +16,8 @@
                 FontSize="Body"
                 FontFamily="ClueFont"
                 HorizontalOptions="Fill"
-                Text="{x:Static m:Strings.AddGame}" />
+                Text="{x:Static m:Strings.AddGame}" 
+                BackgroundColor="#003c00"/>
         </Grid>
         <ListView ItemsSource="{Binding GamesList}" SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>
@@ -39,12 +31,14 @@
                                 FontSize="20"
                                 FontFamily="ClueFont"
                                 HorizontalTextAlignment="Start"
-                                Text="{Binding HostName}" />
+                                Text="{Binding HostName}"
+                                TextColor="White"/>
                             <Label
                                 Grid.Column="1"
                                 FontSize="20"
                                 FontFamily="ClueFont"
-                                Text="{Binding Created}" />
+                                Text="{Binding Created}" 
+                                TextColor="White"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

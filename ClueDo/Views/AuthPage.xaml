@@ -5,11 +5,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:m="clr-namespace:ClueDo.Models"
     xmlns:vm="clr-namespace:ClueDo.ViewModels"
+    xmlns:s="c:\vs\clue\cluedo\resources\styles\mystyles.xaml"
     IsBusy="{Binding IsBusy}"
-    x:DataType="vm:AuthPageVM">
-    <VerticalStackLayout Padding="7" Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+    x:DataType="vm:AuthPageVM"
+    BackgroundImageSource="background.jpg">
+    <VerticalStackLayout Padding="7" Spacing="10" HorizontalOptions="Center" VerticalOptions="Center" >
         <Frame
-            BackgroundColor="#002800"
+            BackgroundColor="#003c00"
             WidthRequest="400"
             HeightRequest="400"
             CornerRadius="20">
@@ -23,32 +25,34 @@
                     TextColor="White" 
                     FontAttributes="Bold"
                 />
-            <Grid IsVisible="{Binding IsRegistered, Converter={StaticResource invertBoolConvert}}" Grid.Row="1" Margin="15,0,15,25">
-                <Border>
-                        <Entry Placeholder="{x:Static m:Strings.Name}" Text="{Binding Name}" TextColor="White" FontFamily="ClueFont"/>
-                </Border>
-            </Grid>
-            <Grid Grid.Row="2" Margin="15,0,15,25">
-                <Border>
-                    <Entry
+                <Grid IsVisible="{Binding IsRegistered, Converter={StaticResource invertBoolConvert}}" Grid.Row="1" Margin="15,0,15,25">
+                    <Border>
+                        <Entry Placeholder="{x:Static m:Strings.Name}" Text="{Binding Name}" TextColor="Black" FontFamily="ClueFont" BackgroundColor="White"/>
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="2" Margin="15,0,15,25">
+                    <Border>
+                        <Entry
                         Keyboard="Email"
                         Placeholder="{x:Static m:Strings.Email}"
                         Text="{Binding Email}" 
-                        TextColor="White"
-                        FontFamily="ClueFont"/>
-                </Border>
-            </Grid>
-            <Grid Grid.Row="3" Margin="15,0,15,25">
-                <Border>
-                    <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
-                        <Entry
+                        TextColor="Black"
+                        FontFamily="ClueFont"
+                        BackgroundColor="White"/>
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="3" Margin="15,0,15,25">
+                    <Border>
+                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                            <Entry
                             IsPassword="{Binding IsPassword}"
                             Placeholder="{x:Static m:Strings.Password}"
                             ReturnType="Done"
                             Text="{Binding Password}" 
-                            TextColor="White"
-                            FontFamily="ClueFont"/>
-                        <Button
+                            TextColor="Black"
+                            FontFamily="ClueFont"
+                            BackgroundColor="White"/>
+                            <Button
                             BackgroundColor="Transparent"
                             BorderWidth="0"
                             Command="{Binding ToggleIsPasswordCommand}"
@@ -59,12 +63,12 @@
                             Text="{Binding IsPassword, Converter={StaticResource passwordIconConvert}}"
                             TextColor="Olive"
                             VerticalOptions="Center"
-                            WidthRequest="80" />
-                    </Grid>
-                </Border>
-                <Label Text="{x:Static m:Strings.Password}" />
-            </Grid>
-            <Button
+                            WidthRequest="80" 
+                            />
+                        </Grid>
+                    </Border>
+                </Grid>
+                <Button
                 Command="{Binding AuthCommand}"
                 CornerRadius="8"
                 FontSize="18"
@@ -72,15 +76,17 @@
                 HeightRequest="50"
                 Text="{Binding UserStateAction}"
                 TextColor="White"
-                BackgroundColor="#003c00"
+                BackgroundColor="#E4BD40"
                 Grid.Row="4"
                 Margin="15,0,15,0">
-                <Button.ImageSource>
-                    <FontImageSource Glyph="{StaticResource IconApp_registration}">
-                        <FontImageSource.FontFamily>MaterialSymbols</FontImageSource.FontFamily>
-                        </FontImageSource>
-                </Button.ImageSource>
-            </Button>
+                    <Button.Shadow>
+                        <Shadow Brush="Black"
+                                Offset="5,5"
+                                Opacity="0.8"
+                                Radius="18"
+                        />
+                    </Button.Shadow>
+                </Button>
             </Grid>
         </Frame>
     </VerticalStackLayout>

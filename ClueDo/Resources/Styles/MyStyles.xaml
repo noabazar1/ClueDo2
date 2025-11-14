@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Style
+        x:Key="IconButtonStyle"
+        BasedOn="{StaticResource baseButton}"
+        TargetType="Button">
+        <Setter Property="BorderColor" Value="{AppThemeBinding Dark=White, Light=Black}" />
+    </Style>
+    <Style TargetType="Border">
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Stroke" Value="Olive" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 8" />
+    </Style>
+</ResourceDictionary>

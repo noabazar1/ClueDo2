@@ -19,5 +19,7 @@
         public const string GameDeleted = "Game Deleted";
         public const string AppTitle = "Clue Do";
         public const string AddGame = "Add Game";
+        public const string WaitMessage = "Opponent's turn";
+        public const string PlayMessage = "Your turn";
     }
 }

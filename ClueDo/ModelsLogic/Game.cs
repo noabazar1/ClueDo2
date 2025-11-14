@@ -13,6 +13,10 @@ namespace ClueDo.ModelsLogic
         public override string Player3 => IsHostUser ? GuestName : HostName;
         public override string Player4 => IsHostUser ? GuestName : HostName;
         public override string Player5 => IsHostUser ? GuestName : HostName;
+        protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
+    new GameStatus { CurrentStatus = GameStatus.Status.Play } :
+    new GameStatus { CurrentStatus = GameStatus.Status.Wait };
+
 
         public Game()
         {
@@ -94,9 +98,127 @@ namespace ClueDo.ModelsLogic
                 {
                     board.Add(new IndexButton(i, j), j, i);
                 }
-            IndexButton white = new IndexButton(15, 11);
+            //Mrs.White Start
+            IndexButton white = new IndexButton(9, 14);
             white.BackgroundColor = Colors.White;
-            board.Add(15, 11);
+            board.Add(white, 9, 14);
+            //Reverend Green Start
+            IndexButton green = new IndexButton(4, 14);
+            green.BackgroundColor = Color.FromArgb("#46865D");
+            board.Add(green, 5, 14);
+            //Mrs.Peacock Start
+            IndexButton blue = new IndexButton(0, 10);
+            blue.BackgroundColor = Color.FromArgb("#2961184");
+            board.Add(blue, 0, 10);
+            //Professor Plum Start
+            IndexButton plum = new IndexButton(0, 4);
+            plum.BackgroundColor = Color.FromArgb("#7C436E");
+            board.Add(plum, 0, 4);
+            //Miss Scarlet Start
+            IndexButton red = new IndexButton(10, 0);
+            red.BackgroundColor = Color.FromArgb("#B0251A");
+            board.Add(red, 10, 0);
+            //Colonel Mustard Start
+            IndexButton yellow = new IndexButton(14, 5);
+            yellow.BackgroundColor = Color.FromArgb("#D9AD3B");
+            board.Add(yellow, 14, 5);
+            //Kitchen
+            for (int i = 11; i < 15; i++)
+                for (int j = 11; j < 15; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
+            //Conservatory
+            for (int i = 0; i < 4; i++) 
+                for (int j = 11; j < 15; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
+            //Study
+            for (int i = 0; i < 5; i++)
+                for (int j = 0; j < 3; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
+            //Lounge
+            for (int i = 11; i < 15; i++)
+                for (int j = 0; j < 4; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
+            //Dining Room
+            for (int i = 10; i < 15; i++)
+                for (int j = 6; j < 10; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
+            //Ballroom
+            for (int i = 6; i < 9; i++)
+            {
+                int j = 14;
+                var btn = new IndexButton(i, j);
+                btn.IsEnabled = false;
+                btn.BackgroundColor = Colors.LightCoral;
+                board.Add(btn, i, j);
+            }
+            for (int i = 5; i < 10; i++)
+                for (int j = 11; j < 14; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
+            for (int i = 5; i < 9; i++)
+            {
+                int j = 10;
+                var btn = new IndexButton(i, j);
+                btn.IsEnabled = false;
+                btn.BackgroundColor = Colors.LightCoral;
+                board.Add(btn, i, j);
+            }
+            //Billiard Room
+            for (int i = 0; i < 4; i++)
+                for (int j = 8; j < 10; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
+            //Library
+            for (int i = 0; i < 5; i++)
+                for (int j = 5; j < 7; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
+            //Hall
+            for (int i = 6; i < 10; i++)
+                for (int j = 0; j < 5; j++)
+                {
+                    var btn = new IndexButton(i, j);
+                    btn.IsEnabled = false;
+                    btn.BackgroundColor = Colors.LightCoral;
+                    board.Add(btn, i, j);
+                }
         }
     }
 }

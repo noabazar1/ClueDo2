@@ -13,12 +13,16 @@ namespace ClueDo.Models
         [Ignored]
         public EventHandler? OnGameDeleted;
         [Ignored]
+        protected abstract GameStatus Status { get; }
+        [Ignored]
+        public string StatusMessage => Status.StatusMessage;
         public string Id { get; set; } = string.Empty;
         public string HostName { get; set; } = string.Empty;
         public string GuestName { get; set; } = string.Empty;
         public DateTime Created { get; set; }
         public bool IsFull { get; set; }
-        
+        public bool IsHostTurn { get; set; } = false;
+
         [Ignored]
         public abstract string Player1 { get; }
         [Ignored]

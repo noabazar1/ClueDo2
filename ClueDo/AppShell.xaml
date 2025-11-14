@@ -5,7 +5,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:ClueDo"
     Shell.FlyoutBehavior="Disabled"
-    Title="ClueDo">
+    Title="ClueDo"
+    Shell.BackgroundColor="#003c00"
+    Shell.TitleColor="White">
 
     <ShellContent
         Title="Home"

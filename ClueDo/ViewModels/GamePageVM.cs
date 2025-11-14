@@ -13,6 +13,7 @@ namespace ClueDo.ViewModels
         public string Player3 => game.Player3;
         public string Player4 => game.Player4;
         public string Player5 => game.Player5;
+        public string StatusMessage => game.StatusMessage;
 
         public GamePageVM(Game game, Grid board)
         {
