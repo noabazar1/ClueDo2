@@ -12,5 +12,10 @@ namespace ClueDo.Models
         public enum Status { Wait, Play }
         public Status CurrentStatus { get; set; } = Status.Wait;
         public string StatusMessage => msgs[(int)CurrentStatus];
+
+        internal void UpdateStatus()
+        {
+
+        }
     }
 }

@@ -8,7 +8,9 @@ namespace ClueDo.Models
     {
         protected FbData fbd = new();
         protected IListenerRegistration? ilr;
+        protected GameStatus _status = new();
         protected string[,]? gameBoard;
+        protected string? nextPlay;
         protected IndexButton[,]? gameButtons;
         [Ignored]
         public EventHandler? OnGameChanged;
@@ -24,7 +26,7 @@ namespace ClueDo.Models
         public DateTime Created { get; set; }
         public bool IsFull { get; set; }
         public bool IsHostTurn { get; set; } = false;
-
+        public List<int> Move { get; set; } = [-1, -1];
         [Ignored]
         public abstract string Player1 { get; }
         [Ignored]
@@ -45,7 +47,10 @@ namespace ClueDo.Models
         public abstract void DeleteDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void Init(Grid board);
         protected abstract void OnButtonClicked(object? sender, EventArgs e);
-        protected abstract void Play(int rowIndex, int columnIndx);
+        protected abstract void Play(int rowIndex, int columnIndx, bool MyMove);
+        protected abstract void UpdateStatus();
+        protected abstract void UpdateFbMove();
+
 
     }
 }

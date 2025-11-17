@@ -22,7 +22,12 @@ namespace ClueDo.ModelsLogic
             HostName = new User().Name;
             Created = DateTime.Now;
         }
-        
+        protected override void UpdateStatus()
+        {
+            _status.CurrentStatus = IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
+                GameStatus.Status.Play : GameStatus.Status.Wait;
+        }
+
         public override void SetDocument(Action<Task> OnComplete)
         {
             Id = fbd.SetDocument(this, Keys.GamesCollection, Id, OnComplete);
@@ -70,6 +75,8 @@ namespace ClueDo.ModelsLogic
                 IsFull = updatedGame.IsFull;
                 GuestName = updatedGame.GuestName;
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
+                if (_status.CurrentStatus == GameStatus.Status.Play)
+                    Play(updatedGame.Move[0], updatedGame.Move[1], false);
             }
             else
             {
@@ -99,8 +106,8 @@ namespace ClueDo.ModelsLogic
             for (int i = 0; i < rowSize; i++)
                 for (int j = 0; j < rowSize; j++)
                 {
-                    btn = gameButtons[i, j];
                     btn = new IndexButton(i, j);
+                    gameButtons[i, j] = btn;
                     btn.Clicked += OnButtonClicked;
                     board.Add(btn, j, i);
                 }
@@ -229,13 +236,33 @@ namespace ClueDo.ModelsLogic
 
         protected override void OnButtonClicked(object? sender, EventArgs e)
         {
-            IndexButton? btn = sender as IndexButton;
-            Play(btn!.RowIndex, btn.ColumnIndex);
+            if(_status.CurrentStatus == GameStatus.Status.Play)
+            {
+                IndexButton? btn = sender as IndexButton;
+                if(btn!.Text == string.Empty)
+                    Play(btn!.RowIndex, btn.ColumnIndex, true);
+            }
         }
-
-        protected override void Play(int rowIndex, int columnIndex)
+        protected override void Play(int rowIndex, int columnIndex, bool MyMove)
         {
-            gameButtons![rowIndex, columnIndex].Text = IsHostUser ? "X" : "O";
+            gameButtons![rowIndex, columnIndex].Text = nextPlay;
+            gameBoard![rowIndex, columnIndex] = nextPlay!;
+            if (MyMove)
+            {
+                Move[0] = rowIndex;
+                Move[1] = columnIndex;
+                _status.UpdateStatus();
+                UpdateFbMove();
+            }
+        }
+        protected override void UpdateFbMove()
+        {
+            Dictionary<string, object> dict = new()
+            {
+                {nameof(Move), Move },
+                {nameof(IsHostTurn), IsHostTurn }
+            };
+            fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
     }
 }

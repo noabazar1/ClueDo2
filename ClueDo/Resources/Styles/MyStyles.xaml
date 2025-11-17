@@ -6,10 +6,4 @@
         TargetType="Button">
         <Setter Property="BorderColor" Value="{AppThemeBinding Dark=White, Light=Black}" />
     </Style>
-    <Style TargetType="Border">
-        <Setter Property="Padding" Value="10" />
-        <Setter Property="Stroke" Value="Olive" />
-        <Setter Property="StrokeThickness" Value="1" />
-        <Setter Property="StrokeShape" Value="RoundRectangle 8" />
-    </Style>
 </ResourceDictionary>
