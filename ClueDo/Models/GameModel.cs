@@ -8,6 +8,8 @@ namespace ClueDo.Models
     {
         protected FbData fbd = new();
         protected IListenerRegistration? ilr;
+        protected string[,]? gameBoard;
+        protected IndexButton[,]? gameButtons;
         [Ignored]
         public EventHandler? OnGameChanged;
         [Ignored]
@@ -41,6 +43,9 @@ namespace ClueDo.Models
         public abstract void RemoveSnapshotListener();
         public abstract void AddSnapshotListener();
         public abstract void DeleteDocument(Action<System.Threading.Tasks.Task> OnComplete);
-        public abstract void InitGrid(Grid board);
+        public abstract void Init(Grid board);
+        protected abstract void OnButtonClicked(object? sender, EventArgs e);
+        protected abstract void Play(int rowIndex, int columnIndx);
+
     }
 }

@@ -17,7 +17,7 @@
                 FontFamily="ClueFont"
                 HorizontalOptions="Fill"
                 Text="{x:Static m:Strings.AddGame}" 
-                BackgroundColor="#003c00"/>
+                BackgroundColor="#E4BD40"/>
         </Grid>
         <ListView ItemsSource="{Binding GamesList}" SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>

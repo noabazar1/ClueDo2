@@ -18,7 +18,7 @@ namespace ClueDo.ViewModels
         public GamePageVM(Game game, Grid board)
         {
             game.OnGameChanged += OnGameChanged;
-            game.InitGrid(board);
+            game.Init(board);
             this.game = game;
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);

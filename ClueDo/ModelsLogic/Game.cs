@@ -1,8 +1,7 @@
 ﻿using ClueDo.Models;
-using ClueDo.Views;
 using CommunityToolkit.Maui.Alerts;
 using Plugin.CloudFirestore;
-using System.Xml.Linq;
+using System.ComponentModel.Design.Serialization;
 
 namespace ClueDo.ModelsLogic
 {
@@ -86,17 +85,24 @@ namespace ClueDo.ModelsLogic
         {
             fbd.DeleteDocument(Keys.GamesCollection, Id, OnComplete);
         }
-        public override void InitGrid(Grid board)
+        public override void Init(Grid board)
         {
-            for (int i = 0; i < 15; i++)
+            int rowSize = 15;
+            gameBoard = new string[rowSize, rowSize];
+            gameButtons = new IndexButton[rowSize, rowSize];
+            IndexButton btn;
+            for (int i = 0; i < rowSize; i++)
             {
                 board.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
                 board.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             }
-            for (int i = 0; i < 15; i++)
-                for (int j = 0; j < 15; j++)
+            for (int i = 0; i < rowSize; i++)
+                for (int j = 0; j < rowSize; j++)
                 {
-                    board.Add(new IndexButton(i, j), j, i);
+                    btn = gameButtons[i, j];
+                    btn = new IndexButton(i, j);
+                    btn.Clicked += OnButtonClicked;
+                    board.Add(btn, j, i);
                 }
             //Mrs.White Start
             IndexButton white = new IndexButton(9, 14);
@@ -123,102 +129,113 @@ namespace ClueDo.ModelsLogic
             yellow.BackgroundColor = Color.FromArgb("#D9AD3B");
             board.Add(yellow, 14, 5);
             //Kitchen
-            for (int i = 11; i < 15; i++)
-                for (int j = 11; j < 15; j++)
+            for (int i = 11; i < rowSize; i++)
+                for (int j = 11; j < rowSize; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var kitchen = new IndexButton(i, j);
+                    kitchen.IsEnabled = false;
+                    kitchen.BackgroundColor = Colors.LightCoral;
+                    board.Add(kitchen, i, j);
                 }
             //Conservatory
             for (int i = 0; i < 4; i++) 
-                for (int j = 11; j < 15; j++)
+                for (int j = 11; j < rowSize; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var Conservatory = new IndexButton(i, j);
+                    Conservatory.IsEnabled = false;
+                    Conservatory.BackgroundColor = Colors.LightCoral;
+                    board.Add(Conservatory, i, j);
                 }
             //Study
             for (int i = 0; i < 5; i++)
                 for (int j = 0; j < 3; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var Study = new IndexButton(i, j);
+                    Study.IsEnabled = false;
+                    Study.BackgroundColor = Colors.LightCoral;
+                    board.Add(Study, i, j);
                 }
             //Lounge
-            for (int i = 11; i < 15; i++)
+            for (int i = 11; i < rowSize; i++)
                 for (int j = 0; j < 4; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var Lounge = new IndexButton(i, j);
+                    Lounge.IsEnabled = false;
+                    Lounge.BackgroundColor = Colors.LightCoral;
+                    board.Add(Lounge, i, j);
                 }
             //Dining Room
-            for (int i = 10; i < 15; i++)
+            for (int i = 10; i < rowSize; i++)
                 for (int j = 6; j < 10; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var DiningRoom = new IndexButton(i, j);
+                    DiningRoom.IsEnabled = false;
+                    DiningRoom.BackgroundColor = Colors.LightCoral;
+                    board.Add(DiningRoom, i, j);
                 }
             //Ballroom
             for (int i = 6; i < 9; i++)
             {
                 int j = 14;
-                var btn = new IndexButton(i, j);
-                btn.IsEnabled = false;
-                btn.BackgroundColor = Colors.LightCoral;
-                board.Add(btn, i, j);
+                var Ballroom = new IndexButton(i, j);
+                Ballroom.IsEnabled = false;
+                Ballroom.BackgroundColor = Colors.LightCoral;
+                board.Add(Ballroom, i, j);
             }
             for (int i = 5; i < 10; i++)
                 for (int j = 11; j < 14; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var Ballroom = new IndexButton(i, j);
+                    Ballroom.IsEnabled = false;
+                    Ballroom.BackgroundColor = Colors.LightCoral;
+                    board.Add(Ballroom, i, j);
                 }
             for (int i = 5; i < 9; i++)
             {
                 int j = 10;
-                var btn = new IndexButton(i, j);
-                btn.IsEnabled = false;
-                btn.BackgroundColor = Colors.LightCoral;
-                board.Add(btn, i, j);
+                var Ballroom = new IndexButton(i, j);
+                Ballroom.IsEnabled = false;
+                Ballroom.BackgroundColor = Colors.LightCoral;
+                board.Add(Ballroom, i, j);
             }
             //Billiard Room
             for (int i = 0; i < 4; i++)
                 for (int j = 8; j < 10; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var BilliardRoom = new IndexButton(i, j);
+                    BilliardRoom.IsEnabled = false;
+                    BilliardRoom.BackgroundColor = Colors.LightCoral;
+                    board.Add(BilliardRoom, i, j);
                 }
             //Library
             for (int i = 0; i < 5; i++)
                 for (int j = 5; j < 7; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var Library = new IndexButton(i, j);
+                    Library.IsEnabled = false;
+                    Library.BackgroundColor = Colors.LightCoral;
+                    board.Add(Library, i, j);
                 }
             //Hall
             for (int i = 6; i < 10; i++)
                 for (int j = 0; j < 5; j++)
                 {
-                    var btn = new IndexButton(i, j);
-                    btn.IsEnabled = false;
-                    btn.BackgroundColor = Colors.LightCoral;
-                    board.Add(btn, i, j);
+                    var Hall = new IndexButton(i, j);
+                    Hall.IsEnabled = false;
+                    Hall.BackgroundColor = Colors.LightCoral;
+                    board.Add(Hall, i, j);
                 }
+        }
+
+        protected override void OnButtonClicked(object? sender, EventArgs e)
+        {
+            IndexButton? btn = sender as IndexButton;
+            Play(btn!.RowIndex, btn.ColumnIndex);
+        }
+
+        protected override void Play(int rowIndex, int columnIndex)
+        {
+            gameButtons![rowIndex, columnIndex].Text = IsHostUser ? "X" : "O";
         }
     }
 }
