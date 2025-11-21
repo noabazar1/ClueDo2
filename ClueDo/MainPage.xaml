@@ -17,7 +17,14 @@
                 FontFamily="ClueFont"
                 HorizontalOptions="Fill"
                 Text="{x:Static m:Strings.AddGame}" 
-                BackgroundColor="#E4BD40"/>
+                BackgroundColor="#E4BD40">
+            <Button.Shadow>
+                <Shadow Brush="Black"
+                Offset="5,5"
+                Opacity="0.8"
+                Radius="18" />
+            </Button.Shadow> 
+            </Button>
         </Grid>
         <ListView ItemsSource="{Binding GamesList}" SelectedItem="{Binding SelectedItem}">
             <ListView.ItemTemplate>

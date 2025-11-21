@@ -1,17 +1,19 @@
 ﻿using ClueDo.Models;
+using ClueDo.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using Plugin.CloudFirestore;
+using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 
 namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
     {
-        public override string Player1 => IsHostUser ? GuestName : HostName;
-        public override string Player2 => IsHostUser ? GuestName : HostName;
-        public override string Player3 => IsHostUser ? GuestName : HostName;
-        public override string Player4 => IsHostUser ? GuestName : HostName;
-        public override string Player5 => IsHostUser ? GuestName : HostName;
+        public override string Player1 => Players.Count > 0 ? Players[0] : "";
+        public override string Player2 => Players.Count > 1 ? Players[1] : "";
+        public override string Player3 => Players.Count > 2 ? Players[2] : "";
+        public override string Player4 => Players.Count > 3 ? Players[3] : "";
+        public override string Player5 => Players.Count > 4 ? Players[4] : "";
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
@@ -35,8 +37,8 @@ namespace ClueDo.ModelsLogic
 
         public void UpdateGuestUser(Action<Task> OnComplete)
         {
-            IsFull = true;
-            GuestName = MyName;
+            IsFull = Players.Count > 5;
+            Players.Add(MyName);
             UpdateFbJoinGame(OnComplete);
         }
 
@@ -45,7 +47,7 @@ namespace ClueDo.ModelsLogic
             Dictionary<string, object> dict = new()
             {
                 { nameof(IsFull), IsFull },
-                { nameof(GuestName), GuestName }
+                { nameof(Players), Players }
             };
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
@@ -77,6 +79,7 @@ namespace ClueDo.ModelsLogic
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
                 if (_status.CurrentStatus == GameStatus.Status.Play)
                     Play(updatedGame.Move[0], updatedGame.Move[1], false);
+                
             }
             else
             {
@@ -236,12 +239,10 @@ namespace ClueDo.ModelsLogic
 
         protected override void OnButtonClicked(object? sender, EventArgs e)
         {
-            if(_status.CurrentStatus == GameStatus.Status.Play)
-            {
-                IndexButton? btn = sender as IndexButton;
-                if(btn!.Text == string.Empty)
-                    Play(btn!.RowIndex, btn.ColumnIndex, true);
-            }
+            IndexButton btn = (IndexButton)sender;
+            PlayerPiece.X = btn.RowIndex;
+            PlayerPiece.Y = btn.ColumnIndex;
+            Play(btn.RowIndex, btn.ColumnIndex, true);
         }
         protected override void Play(int rowIndex, int columnIndex, bool MyMove)
         {
@@ -264,5 +265,6 @@ namespace ClueDo.ModelsLogic
             };
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
+        
     }
 }

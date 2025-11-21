@@ -19,6 +19,12 @@
             HorizontalOptions="Center" 
             VerticalOptions="Center"
         />
+        <Frame
+            WidthRequest="20"
+            HeightRequest="20"
+            CornerRadius="300"
+            BackgroundColor="Red"
+            AbsoluteLayout.LayoutBounds="{Binding PlayerPiece, Converter={StaticResource PiecePositionConverter}}"/>
         <Label HorizontalOptions="Center" Text="{Binding MyName}" FontFamily="ClueFont" TextColor="White"/>
     </VerticalStackLayout>
 </ContentPage>

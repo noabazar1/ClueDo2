@@ -27,16 +27,18 @@ namespace ClueDo.Models
         public bool IsFull { get; set; }
         public bool IsHostTurn { get; set; } = false;
         public List<int> Move { get; set; } = [-1, -1];
+        public GamePiece? PlayerPiece { get; set; }
         [Ignored]
-        public abstract string Player1 { get; }
+        public abstract string? Player1 { get; }
         [Ignored]
-        public abstract string Player2 { get; }
+        public abstract string? Player2 { get; }
         [Ignored]
-        public abstract string Player3 { get; }
+        public abstract string? Player3 { get; }
         [Ignored]
-        public abstract string Player4 { get; }
+        public abstract string? Player4 { get; }
         [Ignored]
-        public abstract string Player5 { get; }
+        public abstract string? Player5 { get; }
+        public List<string> Players { get; set; } = new List<string>();
         [Ignored]
         public string MyName { get; set; } = new User().Name;
         [Ignored]
