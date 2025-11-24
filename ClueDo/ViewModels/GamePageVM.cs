@@ -53,7 +53,7 @@ namespace ClueDo.ViewModels
                 Board.PlayerPiece.Y = newY;
             }
         }
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public new event PropertyChangedEventHandler? PropertyChanged;
         public void AddSnapshotListener()
         {
             game.AddSnapshotListener();

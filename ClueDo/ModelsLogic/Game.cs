@@ -49,6 +49,7 @@ namespace ClueDo.ModelsLogic
                 { nameof(IsFull), IsFull },
                 { nameof(Players), Players }
             };
+            action = Actions.Changed;
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
 
@@ -66,7 +67,10 @@ namespace ClueDo.ModelsLogic
         private void OnComplete(Task task)
         {
             if (task.IsCompletedSuccessfully)
-                OnGameDeleted?.Invoke(this, EventArgs.Empty);
+                if (action == Actions.Deleted)
+                    OnGameDeleted?.Invoke(this, EventArgs.Empty);
+                else
+                    OnGameChanged?.Invoke(this, EventArgs.Empty); //לבדוק בפרויקט של לירון מה אמור להיות כתוב
         }
 
         private void OnChange(IDocumentSnapshot? snapshot, Exception? error)
@@ -77,9 +81,10 @@ namespace ClueDo.ModelsLogic
                 IsFull = updatedGame.IsFull;
                 GuestName = updatedGame.GuestName;
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
+                IsHostTurn = updatedGame.IsHostTurn;
+                UpdateStatus();
                 if (_status.CurrentStatus == GameStatus.Status.Play)
                     Play(updatedGame.Move[0], updatedGame.Move[1], false);
-                
             }
             else
             {
@@ -253,8 +258,11 @@ namespace ClueDo.ModelsLogic
                 Move[0] = rowIndex;
                 Move[1] = columnIndex;
                 _status.UpdateStatus();
+                IsHostTurn = !IsHostTurn;
                 UpdateFbMove();
             }
+            else
+                OnGameChanged?.Invoke(this, EventArgs.Empty);
         }
         protected override void UpdateFbMove()
         {
