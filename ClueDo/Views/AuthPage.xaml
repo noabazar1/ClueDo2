@@ -13,7 +13,7 @@
         <Frame
             BackgroundColor="#003c00"
             WidthRequest="400"
-            HeightRequest="400"
+            HeightRequest="450"
             CornerRadius="20">
             <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto">
                 <Label

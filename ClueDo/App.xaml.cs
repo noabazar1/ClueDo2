@@ -7,7 +7,6 @@ namespace ClueDo
         public App()
         {
             InitializeComponent();
-
             MainPage = new AuthPage();
         }
     }

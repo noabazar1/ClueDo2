@@ -17,9 +17,9 @@ namespace ClueDo.ModelsLogic
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
+        public override GamePiece PlayerPiece { get; } = new GamePiece();
 
-
-        public Game()
+    public Game()
         {
             HostName = new User().Name;
             Created = DateTime.Now;
@@ -37,8 +37,8 @@ namespace ClueDo.ModelsLogic
 
         public void UpdateGuestUser(Action<Task> OnComplete)
         {
-            IsFull = Players.Count > 5;
             Players.Add(MyName);
+            IsFull = Players.Count >= 5; 
             UpdateFbJoinGame(OnComplete);
         }
 
@@ -244,10 +244,13 @@ namespace ClueDo.ModelsLogic
 
         protected override void OnButtonClicked(object? sender, EventArgs e)
         {
-            IndexButton btn = (IndexButton)sender;
-            PlayerPiece.X = btn.RowIndex;
-            PlayerPiece.Y = btn.ColumnIndex;
-            Play(btn.RowIndex, btn.ColumnIndex, true);
+            IndexButton? btn = sender as IndexButton;
+            if (btn != null)
+            {
+                PlayerPiece.X = btn.RowIndex;
+                PlayerPiece.Y = btn.ColumnIndex;
+                Play(btn.RowIndex, btn.ColumnIndex, true);
+            }            
         }
         protected override void Play(int rowIndex, int columnIndex, bool MyMove)
         {

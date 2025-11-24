@@ -6,4 +6,5 @@
     xmlns:cnv="clr-namespace:ClueDo.Converters">
     <cnv:BoolToIconConverter x:Key="passwordIconConvert" />
     <cnv:InvertBoolConverter x:Key="invertBoolConvert" />
+    <cnv:PiecePositionConverter x:Key="piecePositionConverter" />
 </ResourceDictionary>

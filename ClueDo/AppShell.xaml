@@ -14,7 +14,7 @@
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
     <ShellContent
-        Title=""
+        Title="Empty"
         ContentTemplate="{DataTemplate v:GamePage}" 
         />
 </Shell>
