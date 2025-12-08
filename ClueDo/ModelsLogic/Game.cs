@@ -17,7 +17,7 @@ namespace ClueDo.ModelsLogic
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
-        public override GamePiece PlayerPiece { get; } = new GamePiece();
+        public GamePiece PlayerPiece { get; } = new GamePiece();
 
     public Game()
         {

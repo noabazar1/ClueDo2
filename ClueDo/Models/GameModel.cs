@@ -29,7 +29,6 @@ namespace ClueDo.Models
         public bool IsFull { get; set; }
         public bool IsHostTurn { get; set; } = false;
         public List<int> Move { get; set; } = [-1, -1];
-        public abstract GamePiece? PlayerPiece { get; } 
         [Ignored]
         public abstract string? Player1 { get; }
         [Ignored]

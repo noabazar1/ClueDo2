@@ -24,7 +24,8 @@
             HeightRequest="20"
             CornerRadius="300"
             BackgroundColor="Red"
-            AbsoluteLayout.LayoutBounds="{Binding PlayerPiece, Converter={StaticResource PiecePositionConverter}}"/>
+            Grid.Row ="{Binding PlayerPiece.X}"
+            Grid.Column="{Binding PlayerPiece.Y}"/>
         <Label HorizontalOptions="Center" Text="{Binding MyName}" FontFamily="ClueFont" TextColor="White"/>
     </VerticalStackLayout>
 </ContentPage>
