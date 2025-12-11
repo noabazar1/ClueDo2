@@ -7,10 +7,11 @@ namespace ClueDo.ModelsLogic
 {
     public class Games : GamesModel
     {
+        Grid board = new Grid();
         public void AddGame()
         {
             IsBusy = true;
-            currentGame = new()
+            currentGame = new(board)
             {
                 IsHostUser = true
             };

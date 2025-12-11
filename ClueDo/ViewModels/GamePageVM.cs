@@ -16,11 +16,10 @@ namespace ClueDo.ViewModels
         public string Player5 => game.Player5;
         public string StatusMessage => game.StatusMessage;
         public GameBoard Board { get; set; } = new GameBoard();
-        public GamePiece PlayerPiece { get; set; }
         public GamePageVM(Game game, Grid board)
         {
+            _ = new Game(board);
             game.OnGameChanged += OnGameChanged;
-            PlayerPiece = new GamePiece { X = 0, Y = 0, Color = "Red" };
             game.Init(board);
             this.game = game;
             if (!game.IsHostUser)

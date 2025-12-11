@@ -1,9 +1,6 @@
 ﻿using ClueDo.Models;
-using ClueDo.ViewModels;
 using CommunityToolkit.Maui.Alerts;
 using Plugin.CloudFirestore;
-using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 
 namespace ClueDo.ModelsLogic
 {
@@ -17,12 +14,53 @@ namespace ClueDo.ModelsLogic
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
-        public GamePiece PlayerPiece { get; } = new GamePiece();
+        private readonly Grid grdBoard;
+        private readonly IndexButton btnItem = new(0,0);
+        public Player Player = new();
 
-    public Game()
+        public Game(Grid grdBoard)
         {
             HostName = new User().Name;
             Created = DateTime.Now;
+            this.grdBoard = grdBoard;
+            Player.GridIndex = grdBoard.Children.Count;
+            grdBoard.Add(btnItem, btnItem.Column, btnItem.Row);
+        }
+        public Game()
+        {
+            grdBoard = new Grid();
+        }
+        private readonly Color[] colors =
+        [
+            Color.FromArgb("#B0251A"),
+            Color.FromArgb("#D9AD3B"),
+            Color.FromArgb("#46865D"),
+            Color.FromArgb("#2961184"),
+            Color.FromArgb("#7C436E"),
+            Colors.White
+        ];
+        public Color AssignColor()
+        {
+            if (colors.Length > 0)
+                return RemoveFromArr(colors, 0)[0];
+            return
+                null!;
+                 
+        }
+        public Color[] RemoveFromArr(Color[] arr, int index)
+        {
+            if (index < 0 || index >= arr.Length)
+                return arr;
+            Color[] newArr = new Color[arr.Length - 1];
+            for (int i = 0, j = 0; i < arr.Length; i++)
+            {
+                if (i != index)
+                {
+                    newArr[j] = arr[i];
+                    j++;
+                }
+            }
+            return newArr;
         }
         protected override void UpdateStatus()
         {
@@ -37,6 +75,9 @@ namespace ClueDo.ModelsLogic
 
         public void UpdateGuestUser(Action<Task> OnComplete)
         {
+            Player.Name = MyName;
+            Player.Color = AssignColor();
+            Player.SetStartByColor();
             Players.Add(MyName);
             IsFull = Players.Count >= 5; 
             UpdateFbJoinGame(OnComplete);
@@ -125,23 +166,23 @@ namespace ClueDo.ModelsLogic
             board.Add(white, 9, 14);
             //Reverend Green Start
             IndexButton green = new IndexButton(4, 14);
-            green.BackgroundColor = Color.FromArgb("#46865D");
+            green.BackgroundColor = Color.FromArgb(Keys.Green);
             board.Add(green, 5, 14);
             //Mrs.Peacock Start
             IndexButton blue = new IndexButton(0, 10);
-            blue.BackgroundColor = Color.FromArgb("#2961184");
+            blue.BackgroundColor = Color.FromArgb(Keys.Blue);
             board.Add(blue, 0, 10);
             //Professor Plum Start
             IndexButton plum = new IndexButton(0, 4);
-            plum.BackgroundColor = Color.FromArgb("#7C436E");
+            plum.BackgroundColor = Color.FromArgb(Keys.Plum);
             board.Add(plum, 0, 4);
             //Miss Scarlet Start
             IndexButton red = new IndexButton(10, 0);
-            red.BackgroundColor = Color.FromArgb("#B0251A");
+            red.BackgroundColor = Color.FromArgb(Keys.Red);
             board.Add(red, 10, 0);
             //Colonel Mustard Start
             IndexButton yellow = new IndexButton(14, 5);
-            yellow.BackgroundColor = Color.FromArgb("#D9AD3B");
+            yellow.BackgroundColor = Color.FromArgb(Keys.Mustard);
             board.Add(yellow, 14, 5);
             //Kitchen
             for (int i = 11; i < rowSize; i++)
@@ -247,19 +288,15 @@ namespace ClueDo.ModelsLogic
             IndexButton? btn = sender as IndexButton;
             if (btn != null)
             {
-                PlayerPiece.X = btn.RowIndex;
-                PlayerPiece.Y = btn.ColumnIndex;
-                Play(btn.RowIndex, btn.ColumnIndex, true);
-            }            
+                Play(btn.Row, btn.Column, true);
+            }
         }
         protected override void Play(int rowIndex, int columnIndex, bool MyMove)
         {
-            gameButtons![rowIndex, columnIndex].Text = nextPlay;
-            gameBoard![rowIndex, columnIndex] = nextPlay!;
             if (MyMove)
             {
-                Move[0] = rowIndex;
-                Move[1] = columnIndex;
+                grdBoard.RemoveAt(Player.GridIndex);
+                grdBoard.Add(Player, columnIndex, rowIndex);
                 _status.UpdateStatus();
                 IsHostTurn = !IsHostTurn;
                 UpdateFbMove();
@@ -276,6 +313,5 @@ namespace ClueDo.ModelsLogic
             };
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
-        
     }
 }

@@ -8,12 +8,13 @@ namespace ClueDo.Models
 {
     public class IndexButton : Button
     {
-        public int RowIndex { get; set; } 
-        public int ColumnIndex { get; set; } 
-        public IndexButton(int rowIndex, int columnIndex)
+        public int Row { get; set; } 
+        public int Column { get; set; }
+        public int GridIndex { get; set; }
+        public IndexButton(int row, int columnIndex)
         {
-            RowIndex = rowIndex;
-            ColumnIndex = columnIndex;
+            Row = row;
+            Column = columnIndex;
             HeightRequest = 25;
             WidthRequest = HeightRequest;
             BackgroundColor = Color.FromArgb("#F7D275");

@@ -12,8 +12,7 @@ namespace ClueDo.Models
         protected IListenerRegistration? ilr;
         protected GameStatus _status = new();
         protected string[,]? gameBoard;
-        protected string? nextPlay;
-        protected IndexButton[,]? gameButtons;
+        protected IndexButton[,]? gameButtons = new IndexButton[15, 15];
         [Ignored]
         public EventHandler? OnGameChanged;
         [Ignored]
