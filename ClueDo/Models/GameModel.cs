@@ -43,6 +43,7 @@ namespace ClueDo.Models
         public string MyName { get; set; } = new User().Name;
         [Ignored]
         public bool IsHostUser { get; set; }
+        public string DiceResult { get; set; } = string.Empty;
         public abstract void SetDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void RemoveSnapshotListener();
         public abstract void AddSnapshotListener();

@@ -6,24 +6,25 @@
     xmlns:m="clr-namespace:ClueDo.Models"
     xmlns:vm="clr-namespace:ClueDo.ViewModels"
     x:DataType="vm:MainPageVM"
-    IsBusy="{Binding IsBusy}"
-    BackgroundImageSource="background.jpg">
+    BackgroundImageSource="background.jpg"
+    IsBusy="{Binding IsBusy}">
     <VerticalStackLayout>
         <Grid Padding="5" ColumnSpacing="5">
             <Button
                 Margin="10"
+                BackgroundColor="#E4BD40"
                 Command="{Binding AddGameCommand}"
-                FontSize="Body"
                 FontFamily="ClueFont"
+                FontSize="Body"
                 HorizontalOptions="Fill"
-                Text="{x:Static m:Strings.AddGame}" 
-                BackgroundColor="#E4BD40">
-            <Button.Shadow>
-                <Shadow Brush="Black"
-                Offset="5,5"
-                Opacity="0.8"
-                Radius="18" />
-            </Button.Shadow> 
+                Text="{x:Static m:Strings.AddGame}">
+                <Button.Shadow>
+                    <Shadow
+                        Brush="Black"
+                        Opacity="0.8"
+                        Radius="18"
+                        Offset="5,5" />
+                </Button.Shadow>
             </Button>
         </Grid>
         <ListView ItemsSource="{Binding GamesList}" SelectedItem="{Binding SelectedItem}">
@@ -35,17 +36,17 @@
                                 Grid.Column="0"
                                 Margin="20,0,0,0"
                                 FontAttributes="Bold"
-                                FontSize="20"
                                 FontFamily="ClueFont"
+                                FontSize="20"
                                 HorizontalTextAlignment="Start"
                                 Text="{Binding HostName}"
-                                TextColor="White"/>
+                                TextColor="White" />
                             <Label
                                 Grid.Column="1"
-                                FontSize="20"
                                 FontFamily="ClueFont"
-                                Text="{Binding Created}" 
-                                TextColor="White"/>
+                                FontSize="20"
+                                Text="{Binding Created}"
+                                TextColor="White" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

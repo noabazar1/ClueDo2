@@ -20,5 +20,26 @@
             VerticalOptions="Center"
         />
         <Label HorizontalOptions="Center" Text="{Binding MyName}" FontFamily="ClueFont" TextColor="White"/>
+        <Button
+            Text="Roll Dice"
+            BackgroundColor="#E4BD40"
+            CornerRadius="360"
+            FontFamily="ClueFont"
+            TextColor="White"
+            Command="{Binding RollDiceCommand}">
+                <Button.Shadow>
+                    <Shadow Brush="Black"
+                        Offset="5,5"
+                        Opacity="0.8"
+                        Radius="18"/>
+                </Button.Shadow>
+        </Button>
+        <Label
+            Text="{Binding DiceResult}"
+            FontFamily="ClueFont"
+            TextColor="White"
+            HorizontalOptions="Center"
+            FontSize="17"
+            Margin="5"/>
     </VerticalStackLayout>
 </ContentPage>

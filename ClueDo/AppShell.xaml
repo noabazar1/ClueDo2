@@ -3,11 +3,11 @@
     x:Class="ClueDo.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:v="clr-namespace:ClueDo.Views"
     xmlns:local="clr-namespace:ClueDo"
-    Shell.FlyoutBehavior="Disabled"
+    xmlns:v="clr-namespace:ClueDo.Views"
     Title="ClueDo"
     Shell.BackgroundColor="#003c00"
+    Shell.FlyoutBehavior="Disabled"
     Shell.TitleColor="White">
     <ShellContent
         Title="Home"
@@ -15,7 +15,6 @@
         Route="MainPage" />
     <ShellContent
         Title=""
-        ContentTemplate="{DataTemplate v:GamePage}" 
-        Route="GamePage"
-        />
+        ContentTemplate="{DataTemplate v:GamePage}"
+        Route="GamePage" />
 </Shell>

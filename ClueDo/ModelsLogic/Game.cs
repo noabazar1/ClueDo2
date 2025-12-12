@@ -11,56 +11,72 @@ namespace ClueDo.ModelsLogic
         public override string Player3 => Players.Count > 2 ? Players[2] : "";
         public override string Player4 => Players.Count > 3 ? Players[3] : "";
         public override string Player5 => Players.Count > 4 ? Players[4] : "";
+        public List<PlayerPiece> PlayerPieces { get; private set; } = [];
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
         private readonly Grid grdBoard;
-        private readonly IndexButton btnItem = new(0,0);
-        public Player Player = new();
+        private IndexButton[,] BoardCells = new IndexButton[15, 15];
 
         public Game(Grid grdBoard)
         {
             HostName = new User().Name;
             Created = DateTime.Now;
             this.grdBoard = grdBoard;
-            Player.GridIndex = grdBoard.Children.Count;
-            grdBoard.Add(btnItem, btnItem.Column, btnItem.Row);
         }
         public Game()
         {
             grdBoard = new Grid();
         }
-        private readonly Color[] colors =
-        [
-            Color.FromArgb("#B0251A"),
-            Color.FromArgb("#D9AD3B"),
-            Color.FromArgb("#46865D"),
-            Color.FromArgb("#2961184"),
-            Color.FromArgb("#7C436E"),
-            Colors.White
-        ];
-        public Color AssignColor()
+        private readonly List<(int row, int col)> startPositions = new()
         {
-            if (colors.Length > 0)
-                return RemoveFromArr(colors, 0)[0];
-            return
-                null!;
-                 
-        }
-        public Color[] RemoveFromArr(Color[] arr, int index)
+            (9,14), //White
+            (4,14), //Green
+            (0,10), //Blue
+            (0,4),  //Plum
+            (10,0), //Red
+            (14,5)  //Yellow
+        };
+        public PlayerPiece AddPlayer(string name, Color color)
         {
-            if (index < 0 || index >= arr.Length)
-                return arr;
-            Color[] newArr = new Color[arr.Length - 1];
-            for (int i = 0, j = 0; i < arr.Length; i++)
+            IndexButton startButton = GetNextFreeStartPosition();
+            PlayerPiece playerPiece = new PlayerPiece
             {
-                if (i != index)
+                Name = name,
+                Color = color,
+                CurrentButton = startButton
+            };
+            startButton.BackgroundColor = color;
+            PlayerPieces.Add(playerPiece);
+            return playerPiece;
+        }
+        private IndexButton GetNextFreeStartPosition()
+        {
+            for (int i = 0; i < startPositions.Count; i++)
+            {
+                int row = startPositions[i].row;
+                int col = startPositions[i].col;
+                IndexButton btn = BoardCells[row, col];
+                bool used = false;
+                for (int j = 0; j < PlayerPieces.Count && !used; j++)
                 {
-                    newArr[j] = arr[i];
-                    j++;
+                    if (PlayerPieces[j].CurrentButton == btn)
+                    {
+                        used = true;
+                    }
+                }
+                if (!used)
+                {
+                    return btn;
                 }
             }
-            return newArr;
+            return null!;
+        }
+        public void MovePlayer (PlayerPiece piece, IndexButton target)
+        {
+            piece.CurrentButton.BackgroundColor = Color.FromArgb("#F7D275");
+            piece.CurrentButton = target;
+            target.BackgroundColor = piece.Color;
         }
         protected override void UpdateStatus()
         {
@@ -75,9 +91,6 @@ namespace ClueDo.ModelsLogic
 
         public void UpdateGuestUser(Action<Task> OnComplete)
         {
-            Player.Name = MyName;
-            Player.Color = AssignColor();
-            Player.SetStartByColor();
             Players.Add(MyName);
             IsFull = Players.Count >= 5; 
             UpdateFbJoinGame(OnComplete);
@@ -295,8 +308,6 @@ namespace ClueDo.ModelsLogic
         {
             if (MyMove)
             {
-                grdBoard.RemoveAt(Player.GridIndex);
-                grdBoard.Add(Player, columnIndex, rowIndex);
                 _status.UpdateStatus();
                 IsHostTurn = !IsHostTurn;
                 UpdateFbMove();

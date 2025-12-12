@@ -2,6 +2,7 @@
 using ClueDo.ModelsLogic;
 using CommunityToolkit.Maui.Alerts;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace ClueDo.ViewModels
 {
@@ -15,6 +16,18 @@ namespace ClueDo.ViewModels
         public string Player4 => game.Player4;
         public string Player5 => game.Player5;
         public string StatusMessage => game.StatusMessage;
+        public ICommand RollDiceCommand { get; }
+        public Dice Dice { get; set; } = new Dice();
+        private string diceResult = "";
+        public string DiceResult
+        {
+            get { return diceResult; }
+            set
+            {
+                diceResult = value;
+                OnPropertyChanged(nameof(DiceResult));
+            }
+        }
         public GameBoard Board { get; set; } = new GameBoard();
         public GamePageVM(Game game, Grid board)
         {
@@ -24,8 +37,13 @@ namespace ClueDo.ViewModels
             this.game = game;
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);
+            RollDiceCommand = new Command(() =>
+            {
+                Dice.RollDice();
+                DiceResult = Dice.Die1 + " , " + Dice.Die2;
+            });
         }
-
+        
         private void OnGameChanged(object? sender, EventArgs e)
         {
             OnPropertyChanged(nameof(Player1));
