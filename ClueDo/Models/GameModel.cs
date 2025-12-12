@@ -27,7 +27,6 @@ namespace ClueDo.Models
         public DateTime Created { get; set; }
         public bool IsFull { get; set; }
         public bool IsHostTurn { get; set; } = false;
-        public List<int> Move { get; set; } = [-1, -1];
         [Ignored]
         public abstract string? Player1 { get; }
         [Ignored]
@@ -53,5 +52,6 @@ namespace ClueDo.Models
         protected abstract void Play(int rowIndex, int columnIndx, bool MyMove);
         protected abstract void UpdateStatus();
         protected abstract void UpdateFbMove();
+        public abstract void AddPlayer();
     }
 }

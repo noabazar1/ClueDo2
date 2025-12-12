@@ -59,17 +59,6 @@ namespace ClueDo.ViewModels
                 Toast.Make(Strings.JoinGameError, CommunityToolkit.Maui.Core.ToastDuration.Long, 14);
 
         }
-        public void MovePiece(int x, int y)
-        {
-            int newX = Board.PlayerPiece.X + x;
-            int newY = Board.PlayerPiece.Y + y;
-            if (newX >= 0 && newX < Board.Columns &&
-                newY >= 0 && newY < Board.Rows)
-            {
-                Board.PlayerPiece.X = newX;
-                Board.PlayerPiece.Y = newY;
-            }
-        }
         public void AddSnapshotListener()
         {
             game.AddSnapshotListener();

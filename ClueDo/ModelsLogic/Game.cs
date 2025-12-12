@@ -16,8 +16,6 @@ namespace ClueDo.ModelsLogic
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
         private readonly Grid grdBoard;
-        private IndexButton[,] BoardCells = new IndexButton[15, 15];
-
         public Game(Grid grdBoard)
         {
             HostName = new User().Name;
@@ -28,55 +26,24 @@ namespace ClueDo.ModelsLogic
         {
             grdBoard = new Grid();
         }
-        private readonly List<(int row, int col)> startPositions = new()
+        private readonly List<PlayerPiece> startPositions = new()
         {
-            (9,14), //White
-            (4,14), //Green
-            (0,10), //Blue
-            (0,4),  //Plum
-            (10,0), //Red
-            (14,5)  //Yellow
+            { new PlayerPiece("Mrs. White", Colors.White, new Position(9, 14)) },
+            { new PlayerPiece("Reverend Green", Color.FromArgb(Keys.Green), new Position(4, 14)) },
+            { new PlayerPiece("Mrs. Peacock", Color.FromArgb(Keys.Blue), new Position(0, 10)) },
+            { new PlayerPiece("Professor Plum", Color.FromArgb(Keys.Plum), new Position(0, 4)) },
+            { new PlayerPiece("Miss Scarlet", Color.FromArgb(Keys.Red), new Position(10, 0)) },
+            { new PlayerPiece("Colonel Mustard", Color.FromArgb(Keys.Mustard), new Position(14, 5)) }
         };
-        public PlayerPiece AddPlayer(string name, Color color)
+        public override void AddPlayer()
         {
-            IndexButton startButton = GetNextFreeStartPosition();
-            PlayerPiece playerPiece = new PlayerPiece
+            if (startPositions.Count > 0)
             {
-                Name = name,
-                Color = color,
-                CurrentButton = startButton
-            };
-            startButton.BackgroundColor = color;
-            PlayerPieces.Add(playerPiece);
-            return playerPiece;
-        }
-        private IndexButton GetNextFreeStartPosition()
-        {
-            for (int i = 0; i < startPositions.Count; i++)
-            {
-                int row = startPositions[i].row;
-                int col = startPositions[i].col;
-                IndexButton btn = BoardCells[row, col];
-                bool used = false;
-                for (int j = 0; j < PlayerPieces.Count && !used; j++)
-                {
-                    if (PlayerPieces[j].CurrentButton == btn)
-                    {
-                        used = true;
-                    }
-                }
-                if (!used)
-                {
-                    return btn;
-                }
+                IndexButton btn = new(startPositions[Players.Count - 1].CurrentPosition.x, startPositions[Players.Count - 1].CurrentPosition.y);
+                btn.BackgroundColor = startPositions[Players.Count - 1].Color;
+                grdBoard.Add(btn, btn.Row, btn.Column);
+                startPositions.RemoveAt(Players.Count - 1);
             }
-            return null!;
-        }
-        public void MovePlayer (PlayerPiece piece, IndexButton target)
-        {
-            piece.CurrentButton.BackgroundColor = Color.FromArgb("#F7D275");
-            piece.CurrentButton = target;
-            target.BackgroundColor = piece.Color;
         }
         protected override void UpdateStatus()
         {
@@ -124,7 +91,7 @@ namespace ClueDo.ModelsLogic
                 if (action == Actions.Deleted)
                     OnGameDeleted?.Invoke(this, EventArgs.Empty);
                 else
-                    OnGameChanged?.Invoke(this, EventArgs.Empty); //לבדוק בפרויקט של לירון מה אמור להיות כתוב
+                    OnGameChanged?.Invoke(this, EventArgs.Empty);
         }
 
         private void OnChange(IDocumentSnapshot? snapshot, Exception? error)
@@ -138,7 +105,7 @@ namespace ClueDo.ModelsLogic
                 IsHostTurn = updatedGame.IsHostTurn;
                 UpdateStatus();
                 if (_status.CurrentStatus == GameStatus.Status.Play)
-                    Play(updatedGame.Move[0], updatedGame.Move[1], false);
+                { }
             }
             else
             {
@@ -173,30 +140,6 @@ namespace ClueDo.ModelsLogic
                     btn.Clicked += OnButtonClicked;
                     board.Add(btn, j, i);
                 }
-            //Mrs.White Start
-            IndexButton white = new IndexButton(9, 14);
-            white.BackgroundColor = Colors.White;
-            board.Add(white, 9, 14);
-            //Reverend Green Start
-            IndexButton green = new IndexButton(4, 14);
-            green.BackgroundColor = Color.FromArgb(Keys.Green);
-            board.Add(green, 5, 14);
-            //Mrs.Peacock Start
-            IndexButton blue = new IndexButton(0, 10);
-            blue.BackgroundColor = Color.FromArgb(Keys.Blue);
-            board.Add(blue, 0, 10);
-            //Professor Plum Start
-            IndexButton plum = new IndexButton(0, 4);
-            plum.BackgroundColor = Color.FromArgb(Keys.Plum);
-            board.Add(plum, 0, 4);
-            //Miss Scarlet Start
-            IndexButton red = new IndexButton(10, 0);
-            red.BackgroundColor = Color.FromArgb(Keys.Red);
-            board.Add(red, 10, 0);
-            //Colonel Mustard Start
-            IndexButton yellow = new IndexButton(14, 5);
-            yellow.BackgroundColor = Color.FromArgb(Keys.Mustard);
-            board.Add(yellow, 14, 5);
             //Kitchen
             for (int i = 11; i < rowSize; i++)
                 for (int j = 11; j < rowSize; j++)
@@ -319,7 +262,6 @@ namespace ClueDo.ModelsLogic
         {
             Dictionary<string, object> dict = new()
             {
-                {nameof(Move), Move },
                 {nameof(IsHostTurn), IsHostTurn }
             };
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);

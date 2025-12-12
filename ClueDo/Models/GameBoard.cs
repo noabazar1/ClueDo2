@@ -10,6 +10,6 @@ namespace ClueDo.Models
     {
         public int Rows { get; set; } = 15;
         public int Columns { get; set; } = 15;
-        public GamePiece PlayerPiece { get; set; } = new GamePiece();
+        public PlayerPiece PlayerPiece { get; set; } = new PlayerPiece();
     }
 }
