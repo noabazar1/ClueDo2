@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace ClueDo.Models
 {
-    public class Position(int x, int y)
+    public class Position
     {
-        public int x = x;
-        public int y = y;
+        public int X { get; set; }
+        public int Y { get; set; }
+
+        public Position(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
     }
 }

@@ -8,12 +8,6 @@
     x:DataType="vm:GamePageVM"
     BackgroundImageSource="background.jpg">
     <VerticalStackLayout>
-        <Label HorizontalOptions="Center" Text="{Binding Player1}" FontFamily="ClueFont" TextColor="White"/>
-        <Label HorizontalOptions="Center" Text="{Binding Player2}" FontFamily="ClueFont" TextColor="White"/>
-        <Label HorizontalOptions="Center" Text="{Binding Player3}" FontFamily="ClueFont" TextColor="White"/>
-        <Label HorizontalOptions="Center" Text="{Binding Player4}" FontFamily="ClueFont" TextColor="White"/>
-        <Label HorizontalOptions="Center" Text="{Binding Player5}" FontFamily="ClueFont" TextColor="White"/>
-        <Label HorizontalOptions="Center" Text="{Binding StatusMessage}" Margin="20" FontFamily="ClueFont" TextColor="White"/>
         <Grid 
             x:Name="grdBoard" 
             HorizontalOptions="Center" 

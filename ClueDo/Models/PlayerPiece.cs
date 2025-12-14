@@ -8,17 +8,13 @@ namespace ClueDo.Models
 {
     public class PlayerPiece
     {
-        public string Name { get; set; } = string.Empty;
-        public Color Color { get; set; } = Colors.Transparent;
-        public Position CurrentPosition { get; set; } = new Position(0, 0);
-        public PlayerPiece(string Name, Color color, Position position)
+        public Player Player { get; }
+        public Color Color { get; }
+
+        public PlayerPiece(Player player, Color color)
         {
-            this.Name = Name;
-            this.Color = color;
-            CurrentPosition = position;
-        }
-        public PlayerPiece()
-        {
+            Player = player;
+            Color = color;
         }
     }
 }

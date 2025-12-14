@@ -21,5 +21,6 @@
         public const string AddGame = "Add Game";
         public const string WaitMessage = "Opponent's turn";
         public const string PlayMessage = "Your turn";
+        public const string Waiting = "Waiting...";
     }
 }

@@ -1,7 +1,6 @@
 ﻿using ClueDo.Models;
 using ClueDo.ModelsLogic;
 using CommunityToolkit.Maui.Alerts;
-using System.ComponentModel;
 using System.Windows.Input;
 
 namespace ClueDo.ViewModels
@@ -9,12 +8,9 @@ namespace ClueDo.ViewModels
     public partial class GamePageVM : ObservableObject
     {
         private readonly Game game;
+        private readonly List<Label> lstOponnentsLabels = [];
         public string MyName => game.MyName;
-        public string Player1 => game.Player1;
-        public string Player2 => game.Player2;
-        public string Player3 => game.Player3;
-        public string Player4 => game.Player4;
-        public string Player5 => game.Player5;
+        public bool IsMyTurn => game.IsMyTurn();
         public string StatusMessage => game.StatusMessage;
         public ICommand RollDiceCommand { get; }
         public Dice Dice { get; set; } = new Dice();
@@ -35,6 +31,7 @@ namespace ClueDo.ViewModels
             game.OnGameChanged += OnGameChanged;
             game.Init(board);
             this.game = game;
+            InitOponnentsGrid(board);
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);
             RollDiceCommand = new Command(() =>
@@ -46,11 +43,46 @@ namespace ClueDo.ViewModels
         
         private void OnGameChanged(object? sender, EventArgs e)
         {
-            OnPropertyChanged(nameof(Player1));
-            OnPropertyChanged(nameof(Player2));
-            OnPropertyChanged(nameof(Player3));
-            OnPropertyChanged(nameof(Player4));
-            OnPropertyChanged(nameof(Player5));
+            DisplayOponnentsNames();
+            OnPropertyChanged(nameof(IsMyTurn));
+        }
+        private void OnGameDeleted(object? sender, EventArgs e)
+        {
+            MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                Shell.Current.Navigation.PopAsync();
+                Toast.Make(Strings.GameDeleted, CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
+            });
+        }
+        private void DisplayOponnentsNames()
+        {
+            int lblIndex = 0;
+            for (int i = 0; i < game.MyIndex; i++)
+            {
+                lstOponnentsLabels[lblIndex].Text = game.PlayersNames[i];
+                lstOponnentsLabels[lblIndex++].BackgroundColor = i == game.NextPlay ? Colors.Yellow : Colors.Cyan;
+            }
+            for (int i = game.MyIndex + 1; i < game.PlayersNames.Count; i++)
+            {
+                lstOponnentsLabels[lblIndex].Text = game.PlayersNames[i];
+                lstOponnentsLabels[lblIndex++].BackgroundColor = game.IsOponnentTurn(i) ? Colors.Yellow : Colors.Cyan;
+            }
+        }
+        private void InitOponnentsGrid(Grid grdOponnents)
+        {
+            int oponnentsCount = game.TotalPlayers - 1;
+            for (int i = 0; i < oponnentsCount; i++)
+            {
+                grdOponnents.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                lstOponnentsLabels.Add(new Label
+                {
+                    Text = Strings.Waiting,
+                    FontSize = 16,
+                    Margin = new Thickness(5),
+                    Padding = new Thickness(12)
+                });
+                grdOponnents.Add(lstOponnentsLabels[i], i, 0);
+            }
         }
 
         private void OnComplete(Task task)
