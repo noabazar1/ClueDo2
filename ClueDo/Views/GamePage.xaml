@@ -8,32 +8,41 @@
     x:DataType="vm:GamePageVM"
     BackgroundImageSource="background.jpg">
     <VerticalStackLayout>
-        <Grid 
-            x:Name="grdBoard" 
-            HorizontalOptions="Center" 
-            VerticalOptions="Center"
-        />
-        <Label HorizontalOptions="Center" Text="{Binding MyName}" FontFamily="ClueFont" TextColor="White"/>
+        <Label
+            FontFamily="ClueFont"
+            HorizontalOptions="Center"
+            Text="{Binding StatusMessage}"
+            TextColor="White" />
+        <Grid
+            x:Name="grdBoard"
+            HorizontalOptions="Center"
+            VerticalOptions="Center" />
+        <Label
+            FontFamily="ClueFont"
+            HorizontalOptions="Center"
+            Text="{Binding MyName}"
+            TextColor="White" />
         <Button
-            Text="Roll Dice"
             BackgroundColor="#E4BD40"
+            Command="{Binding RollDiceCommand}"
             CornerRadius="360"
             FontFamily="ClueFont"
-            TextColor="White"
-            Command="{Binding RollDiceCommand}">
-                <Button.Shadow>
-                    <Shadow Brush="Black"
-                        Offset="5,5"
-                        Opacity="0.8"
-                        Radius="18"/>
-                </Button.Shadow>
+            Text="Roll Dice"
+            TextColor="White">
+            <Button.Shadow>
+                <Shadow
+                    Brush="Black"
+                    Opacity="0.8"
+                    Radius="18"
+                    Offset="5,5" />
+            </Button.Shadow>
         </Button>
         <Label
-            Text="{Binding DiceResult}"
+            Margin="5"
             FontFamily="ClueFont"
-            TextColor="White"
-            HorizontalOptions="Center"
             FontSize="17"
-            Margin="5"/>
+            HorizontalOptions="Center"
+            Text="{Binding DiceResult}"
+            TextColor="White" />
     </VerticalStackLayout>
 </ContentPage>

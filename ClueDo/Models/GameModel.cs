@@ -37,7 +37,7 @@ namespace ClueDo.Models
         public int TotalPlayers { get; set; }
         public int CurrentPlayers { get; set; } = 1;
         public int NextPlay { get; set; }
-        public abstract string JoinStatus { get; }
+        protected abstract string JoinStatus { get; }
         public List<string> PlayersNames { get; set; } = [];
         public string DiceResult { get; set; } = string.Empty;
         public abstract void SetDocument(Action<System.Threading.Tasks.Task> OnComplete);

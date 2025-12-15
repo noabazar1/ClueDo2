@@ -58,7 +58,7 @@
         public const string Table_rows = "\uf101";
         public const string Table_rows_narrow = "\uf73f";
         public const string Table_chart = "\ue265";
-        public const string Shelf_position = "\uf702";
+        public const string Shelf_Point = "\uf702";
         public const string Window = "\uf088";
         public const string Space_dashboard = "\ue66b";
         public const string Dns = "\ue875";
@@ -555,9 +555,9 @@
         public const string Escalator = "\uf1a1";
         public const string Code_blocks = "\uf84d";
         public const string Keyboard_capslock_badge = "\uf7de";
-        public const string Position_top_right = "\uf709";
-        public const string Position_bottom_right = "\uf70a";
-        public const string Position_bottom_left = "\uf70b";
+        public const string Point_top_right = "\uf709";
+        public const string Point_bottom_right = "\uf70a";
+        public const string Point_bottom_left = "\uf70b";
         public const string Shelf_auto_hide = "\uf703";
         public const string Dock_to_left = "\uf7e5";
         public const string Right_panel_open = "\uf704";

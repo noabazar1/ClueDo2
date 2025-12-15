@@ -5,7 +5,7 @@ namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
     {
-        public List<PlayerPiece> PlayerPieces { get; private set; } = [];
+        private List<Player> lstPlayers = [];
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
@@ -16,21 +16,23 @@ namespace ClueDo.ModelsLogic
             HostName = new User().Name;
             Created = DateTime.Now;
             this.grdBoard = grdBoard;
+            boardLogic = new GameBoard();
+            AddPlayer(MyName);
         }
         public Game()
         {
             grdBoard = new Grid();
         }
-        public override string JoinStatus => CurrentPlayers + "/" + TotalPlayers;
-        private readonly List<Position> startPositions = new()
-        {
+        protected override string JoinStatus => CurrentPlayers + "/" + TotalPlayers;
+        private readonly List<Position> startPositions =
+        [
             new Position(9, 14),
             new Position(4, 14),
             new Position(0, 10),
             new Position(0, 4),
             new Position(10, 0),
             new Position(14, 5)
-        };
+        ];
         public override bool AddPlayer(string playerName)
         {
             int index = PlayersNames.Count;
@@ -41,18 +43,20 @@ namespace ClueDo.ModelsLogic
             Color playerColor = GetPlayerColor(index);
             if (boardLogic != null)
             {
-                boardLogic.PlacePlayer(startPosition, playerColor);
+                IndexButton ib = boardLogic.CreatePlayer(startPosition, playerColor);
+                grdBoard.Add(ib,ib.Column,ib.Row);
             }
+
             return true;
-        }
-        private Color GetPlayerColor(int index)
+        } 
+        public static Color GetPlayerColor(int index)
         {
             if (index == 0) return Colors.White;
-            if (index == 1) return Color.FromArgb(Keys.Green);
-            if (index == 2) return Color.FromArgb(Keys.Blue);
-            if (index == 3) return Color.FromArgb(Keys.Plum);
-            if (index == 4) return Color.FromArgb(Keys.Red);
-            return Color.FromArgb(Keys.Mustard);
+            if (index == 1) return Color.FromArgb("#46865D");
+            if (index == 2) return Color.FromArgb("#2961184");
+            if (index == 3) return Color.FromArgb("#7C436E");
+            if (index == 4) return Color.FromArgb("#B0251A");
+            return Color.FromArgb("#D9AD3B");
         }
         public override void JoinGame()
         {
@@ -151,12 +155,19 @@ namespace ClueDo.ModelsLogic
         {
             if (MyMove)
             {
+                if (boardLogic != null)
+                    boardLogic.MyTurn();
                 _status.UpdateStatus();
                 IsHostTurn = !IsHostTurn;
                 UpdateFbMove();
             }
             else
+            {
+                if (boardLogic != null)
+                    boardLogic.OpponentTurn();
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
+            }
+                
         }
         protected override void UpdateFbMove()
         {

@@ -59,7 +59,7 @@
     <x:String x:Key="IconTable_rows">&#xf101;</x:String>
     <x:String x:Key="IconTable_rows_narrow">&#xf73f;</x:String>
     <x:String x:Key="IconTable_chart">&#xe265;</x:String>
-    <x:String x:Key="IconShelf_position">&#xf702;</x:String>
+    <x:String x:Key="IconShelf_Point">&#xf702;</x:String>
     <x:String x:Key="IconWindow">&#xf088;</x:String>
     <x:String x:Key="IconSpace_dashboard">&#xe66b;</x:String>
     <x:String x:Key="IconDns">&#xe875;</x:String>
@@ -590,9 +590,9 @@
     <x:String x:Key="IconExpansion_panels">&#xe600;</x:String>
     <x:String x:Key="IconCode_blocks">&#xf84d;</x:String>
     <x:String x:Key="IconKeyboard_capslock_badge">&#xf7de;</x:String>
-    <x:String x:Key="IconPosition_top_right">&#xf709;</x:String>
-    <x:String x:Key="IconPosition_bottom_right">&#xf70a;</x:String>
-    <x:String x:Key="IconPosition_bottom_left">&#xf70b;</x:String>
+    <x:String x:Key="IconPoint_top_right">&#xf709;</x:String>
+    <x:String x:Key="IconPoint_bottom_right">&#xf70a;</x:String>
+    <x:String x:Key="IconPoint_bottom_left">&#xf70b;</x:String>
     <x:String x:Key="IconShelf_auto_hide">&#xf703;</x:String>
     <x:String x:Key="IconDock_to_left">&#xf7e5;</x:String>
     <x:String x:Key="IconRight_panel_open">&#xf704;</x:String>

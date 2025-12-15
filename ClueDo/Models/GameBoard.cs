@@ -72,18 +72,37 @@ namespace ClueDo.ModelsLogic
             BlockArea(0, 4, 5, 6);    // Library
             BlockArea(6, 9, 0, 4);    // Hall
         }
-        public IndexButton GetButton(Position position)
+        public IndexButton GetButton(Position p)
         {
-            return buttons[position.X, position.Y];
+            return buttons[p.Row, p.Column];
         }
-        public bool IsBlocked(Position position)
+        public bool IsBlocked(Position p)
         {
-            return blocked[position.X, position.Y];
+            return blocked[p.Row, p.Column];
         }
-        public void PlacePlayer(Position position, Color color)
+        public IndexButton CreatePlayer(Position p, Color color)
         {
-            IndexButton button = buttons[position.X, position.Y];
+            IndexButton button = buttons[p.Row, p.Column];
             button.BackgroundColor = color;
+            return button;
+        }
+        public void MyTurn()
+        {
+            BuildRooms();
+        }
+        public void OpponentTurn()
+        {
+            for (int row = 0; row < BoardSize; row++)
+            {
+                for (int col = 0; col < BoardSize; col++)
+                {
+                    if (!blocked[row, col])
+                    {
+                        blocked[row, col] = true;
+                        BlockArea(row, row, col, col);
+                    }
+                }
+            }
         }
     }
 }
