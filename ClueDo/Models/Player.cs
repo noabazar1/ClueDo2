@@ -3,25 +3,29 @@
     public class Player
     {
         public string Name { get; }
-        public Point Point { get; private set; }
+        public int Index { get; }
+        public Position Position { get; private set; }
         public Color Color { get; }
 
-
-        public Player(string name, Point startPoint, Color color)
+        public Player(string name, int index, Position startPosition, Color color)
         {
             Name = name;
-            Point = startPoint;
+            Index = index;
+            Position = startPosition;
             Color = color;
         }
+
         public Player()
         {
             Name = string.Empty;
-            Point = new Point(0, 0);
+            Index = 0;
+            Position = new Position(0, 0);
             Color = Colors.Transparent;
         }
-        public void MoveTo(Point newPoint)
+
+        public void MoveTo(Position newPosition)
         {
-            Point = newPoint;
+            Position = newPosition;
         }
     }
 }

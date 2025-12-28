@@ -80,12 +80,6 @@ namespace ClueDo.ModelsLogic
         {
             return blocked[p.Row, p.Column];
         }
-        public IndexButton CreatePlayer(Position p, Color color)
-        {
-            IndexButton button = buttons[p.Row, p.Column];
-            button.BackgroundColor = color;
-            return button;
-        }
         public void MyTurn()
         {
             BuildRooms();

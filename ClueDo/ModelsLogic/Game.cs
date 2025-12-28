@@ -5,7 +5,7 @@ namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
     {
-        private List<Player> lstPlayers = [];
+        private readonly List<Player> players = [];
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
@@ -17,7 +17,6 @@ namespace ClueDo.ModelsLogic
             Created = DateTime.Now;
             this.grdBoard = grdBoard;
             boardLogic = new GameBoard();
-            AddPlayer(MyName);
         }
         public Game()
         {
@@ -35,20 +34,21 @@ namespace ClueDo.ModelsLogic
         ];
         public override bool AddPlayer(string playerName)
         {
-            int index = PlayersNames.Count;
+            int index = players.Count;
             if (index >= startPositions.Count)
                 return false;
-            Position startPosition = startPositions[index];
-            PlayersNames.Add(playerName);
-            Color playerColor = GetPlayerColor(index);
-            if (boardLogic != null)
-            {
-                IndexButton ib = boardLogic.CreatePlayer(startPosition, playerColor);
-                grdBoard.Add(ib,ib.Column,ib.Row);
-            }
 
+            Position startPos = startPositions[index];
+            Color color = GetPlayerColor(index);
+
+            Player player = new(playerName, index, startPos, color);
+            players.Add(player);
+            PlayersNames.Add(playerName);
+
+            DrawPlayer(player);
             return true;
-        } 
+        }
+
         public static Color GetPlayerColor(int index)
         {
             if (index == 0) return Colors.White;
@@ -63,12 +63,21 @@ namespace ClueDo.ModelsLogic
             if (CurrentPlayers + 1 == TotalPlayers)
                 fbd.UpdateField(Keys.GamesCollection, Id, nameof(IsFull), true, OnComplete);
             MyIndex = CurrentPlayers;
+            AddPlayer(MyName);
             PlayersNames.Add(MyName);
             fbd.StartBatch();
             fbd.BatchIncrementField(Keys.GamesCollection, Id, nameof(CurrentPlayers), 1);
             fbd.BatchUpdateField(Keys.GamesCollection, Id, nameof(PlayersNames), PlayersNames);
             fbd.CommitBatch(OnComplete);
         }
+        private void DrawPlayer(Player player)
+        {
+            if (boardLogic == null) return;
+
+            IndexButton btn = boardLogic.GetButton(player.Position);
+            btn.BackgroundColor = player.Color;
+        }
+
         protected override void UpdateStatus()
         {
             _status.CurrentStatus = IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?

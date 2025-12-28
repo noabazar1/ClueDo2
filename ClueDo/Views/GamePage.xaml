@@ -8,6 +8,9 @@
     x:DataType="vm:GamePageVM"
     BackgroundImageSource="background.jpg">
     <VerticalStackLayout>
+        <Button
+            Text="Suspect List"
+            Command="{Binding OpenSuspectsCommand}" />
         <Label
             FontFamily="ClueFont"
             HorizontalOptions="Center"

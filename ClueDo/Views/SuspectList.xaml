@@ -6,14 +6,18 @@
     xmlns:vm="clr-namespace:ClueDo.ViewModels"
     Title="SuspectList"
     x:DataType="vm:SuspectListVM">
-    <VerticalStackLayout>
+    <HorizontalStackLayout Spacing="10" Padding="10">
+
         <Label
-            FontFamily="ClueFont"
-            HorizontalOptions="Center"
-            Text="Suspect List" />
-        <Grid
-            x:Name="grdSuspects"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
-    </VerticalStackLayout>
+                    Text="{Binding Name}"
+                    FontSize="18"
+                    VerticalOptions="Center" />
+
+        <Button
+                    Text="❌"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SuspectListVM}}, Path=ToggleMarkCommand}"
+                    CommandParameter="{Binding}"
+                    BackgroundColor="Transparent" />
+
+    </HorizontalStackLayout>
 </ContentPage>
