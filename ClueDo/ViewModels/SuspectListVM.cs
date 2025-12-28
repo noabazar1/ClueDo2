@@ -10,6 +10,7 @@ namespace ClueDo.ViewModels
 {
     public class SuspectListVM : ObservableObject
     {
+        public string Name { get; set; } = string.Empty;
         public ObservableCollection<SuspectItem> Suspects { get; } =
             new ObservableCollection<SuspectItem>
             {

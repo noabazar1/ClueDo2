@@ -27,7 +27,6 @@ namespace ClueDo.ViewModels
             }
         }
         public GameBoard Board { get; set; } = new GameBoard();
-        private readonly GameModel gameModel;
         public GamePageVM(Game game, Grid board)
         {
             game.OnGameChanged += OnGameChanged;
@@ -47,11 +46,11 @@ namespace ClueDo.ViewModels
             nameof(SuspectList),
             new Dictionary<string, object>
             {
-                { "Game", gameModel! }
+                { "Game", game }
             });
             });
         }
-        
+
         private void OnGameChanged(object? sender, EventArgs e)
         {
             DisplayOponnentsNames();

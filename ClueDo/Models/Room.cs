@@ -11,10 +11,10 @@ namespace ClueDo.Models
         public string Name { get; }
         public Point Point;
         public IndexButton OpenRoom;
-        public Room(string name, Point Point, IndexButton openRoom)
+        public Room(string name, Point point, IndexButton openRoom)
         {
             Name = name;
-            Point = Point;
+            Point = point;
             OpenRoom = openRoom;
         }
         public Room()
