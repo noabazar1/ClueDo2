@@ -5,24 +5,28 @@ namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
     {
-        private readonly List<Player> players = [];
+        public override string JoinStatus => CurrentPlayers + "/" + Players.TotalPlayers;
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
     new GameStatus { CurrentStatus = GameStatus.Status.Play } :
     new GameStatus { CurrentStatus = GameStatus.Status.Wait };
         private readonly Grid grdBoard;
+        private readonly int totalPlayers;
         private GameBoard? boardLogic;
-        public Game(Grid grdBoard)
+        public Game(Grid grdBoard, int totalPlayers)
         {
-            HostName = new User().Name;
             Created = DateTime.Now;
             this.grdBoard = grdBoard;
             boardLogic = new GameBoard();
+            Player p = new(new User().Name, 0);
+            Players.Add(p);
+            Players.TotalPlayers = totalPlayers;
+            Players.NextPlay = totalPlayers - 1;
         }
         public Game()
         {
             grdBoard = new Grid();
+            totalPlayers = 0;
         }
-        protected override string JoinStatus => CurrentPlayers + "/" + TotalPlayers;
         private readonly List<Position> startPositions =
         [
             new Position(9, 14),
@@ -34,22 +38,22 @@ namespace ClueDo.ModelsLogic
         ];
         public override bool AddPlayer(string playerName)
         {
-            int index = players.Count;
+            int index = Players.Count;
             if (index >= startPositions.Count)
                 return false;
 
             Position startPos = startPositions[index];
-            Color color = GetPlayerColor(index);
+            Color color = PlayerColor(index);
 
-            Player player = new(playerName, index, startPos, color);
-            players.Add(player);
+            Player player = new(playerName, index);
+            Players.Add(player);
             PlayersNames.Add(playerName);
 
             DrawPlayer(player);
             return true;
         }
 
-        public static Color GetPlayerColor(int index)
+        public static Color PlayerColor(int index)
         {
             if (index == 0) return Colors.White;
             if (index == 1) return Color.FromArgb("#46865D");
@@ -62,13 +66,26 @@ namespace ClueDo.ModelsLogic
         {
             if (CurrentPlayers + 1 == TotalPlayers)
                 fbd.UpdateField(Keys.GamesCollection, Id, nameof(IsFull), true, OnComplete);
-            MyIndex = CurrentPlayers;
-            AddPlayer(MyName);
-            PlayersNames.Add(MyName);
+            Players.MyIndex = CurrentPlayers;
+            Player p = new(MyName, CurrentPlayers);
+            Players.Add(p);
             fbd.StartBatch();
             fbd.BatchIncrementField(Keys.GamesCollection, Id, nameof(CurrentPlayers), 1);
             fbd.BatchUpdateField(Keys.GamesCollection, Id, nameof(PlayersNames), PlayersNames);
             fbd.CommitBatch(OnComplete);
+        }
+        public override Position GetPlayerPosition(int playerIndex)
+        {
+            return Players.PlayersList[playerIndex].Position;
+        }
+        public override Color GetPlayerColor(int playerIndex)
+        {
+            return Players.PlayersList[playerIndex].Color;
+        }
+
+        public override string GetPlayerName(int playerIndex)
+        {
+            return Players.PlayersList[playerIndex].Name;
         }
         private void DrawPlayer(Player player)
         {
@@ -91,7 +108,6 @@ namespace ClueDo.ModelsLogic
 
         public void UpdateGuestUser(Action<Task> OnComplete)
         {
-            Players.Add(MyName);
             IsFull = Players.Count >= 5; 
             UpdateFbJoinGame(OnComplete);
         }
@@ -133,9 +149,14 @@ namespace ClueDo.ModelsLogic
             if (game != null)
             {
                 CurrentPlayers = game.CurrentPlayers;
-                PlayersNames = game.PlayersNames;
+                int myIndex = Players.MyIndex;
+                Players = game.Players;
+                Players.MyIndex = myIndex;
                 NextPlay = game.NextPlay;
-                OnGameChanged?.Invoke(this, EventArgs.Empty);
+                if (CurrentPlayers == Players.Count)
+                    OnGameChanged?.Invoke(this, EventArgs.Empty);
+                else
+                    GameError?.Invoke(this, EventArgs.Empty);
             }
             else
                 OnGameDeleted?.Invoke(this, EventArgs.Empty);
@@ -176,7 +197,8 @@ namespace ClueDo.ModelsLogic
                     boardLogic.OpponentTurn();
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
             }
-                
+            Players.Play(rowIndex, columnIndex);
+            fbd.UpdateField(Keys.GamesCollection, Id, nameof(Players), Players, OnComplete);
         }
         protected override void UpdateFbMove()
         {
@@ -188,11 +210,11 @@ namespace ClueDo.ModelsLogic
         }
         public override bool IsMyTurn()
         {
-            return NextPlay == MyIndex;
+            return Players.IsMyTurn();
         }
         public override bool IsOponnentTurn(int oponnentIndex)
         {
-            return oponnentIndex == NextPlay;
+            return Players.IsOponnentTurn(oponnentIndex);
         }
     }
 }

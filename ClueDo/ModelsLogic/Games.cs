@@ -1,57 +1,36 @@
-﻿using ClueDo.ModelsLogic;
+﻿using ClueDo.Models;
 using CommunityToolkit.Maui.Alerts;
 using Plugin.CloudFirestore;
-using ClueDo.Models;
 
 namespace ClueDo.ModelsLogic
 {
     public class Games : GamesModel
     {
-        Grid board = new Grid();
-        public void AddGame()
+        protected override void OnChange(IQuerySnapshot snapshot, Exception error)
         {
-            IsBusy = true;
-            currentGame = new(board)
-            {
-                IsHostUser = true
-            };
-            currentGame.OnGameDeleted += OnGameDeleted;
-            currentGame.SetDocument(OnComplete);
+            fbd.GetDocumentsWhereLessThan(Keys.GamesCollection, nameof(GameModel.IsFull), false, OnComplete);
         }
-
-        private void OnGameDeleted(object? sender, EventArgs e)
-        {
-            MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                Toast.Make(Strings.GameDeleted, CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
-            });
-        }
-
-        private void OnComplete(Task task)
+        protected override void OnComplete(Task task)
         {
             IsBusy = false;
-            OnGameAdded?.Invoke(this, currentGame!);
+            if (task.IsCompletedSuccessfully)
+                OnGameAdded?.Invoke(this, currentGame!);
+            else if (task.IsFaulted && task.Exception != null)
+            {
+                MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    Toast.Make(fbd.GetErrorMessage(task.Exception.Message), CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
+                });
+            }
         }
-        public Games()
-        {
-
-        }
-        public override void AddSnapshotListener()
-        {
-            ilr = fbd.AddSnapshotListener(Keys.GamesCollection, OnChange!);
-        }
-        public override void RemoveSnapshotListener()
-        {
-            ilr?.Remove();
-        }
-        private void OnChange(IQuerySnapshot snapshot, Exception error)
-        {
-            fbd.GetDocumentsWhereEqualTo(Keys.GamesCollection, nameof(GameModel.IsFull), false, OnComplete);
-        }
-
-        private void OnComplete(IQuerySnapshot qs)
+        protected override void OnComplete(IQuerySnapshot qs)
         {
             GamesList!.Clear();
+            if (qs.Documents.Count() > 0)
+            {
+                IDocumentSnapshot ds = qs.Documents.FirstOrDefault()!;
+                Game? game = ds.ToObject<Game>();
+            }
             foreach (IDocumentSnapshot ds in qs.Documents)
             {
                 Game? game = ds.ToObject<Game>();
@@ -62,6 +41,21 @@ namespace ClueDo.ModelsLogic
                 }
             }
             OnGamesChanged?.Invoke(this, EventArgs.Empty);
+        }
+        public override void AddSnapshotListener()
+        {
+            ilr = fbd.AddSnapshotListener(Keys.GamesCollection, OnChange!);
+        }
+        public override void RemoveSnapshotListener()
+        {
+            ilr?.Remove();
+        }
+        public override void AddGame()
+        {
+            Grid board = new Grid();
+            IsBusy = true;
+            currentGame = new(board, SelectedTotalPlayers);
+            currentGame.SetDocument(OnComplete);
         }
     }
 }

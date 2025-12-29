@@ -4,5 +4,6 @@
     {
         public int Row { get; set; } = row;
         public int Column { get; set; } = column;
+        public Position() : this(0, 0) { }
     }
 }

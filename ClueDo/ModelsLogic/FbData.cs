@@ -88,10 +88,10 @@ namespace ClueDo.ModelsLogic
             IDocumentReference dr = fs.Collection(collectonName).Document(id);
             return dr.AddSnapshotListener(OnChange);
         }
-        public async void GetDocumentsWhereEqualTo(string collectonName, string fName, object fValue, Action<IQuerySnapshot> OnComplete)
+        public override async void GetDocumentsWhereLessThan(string collectonName, string fName, object fValue, Action<IQuerySnapshot> OnComplete)
         {
             ICollectionReference dr = fs.Collection(collectonName);
-            IQuerySnapshot qs = await dr.WhereEqualsTo(fName, fValue).GetAsync();
+            IQuerySnapshot qs = await dr.WhereLessThan(fName, fValue).GetAsync();
             OnComplete(qs);
         }
     }

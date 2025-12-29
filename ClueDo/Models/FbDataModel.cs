@@ -22,6 +22,7 @@ namespace ClueDo.Models
         public abstract void BatchIncrementField(string collectonName, string id, string fName, long incrementBy);
         public abstract void BatchUpdateField(string collectonName, string id, string fName, object fValue);
         public abstract void CommitBatch(Action<System.Threading.Tasks.Task> OnComplete);
+        public abstract void GetDocumentsWhereLessThan(string collectonName, string fName, object fValue, Action<IQuerySnapshot> OnComplete);
         public abstract IListenerRegistration AddSnapshotListener(string collectonName, Plugin.CloudFirestore.QuerySnapshotHandler OnChange);
         public abstract IListenerRegistration AddSnapshotListener(string collectonName, string id, Plugin.CloudFirestore.DocumentSnapshotHandler OnChange);
         public FbDataModel()

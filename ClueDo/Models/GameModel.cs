@@ -18,6 +18,8 @@ namespace ClueDo.Models
         [Ignored]
         public EventHandler? OnGameDeleted;
         [Ignored]
+        public EventHandler? GameError;
+        [Ignored]
         protected abstract GameStatus Status { get; }
         [Ignored]
         public string StatusMessage => Status.StatusMessage;
@@ -27,7 +29,6 @@ namespace ClueDo.Models
         public DateTime Created { get; set; }
         public bool IsFull { get; set; }
         public bool IsHostTurn { get; set; } = false;
-        public List<string> Players { get; set; } = new List<string>();
         [Ignored]
         public string MyName { get; set; } = new User().Name;
         [Ignored]
@@ -37,13 +38,17 @@ namespace ClueDo.Models
         public int TotalPlayers { get; set; }
         public int CurrentPlayers { get; set; } = 1;
         public int NextPlay { get; set; }
-        protected abstract string JoinStatus { get; }
+        public abstract string JoinStatus { get; }
         public List<string> PlayersNames { get; set; } = [];
         public string DiceResult { get; set; } = string.Empty;
+        public Players Players { get; set; } = new();
         public abstract void SetDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void RemoveSnapshotListener();
         public abstract void AddSnapshotListener();
         public abstract void JoinGame();
+        public abstract Position GetPlayerPosition(int playerIndex);
+        public abstract Color GetPlayerColor(int playerIndex);
+        public abstract string GetPlayerName(int playerIndex);
         public abstract void DeleteDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void Init(Grid board);
         protected abstract void OnButtonClicked(object? sender, EventArgs e);

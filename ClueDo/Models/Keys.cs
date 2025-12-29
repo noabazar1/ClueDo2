@@ -14,5 +14,7 @@
         public const string Blue = "#2961184";
         public const string Plum = "#7C436E";
         public const string Mustard = "#D9AD3B";
+        public const long FinishedSignal = 1;
+        public const int OneHourInMilliseconds = 3600000;
     }
 }
