@@ -52,9 +52,11 @@ namespace ClueDo.ModelsLogic
         }
         public override void AddGame()
         {
-            Grid board = new Grid();
             IsBusy = true;
-            currentGame = new(board, SelectedTotalPlayers);
+            currentGame = new()
+            {
+                IsHostUser = true
+            };
             currentGame.SetDocument(OnComplete);
         }
     }

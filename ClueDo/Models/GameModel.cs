@@ -12,7 +12,7 @@ namespace ClueDo.Models
         protected IListenerRegistration? ilr;
         protected GameStatus _status = new();
         protected string[,]? gameBoard;
-        protected IndexButton[,]? gameButtons = new IndexButton[15, 15];
+        protected IndexButton[,] gameButtons = new IndexButton[15, 15];
         [Ignored]
         public EventHandler? OnGameChanged;
         [Ignored]
@@ -35,9 +35,9 @@ namespace ClueDo.Models
         public bool IsHostUser { get; set; }
         [Ignored]
         public int MyIndex { get; protected set; } = 0;
-        public int TotalPlayers { get; set; }
         public int CurrentPlayers { get; set; } = 1;
         public int NextPlay { get; set; }
+        [Ignored]
         public abstract string JoinStatus { get; }
         public List<string> PlayersNames { get; set; } = [];
         public string DiceResult { get; set; } = string.Empty;
@@ -52,7 +52,7 @@ namespace ClueDo.Models
         public abstract void DeleteDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void Init(Grid board);
         protected abstract void OnButtonClicked(object? sender, EventArgs e);
-        protected abstract void Play(int rowIndex, int columnIndx, bool MyMove);
+        protected abstract void Play(int rowIndex, int columnIndex, bool myMove);
         protected abstract void UpdateStatus();
         protected abstract void UpdateFbMove();
         public abstract bool AddPlayer(string name);

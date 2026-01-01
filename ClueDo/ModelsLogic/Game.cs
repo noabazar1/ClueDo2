@@ -1,16 +1,15 @@
 ﻿using ClueDo.Models;
 using Plugin.CloudFirestore;
+using System.Diagnostics;
 
 namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
     {
-        public override string JoinStatus => CurrentPlayers + "/" + Players.TotalPlayers;
+        public override string JoinStatus => $"{CurrentPlayers}/{Players.TotalPlayers}";
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
-    new GameStatus { CurrentStatus = GameStatus.Status.Play } :
-    new GameStatus { CurrentStatus = GameStatus.Status.Wait };
+            new GameStatus { CurrentStatus = GameStatus.Status.Play } : new GameStatus { CurrentStatus = GameStatus.Status.Wait };
         private readonly Grid grdBoard;
-        private readonly int totalPlayers;
         private GameBoard? boardLogic;
         public Game(Grid grdBoard, int totalPlayers)
         {
@@ -25,46 +24,27 @@ namespace ClueDo.ModelsLogic
         public Game()
         {
             grdBoard = new Grid();
-            totalPlayers = 0;
+            Players.TotalPlayers = 0;
         }
-        private readonly List<Position> startPositions =
-        [
-            new Position(9, 14),
-            new Position(4, 14),
-            new Position(0, 10),
-            new Position(0, 4),
-            new Position(10, 0),
-            new Position(14, 5)
-        ];
+
         public override bool AddPlayer(string playerName)
         {
             int index = Players.Count;
-            if (index >= startPositions.Count)
-                return false;
+            if (boardLogic != null)
+            {
+                IndexButton btn = boardLogic.GetButton(new Position(0, 0));
+                Player player = new Player(new User().Name, 0, btn);
+                Players.Add(player);
+                PlayersNames.Add(playerName);
 
-            Position startPos = startPositions[index];
-            Color color = PlayerColor(index);
-
-            Player player = new(playerName, index);
-            Players.Add(player);
-            PlayersNames.Add(playerName);
-
-            DrawPlayer(player);
-            return true;
-        }
-
-        public static Color PlayerColor(int index)
-        {
-            if (index == 0) return Colors.White;
-            if (index == 1) return Color.FromArgb("#46865D");
-            if (index == 2) return Color.FromArgb("#2961184");
-            if (index == 3) return Color.FromArgb("#7C436E");
-            if (index == 4) return Color.FromArgb("#B0251A");
-            return Color.FromArgb("#D9AD3B");
+                DrawPlayer(player);
+                return true;
+            }
+            return false;
         }
         public override void JoinGame()
         {
-            if (CurrentPlayers + 1 == TotalPlayers)
+            if (CurrentPlayers + 1 == Players.TotalPlayers)
                 fbd.UpdateField(Keys.GamesCollection, Id, nameof(IsFull), true, OnComplete);
             Players.MyIndex = CurrentPlayers;
             Player p = new(MyName, CurrentPlayers);
@@ -93,6 +73,7 @@ namespace ClueDo.ModelsLogic
 
             IndexButton btn = boardLogic.GetButton(player.Position);
             btn.BackgroundColor = player.Color;
+            player.Button = btn;
         }
 
         protected override void UpdateStatus()
@@ -171,34 +152,74 @@ namespace ClueDo.ModelsLogic
             boardLogic = new GameBoard();
             boardLogic.Build(board, OnButtonClicked);
         }
-
-
         protected override void OnButtonClicked(object? sender, EventArgs e)
         {
-            IndexButton? btn = sender as IndexButton;
-            if (btn != null)
-            {
-                Play(btn.Row, btn.Column, true);
-            }
+            if (sender is not IndexButton btn)
+                return;
+
+            Play(btn.Row, btn.Column, true);
         }
-        protected override void Play(int rowIndex, int columnIndex, bool MyMove)
+
+        protected override void Play(int rowIndex, int columnIndex, bool myMove)
         {
-            if (MyMove)
+            if (boardLogic == null || Players == null)
+                return;
+
+            if (Players.PlayersList == null || Players.PlayersList.Count == 0)
+                return;
+
+            if (Players.MyIndex < 0 || Players.MyIndex >= Players.PlayersList.Count)
+                return;
+
+            IndexButton targetBtn =
+                boardLogic.GetButton(new Position(rowIndex, columnIndex));
+
+            if (targetBtn == null)
+                return;
+
+            Player currentPlayer = Players.PlayersList[Players.MyIndex];
+
+            // ניקוי הכפתור הקודם של השחקן
+            if (currentPlayer.Button != null)
             {
-                if (boardLogic != null)
-                    boardLogic.MyTurn();
+                currentPlayer.Button.Background = null;
+                currentPlayer.Button.BackgroundColor = Color.FromArgb("#F7D275");
+                currentPlayer.Button.Handler?.UpdateValue(nameof(Button.BackgroundColor));
+            }
+
+            // צביעת הכפתור החדש
+            targetBtn.Background = null;
+            targetBtn.BackgroundColor = currentPlayer.Color;
+            targetBtn.Text = "X";
+
+            // 🔴 זה קריטי לאנדרואיד (MaterialButton)
+            targetBtn.Handler?.UpdateValue(nameof(Button.BackgroundColor));
+
+            currentPlayer.Button = targetBtn;
+            currentPlayer.Position = new Position(rowIndex, columnIndex);
+
+            Players.Play(rowIndex, columnIndex);
+
+            if (myMove)
+            {
+                boardLogic.MyTurn();
                 _status.UpdateStatus();
                 IsHostTurn = !IsHostTurn;
                 UpdateFbMove();
             }
             else
             {
-                if (boardLogic != null)
-                    boardLogic.OpponentTurn();
+                boardLogic.OpponentTurn();
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
             }
-            Players.Play(rowIndex, columnIndex);
-            fbd.UpdateField(Keys.GamesCollection, Id, nameof(Players), Players, OnComplete);
+
+            fbd.UpdateField(
+                Keys.GamesCollection,
+                Id,
+                nameof(Players),
+                Players,
+                OnComplete
+            );
         }
         protected override void UpdateFbMove()
         {

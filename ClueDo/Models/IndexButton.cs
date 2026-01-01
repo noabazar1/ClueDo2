@@ -22,5 +22,16 @@ namespace ClueDo.Models
             BorderWidth = 0.5;
             CornerRadius = 0;
         }
+        public IndexButton()
+        {
+            Row = 0;
+            Column = 0;
+            HeightRequest = 25;
+            WidthRequest = HeightRequest;
+            BackgroundColor = Color.FromArgb("#F7D275");
+            BorderColor = Colors.Black;
+            BorderWidth = 0.5;
+            CornerRadius = 0;
+        }
     }
 }

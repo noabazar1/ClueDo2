@@ -32,6 +32,7 @@ namespace ClueDo.ViewModels
             game.OnGameChanged += OnGameChanged;
             game.Init(board);
             this.game = game;
+            game.AddPlayer(MyName);
             InitOponnentsGrid(board);
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);
@@ -80,7 +81,7 @@ namespace ClueDo.ViewModels
         }
         private void InitOponnentsGrid(Grid grdOponnents)
         {
-            int oponnentsCount = game.TotalPlayers - 1;
+            int oponnentsCount = game.Players.TotalPlayers - 1;
             for (int i = 0; i < oponnentsCount; i++)
             {
                 grdOponnents.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });

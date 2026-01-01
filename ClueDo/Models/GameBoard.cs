@@ -38,6 +38,9 @@ namespace ClueDo.ModelsLogic
                 for (int col = 0; col < BoardSize; col++)
                 {
                     IndexButton button = new IndexButton(row, col);
+
+                    button.Text = $"{row},{col}";
+
                     button.Clicked += clickHandler;
 
                     buttons[row, col] = button;
