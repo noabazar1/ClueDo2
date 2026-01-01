@@ -16,11 +16,11 @@ namespace ClueDo.ModelsLogic
         }
         public void Build(Grid board, EventHandler clickHandler)
         {
-            CreateGrid(board);
+            GameBoard.CreateGrid(board);
             CreateButtons(board, clickHandler);
             BuildRooms();
         }
-        private void CreateGrid(Grid board)
+        public static void CreateGrid(Grid board)
         {
             board.RowDefinitions.Clear();
             board.ColumnDefinitions.Clear();
@@ -31,24 +31,20 @@ namespace ClueDo.ModelsLogic
                 board.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
             }
         }
-        private void CreateButtons(Grid board, EventHandler clickHandler)
+        public void CreateButtons(Grid board, EventHandler clickHandler)
         {
             for (int row = 0; row < BoardSize; row++)
             {
                 for (int col = 0; col < BoardSize; col++)
                 {
                     IndexButton button = new IndexButton(row, col);
-
-                    button.Text = $"{row},{col}";
-
                     button.Clicked += clickHandler;
-
                     buttons[row, col] = button;
                     board.Add(button, col, row);
                 }
             }
         }
-        private void BlockArea(int rowStart, int rowEnd, int colStart, int colEnd)
+        public void BlockArea(int rowStart, int rowEnd, int colStart, int colEnd)
         {
             for (int row = rowStart; row <= rowEnd; row++)
             {
@@ -61,7 +57,7 @@ namespace ClueDo.ModelsLogic
                 }
             }
         }
-        private void BuildRooms()
+        public void BuildRooms()
         {
             BlockArea(11, 14, 11, 14); // Kitchen
             BlockArea(0, 3, 11, 14);  // Conservatory

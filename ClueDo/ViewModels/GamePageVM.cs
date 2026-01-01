@@ -14,7 +14,6 @@ namespace ClueDo.ViewModels
         public bool IsMyTurn => game.IsMyTurn();
         public string StatusMessage => game.StatusMessage;
         public ICommand RollDiceCommand { get; }
-        public ICommand OpenSuspectsCommand { get; }
         public Dice Dice { get; set; } = new Dice();
         private string diceResult = "";
         public string DiceResult
@@ -26,7 +25,6 @@ namespace ClueDo.ViewModels
                 OnPropertyChanged(nameof(DiceResult));
             }
         }
-        public GameBoard Board { get; set; } = new GameBoard();
         public GamePageVM(Game game, Grid board)
         {
             game.OnGameChanged += OnGameChanged;
@@ -41,17 +39,7 @@ namespace ClueDo.ViewModels
                 Dice.RollDice();
                 DiceResult = Dice.Die1 + " , " + Dice.Die2;
             });
-            OpenSuspectsCommand = new Command(async () =>
-            {
-                await Shell.Current.GoToAsync(
-            nameof(SuspectList),
-            new Dictionary<string, object>
-            {
-                { "Game", game }
-            });
-            });
         }
-
         private void OnGameChanged(object? sender, EventArgs e)
         {
             DisplayOponnentsNames();

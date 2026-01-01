@@ -156,11 +156,10 @@ namespace ClueDo.ModelsLogic
         {
             if (sender is not IndexButton btn)
                 return;
-
-            Play(btn.Row, btn.Column, true);
+            Play(btn.Row, btn.Column);
         }
 
-        protected override void Play(int rowIndex, int columnIndex, bool myMove)
+        protected override void Play(int rowIndex, int columnIndex)
         {
             if (boardLogic == null || Players == null)
                 return;
@@ -171,47 +170,25 @@ namespace ClueDo.ModelsLogic
             if (Players.MyIndex < 0 || Players.MyIndex >= Players.PlayersList.Count)
                 return;
 
-            IndexButton targetBtn =
-                boardLogic.GetButton(new Position(rowIndex, columnIndex));
+            IndexButton targetBtn = boardLogic.GetButton(new Position(rowIndex, columnIndex));
 
             if (targetBtn == null)
                 return;
 
             Player currentPlayer = Players.PlayersList[Players.MyIndex];
 
-            // ניקוי הכפתור הקודם של השחקן
             if (currentPlayer.Button != null)
             {
-                currentPlayer.Button.Background = null;
+                targetBtn.BackgroundColor = currentPlayer.Button.BackgroundColor;
                 currentPlayer.Button.BackgroundColor = Color.FromArgb("#F7D275");
+                currentPlayer.Button = targetBtn;
+                currentPlayer.Position = new Position(rowIndex, columnIndex);
                 currentPlayer.Button.Handler?.UpdateValue(nameof(Button.BackgroundColor));
             }
-
-            // צביעת הכפתור החדש
-            targetBtn.Background = null;
-            targetBtn.BackgroundColor = currentPlayer.Color;
-            targetBtn.Text = "X";
-
-            // 🔴 זה קריטי לאנדרואיד (MaterialButton)
-            targetBtn.Handler?.UpdateValue(nameof(Button.BackgroundColor));
-
-            currentPlayer.Button = targetBtn;
-            currentPlayer.Position = new Position(rowIndex, columnIndex);
-
-            Players.Play(rowIndex, columnIndex);
-
-            if (myMove)
-            {
-                boardLogic.MyTurn();
-                _status.UpdateStatus();
-                IsHostTurn = !IsHostTurn;
-                UpdateFbMove();
-            }
-            else
-            {
-                boardLogic.OpponentTurn();
-                OnGameChanged?.Invoke(this, EventArgs.Empty);
-            }
+            boardLogic.MyTurn();
+            _status.UpdateStatus();
+            IsHostTurn = !IsHostTurn;
+            UpdateFbMove();
 
             fbd.UpdateField(
                 Keys.GamesCollection,
