@@ -1,9 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows.Input;
-using ClueDo.Models;
+﻿using ClueDo.Models;
 using ClueDo.ModelsLogic;
 using ClueDo.Views;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace ClueDo.ViewModels
 {
@@ -21,9 +20,9 @@ namespace ClueDo.ViewModels
                 if (value != null)
                 {
                     games.CurrentGame = value;
-                    MainThread.InvokeOnMainThreadAsync(() =>
+                    MainThread.InvokeOnMainThreadAsync( () =>
                     {
-                        Shell.Current.Navigation.PushAsync(new GamePage(value), true);
+                        Shell.Current.Navigation.PushAsync(new GamePage(value));
                     });
                 }
             }
@@ -41,6 +40,7 @@ namespace ClueDo.ViewModels
         private void OnGamesChanged(object? sender, EventArgs e)
         {
             OnPropertyChanged(nameof(GamesList));
+            OnPropertyChanged(nameof(IsBusy));
         }
         private void OnGameAdded(object? sender, Game game)
         {

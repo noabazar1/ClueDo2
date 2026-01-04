@@ -14,7 +14,17 @@
         public const string Blue = "#2961184";
         public const string Plum = "#7C436E";
         public const string Mustard = "#D9AD3B";
+        public const string Apostrophe = "'";
+        public const string Colon = ":";
+        public const string Comma = ",";
         public const long FinishedSignal = 1;
         public const int OneHourInMilliseconds = 3600000;
+        public const string MessageKey = "Message:";
+        public const string ErrorsKey = "Reason:";
+        public const string ReasonKey = "Reason:";
+        public const string TitleDelimiter = "_";
+        public const string WordsDelimiter = " ";
+        public const string UpperCaseDelimiter = @"(?=[A-Z}[a-z])";
+        public const string NewLine = "\n";
     }
 }

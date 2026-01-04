@@ -25,20 +25,20 @@ namespace ClueDo.ViewModels
                 OnPropertyChanged(nameof(DiceResult));
             }
         }
-        public GamePageVM(Game game, Grid board)
-        {
-            game.OnGameChanged += OnGameChanged;
-            game.Init(board);
-            this.game = game;
-            game.AddPlayer(MyName);
-            InitOponnentsGrid(board);
-            if (!game.IsHostUser)
-                game.UpdateGuestUser(OnComplete);
-            RollDiceCommand = new Command(() =>
-            {
-                Dice.RollDice();
-                DiceResult = Dice.Die1 + " , " + Dice.Die2;
-            });
+        public GamePageVM(Game game, Grid board) 
+        { 
+            this.game = game; 
+            game.OnGameChanged += OnGameChanged; 
+            game.AddPlayer(MyName); 
+            game.DrawAllPlayers(); 
+            InitOponnentsGrid(board); 
+            if (!game.IsHostUser) 
+                game.UpdateGuestUser(OnComplete); 
+            RollDiceCommand = new Command(() => 
+            { 
+                Dice.RollDice(); 
+                DiceResult = Dice.Die1 + " , " + Dice.Die2; 
+            }); 
         }
         private void OnGameChanged(object? sender, EventArgs e)
         {

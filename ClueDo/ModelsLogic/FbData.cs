@@ -4,11 +4,11 @@ using ClueDo.Models;
 
 namespace ClueDo.ModelsLogic
 {
-    public partial class FbData:FbDataModel
+    public partial class FbData : FbDataModel
     {
         public override async void CreateUserWithEmailAndPasswordAsync(string email, string password, string name, Action<System.Threading.Tasks.Task> OnComplete)
         {
-           await facl.CreateUserWithEmailAndPasswordAsync(email, password, name).ContinueWith(OnComplete);
+            await facl.CreateUserWithEmailAndPasswordAsync(email, password, name).ContinueWith(OnComplete);
         }
         public override async void SignInWithEmailAndPasswordAsync(string email, string password, Action<System.Threading.Tasks.Task> OnComplete)
         {
@@ -16,11 +16,58 @@ namespace ClueDo.ModelsLogic
         }
         public override string SetDocument(object obj, string collectonName, string id, Action<System.Threading.Tasks.Task> OnComplete)
         {
-            IDocumentReference dr = string.IsNullOrEmpty (id) ? fs.Collection(collectonName).Document(): fs.Collection(collectonName).Document(id);
+            IDocumentReference dr = string.IsNullOrEmpty(id) ? fs.Collection(collectonName).Document() : fs.Collection(collectonName).Document(id);
             dr.SetAsync(obj).ContinueWith(OnComplete);
             return dr.Id;
         }
-        public override async void UpdateFields(string collectonName, string id, Dictionary<string,object> dict, Action<Task> OnComplete)
+        public override string GetErrorMessage(string errMessage)
+        {
+            string retMessage;
+            int end, start = errMessage.IndexOf(Keys.MessageKey);
+            if (start > 0)
+            {
+                end = errMessage.IndexOf(Keys.ErrorsKey, start);
+
+                string title = errMessage[(start + Keys.MessageKey.Length)..end]
+                    .Replace(Keys.Apostrophe, string.Empty)
+                    .Replace(Keys.Colon, string.Empty)
+                    .Replace(Keys.Comma, string.Empty)
+                    .Trim();
+                title = string.Join(Keys.WordsDelimiter, title.Split(Keys.TitleDelimiter));
+                errMessage = errMessage[(errMessage.IndexOf(Keys.ReasonKey) +
+                    Keys.ReasonKey.Length)..];
+                errMessage = string.Join(Keys.WordsDelimiter,
+                    Regex.Split(errMessage, Keys.UpperCaseDelimiter)).Trim();
+                retMessage = title + Keys.NewLine + Keys.ReasonKey +
+                Keys.WordsDelimiter + errMessage[..^1];
+            }
+            else
+                retMessage = errMessage;
+            return retMessage;
+        }
+        public override IListenerRegistration AddSnapshotListener(string collectonName, Plugin.CloudFirestore.QuerySnapshotHandler OnChange)
+        {
+            ICollectionReference cr = fs.Collection(collectonName);
+            return cr.AddSnapshotListener(OnChange);
+        }
+        public override IListenerRegistration AddSnapshotListener(string collectonName, string id, Plugin.CloudFirestore.DocumentSnapshotHandler OnChange)
+        {
+            IDocumentReference cr = fs.Collection(collectonName).Document(id);
+            return cr.AddSnapshotListener(OnChange);
+        }
+        public override async void GetDocumentsWhereEqualTo(string collectonName, string fName, object fValue, Action<IQuerySnapshot> OnComplete)
+        {
+            ICollectionReference cr = fs.Collection(collectonName);
+            IQuerySnapshot qs = await cr.WhereEqualsTo(fName, fValue).GetAsync();
+            OnComplete(qs);
+        }
+        public override async void GetDocumentsWhereLessThan(string collectonName, string fName, object fValue, Action<IQuerySnapshot> OnComplete)
+        {
+            ICollectionReference cr = fs.Collection(collectonName);
+            IQuerySnapshot qs = await cr.WhereLessThan(fName, fValue).GetAsync();
+            OnComplete(qs);
+        }
+        public override async void UpdateFields(string collectonName, string id, Dictionary<string, object> dict, Action<Task> OnComplete)
         {
             IDocumentReference dr = fs.Collection(collectonName).Document(id);
             await dr.UpdateAsync(dict).ContinueWith(OnComplete);
@@ -39,60 +86,19 @@ namespace ClueDo.ModelsLogic
         {
             batch = fs.Batch();
         }
-        public override void BatchIncrementField(string collectonName, string id, string fName, long incrementBy)
-        {
-            IDocumentReference dr = fs.Collection(collectonName).Document(id);
-            batch?.Update(dr, fName, FieldValue.Increment(incrementBy));
-        }
         public override void BatchUpdateField(string collectonName, string id, string fName, object fValue)
         {
             IDocumentReference dr = fs.Collection(collectonName).Document(id);
             batch?.Update(dr, fName, fValue);
         }
+        public override void BatchIncrementField(string collectonName, string id, string fName, long incrementBy)
+        {
+            IDocumentReference dr = fs.Collection(collectonName).Document(id);
+            batch?.Update(dr, fName, FieldValue.Increment(incrementBy));
+        }
         public override void CommitBatch(Action<System.Threading.Tasks.Task> OnComplete)
         {
             batch?.CommitAsync().ContinueWith(OnComplete);
-        }
-        public override string GetErrorMessage(string errMessage)
-        {
-            string retMessage = string.Empty;
-            //int end, start = errMessage.IndexOf(Keys.MessageKey);
-            //if (start > 0)
-            //{
-            //    end = errMessage.IndexOf(Keys.ErrorsKey, start);
-
-            //    string title = errMessage[(start + Keys.MessageKey.Length)..end]
-            //        .Replace(Keys.Apostrophe, string.Empty)
-            //        .Replace(Keys.Colon, string.Empty)
-            //        .Replace(Keys.Comma, string.Empty)
-            //        .Trim();
-            //    title = string.Join(Keys.WordsDelimiter, title.Split(Keys.TitleDelimiter));
-            //    errMessage = errMessage[(errMessage.IndexOf(Keys.ReasonKey) +
-            //        Keys.ReasonKey.Length)..];
-            //    errMessage = string.Join(Keys.WordsDelimiter,
-            //        Regex.Split(errMessage, Keys.UpperCaseDelimiter)).Trim();
-            //    retMessage = title + Keys.NewLine + Keys.ReasonKey +
-            //    Keys.WordsDelimiter + errMessage[..^1];
-            //}
-            //else
-            //    retMessage = errMessage;
-            return retMessage;
-        }
-        public override IListenerRegistration AddSnapshotListener(string collectonName, Plugin.CloudFirestore.QuerySnapshotHandler OnChange)
-        {
-            ICollectionReference dr = fs.Collection(collectonName);
-            return dr.AddSnapshotListener(OnChange);
-        }
-        public override IListenerRegistration AddSnapshotListener(string collectonName, string id, Plugin.CloudFirestore.DocumentSnapshotHandler OnChange)
-        {
-            IDocumentReference dr = fs.Collection(collectonName).Document(id);
-            return dr.AddSnapshotListener(OnChange);
-        }
-        public override async void GetDocumentsWhereLessThan(string collectonName, string fName, object fValue, Action<IQuerySnapshot> OnComplete)
-        {
-            ICollectionReference dr = fs.Collection(collectonName);
-            IQuerySnapshot qs = await dr.WhereLessThan(fName, fValue).GetAsync();
-            OnComplete(qs);
         }
     }
 }

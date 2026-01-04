@@ -50,8 +50,7 @@ namespace ClueDo.Models
         public abstract Color GetPlayerColor(int playerIndex);
         public abstract string GetPlayerName(int playerIndex);
         public abstract void DeleteDocument(Action<System.Threading.Tasks.Task> OnComplete);
-        public abstract void Init(Grid board);
-        protected abstract void OnButtonClicked(object? sender, EventArgs e);
+        public abstract void OnButtonClicked(object? sender, EventArgs e);
         protected abstract void Play(int rowIndex, int columnIndex);
         protected abstract void UpdateStatus();
         protected abstract void UpdateFbMove();

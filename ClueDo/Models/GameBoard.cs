@@ -6,6 +6,8 @@ namespace ClueDo.ModelsLogic
     public class GameBoard
     {
         private const int BoardSize = 15;
+        private bool roomsBuilt = false;
+        private bool isBuilt = false;
 
         private readonly IndexButton[,] buttons;
         private readonly bool[,] blocked;
@@ -16,12 +18,19 @@ namespace ClueDo.ModelsLogic
         }
         public void Build(Grid board, EventHandler clickHandler)
         {
-            GameBoard.CreateGrid(board);
+            if (isBuilt)
+                return;
+
+            isBuilt = true;
+
+            CreateGrid(board);
             CreateButtons(board, clickHandler);
             BuildRooms();
         }
+
         public static void CreateGrid(Grid board)
         {
+            board.Children.Clear();
             board.RowDefinitions.Clear();
             board.ColumnDefinitions.Clear();
 
@@ -39,11 +48,13 @@ namespace ClueDo.ModelsLogic
                 {
                     IndexButton button = new IndexButton(row, col);
                     button.Clicked += clickHandler;
+
                     buttons[row, col] = button;
                     board.Add(button, col, row);
                 }
             }
         }
+        
         public void BlockArea(int rowStart, int rowEnd, int colStart, int colEnd)
         {
             for (int row = rowStart; row <= rowEnd; row++)
@@ -81,7 +92,11 @@ namespace ClueDo.ModelsLogic
         }
         public void MyTurn()
         {
-            BuildRooms();
+            if (!roomsBuilt)
+            {
+                BuildRooms();
+                roomsBuilt = true;
+            }
         }
         public void OpponentTurn()
         {

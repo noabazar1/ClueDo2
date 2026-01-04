@@ -9,13 +9,12 @@ namespace ClueDo.ModelsLogic
         public override string JoinStatus => $"{CurrentPlayers}/{Players.TotalPlayers}";
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
             new GameStatus { CurrentStatus = GameStatus.Status.Play } : new GameStatus { CurrentStatus = GameStatus.Status.Wait };
-        private readonly Grid grdBoard;
+        private Grid grdBoard;
         private GameBoard? boardLogic;
         public Game(Grid grdBoard, int totalPlayers)
         {
             Created = DateTime.Now;
             this.grdBoard = grdBoard;
-            boardLogic = new GameBoard();
             Player p = new(new User().Name, 0);
             Players.Add(p);
             Players.TotalPlayers = totalPlayers;
@@ -32,16 +31,19 @@ namespace ClueDo.ModelsLogic
             int index = Players.Count;
             if (boardLogic != null)
             {
-                IndexButton btn = boardLogic.GetButton(new Position(0, 0));
-                Player player = new Player(new User().Name, 0, btn);
+                // ← צור שחקן זמני כדי לקבל מיקום התחלתי
+                Player tempPlayer = new Player("", index, null!);
+                Position startPos = tempPlayer.Position;  // ← (9,14) לשחקן ראשון!
+
+                IndexButton btn = boardLogic.GetButton(startPos);
+                Player player = new Player(playerName, index, btn);
                 Players.Add(player);
                 PlayersNames.Add(playerName);
-
-                DrawPlayer(player);
                 return true;
             }
             return false;
         }
+
         public override void JoinGame()
         {
             if (CurrentPlayers + 1 == Players.TotalPlayers)
@@ -69,13 +71,28 @@ namespace ClueDo.ModelsLogic
         }
         private void DrawPlayer(Player player)
         {
-            if (boardLogic == null) return;
-
+            Console.WriteLine($"DrawPlayer: {player.Name} at {player.Position}");
+            if (boardLogic == null)
+            {
+                Console.WriteLine("boardLogic = null");
+                return;
+            }
             IndexButton btn = boardLogic.GetButton(player.Position);
-            btn.BackgroundColor = player.Color;
-            player.Button = btn;
+            Console.WriteLine($"Button found: {btn != null}");
+            if (btn != null)
+            {
+                btn.BackgroundColor = player.Color;
+                player.Button = btn;
+                Console.WriteLine($"Painted {player.Color} at ({player.Position.Row},{player.Position.Column})");
+            }
         }
-
+        public void DrawAllPlayers()
+        {
+            foreach (Player player in Players.PlayersList)
+            {
+                DrawPlayer(player);
+            }
+        }
         protected override void UpdateStatus()
         {
             _status.CurrentStatus = IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
@@ -106,9 +123,14 @@ namespace ClueDo.ModelsLogic
 
         public override void AddSnapshotListener()
         {
+            if (ilr != null)
+                return;
+
+            if (string.IsNullOrEmpty(Id))
+                return;
+
             ilr = fbd.AddSnapshotListener(Keys.GamesCollection, Id, OnChange);
         }
-
         public override void RemoveSnapshotListener()
         {
             ilr?.Remove();
@@ -147,12 +169,19 @@ namespace ClueDo.ModelsLogic
         {
             fbd.DeleteDocument(Keys.GamesCollection, Id, OnComplete);
         }
-        public override void Init(Grid board)
+        public void PlacePlayer(int playerIndex, int row, int col)
         {
-            boardLogic = new GameBoard();
-            boardLogic.Build(board, OnButtonClicked);
+            Players.PlayersList[playerIndex].Position = new Position(row, col);
         }
-        protected override void OnButtonClicked(object? sender, EventArgs e)
+        public void InitBoard(Grid grid)
+        {
+            if (boardLogic != null)
+                return; 
+            boardLogic = new GameBoard();
+            boardLogic.Build(grid, OnButtonClicked);
+        }
+
+        public override void OnButtonClicked(object? sender, EventArgs e)
         {
             if (sender is not IndexButton btn)
                 return;
