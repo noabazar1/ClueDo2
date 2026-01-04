@@ -185,22 +185,22 @@ namespace ClueDo.ModelsLogic
         {
             if (sender is not IndexButton btn)
                 return;
+
             Play(btn.Row, btn.Column);
         }
 
         protected override void Play(int rowIndex, int columnIndex)
         {
-            if (boardLogic == null || Players == null)
+            if (boardLogic == null || Players?.PlayersList == null)
                 return;
 
-            if (Players.PlayersList == null || Players.PlayersList.Count == 0)
+            if (Players.PlayersList.Count == 0)
                 return;
 
             if (Players.MyIndex < 0 || Players.MyIndex >= Players.PlayersList.Count)
                 return;
 
             IndexButton targetBtn = boardLogic.GetButton(new Position(rowIndex, columnIndex));
-
             if (targetBtn == null)
                 return;
 
@@ -208,17 +208,21 @@ namespace ClueDo.ModelsLogic
 
             if (currentPlayer.Button != null)
             {
-                targetBtn.BackgroundColor = currentPlayer.Button.BackgroundColor;
                 currentPlayer.Button.BackgroundColor = Color.FromArgb("#F7D275");
-                currentPlayer.Button = targetBtn;
-                currentPlayer.Position = new Position(rowIndex, columnIndex);
-                currentPlayer.Button.Handler?.UpdateValue(nameof(Button.BackgroundColor));
             }
+
+            currentPlayer.Button = targetBtn;
+            currentPlayer.Position = new Position(rowIndex, columnIndex);
+
+            boardLogic.ResetBoardColors();
+            DrawAllPlayers();
+
+
             boardLogic.MyTurn();
             _status.UpdateStatus();
             IsHostTurn = !IsHostTurn;
-            UpdateFbMove();
 
+            UpdateFbMove();
             fbd.UpdateField(
                 Keys.GamesCollection,
                 Id,
@@ -227,6 +231,7 @@ namespace ClueDo.ModelsLogic
                 OnComplete
             );
         }
+
         protected override void UpdateFbMove()
         {
             Dictionary<string, object> dict = new()

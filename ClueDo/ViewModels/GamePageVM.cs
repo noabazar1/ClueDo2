@@ -29,8 +29,6 @@ namespace ClueDo.ViewModels
         { 
             this.game = game; 
             game.OnGameChanged += OnGameChanged; 
-            game.AddPlayer(MyName); 
-            game.DrawAllPlayers(); 
             InitOponnentsGrid(board); 
             if (!game.IsHostUser) 
                 game.UpdateGuestUser(OnComplete); 

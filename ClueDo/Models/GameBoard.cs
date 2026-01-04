@@ -82,6 +82,19 @@ namespace ClueDo.ModelsLogic
             BlockArea(0, 4, 5, 6);    // Library
             BlockArea(6, 9, 0, 4);    // Hall
         }
+        public void ResetBoardColors()
+        {
+            for (int row = 0; row < BoardSize; row++)
+            {
+                for (int col = 0; col < BoardSize; col++)
+                {
+                    if (!blocked[row, col])
+                    {
+                        buttons[row, col].BackgroundColor = Color.FromArgb("#F7D275");
+                    }
+                }
+            }
+        }
         public IndexButton GetButton(Position p)
         {
             return buttons[p.Row, p.Column];

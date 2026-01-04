@@ -15,7 +15,8 @@ public partial class GamePage : ContentPage
         gpVM = new GamePageVM(game, grdBoard);
         BindingContext = gpVM;
 
-        game.InitBoard(grdBoard); 
+        game.InitBoard(grdBoard);
+        game.DrawAllPlayers();
     }
 
     protected override void OnAppearing()
