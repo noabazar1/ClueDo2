@@ -8,6 +8,9 @@
     x:DataType="vm:GamePageVM"
     BackgroundImageSource="background.jpg">
     <VerticalStackLayout>
+        <Grid 
+            x:Name="grdOponnents" 
+            HorizontalOptions="Center"/>
         <Label
             FontFamily="ClueFont"
             HorizontalOptions="Center"

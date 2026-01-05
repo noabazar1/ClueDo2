@@ -23,6 +23,10 @@ namespace ClueDo.Models
         protected abstract GameStatus Status { get; }
         [Ignored]
         public string StatusMessage => Status.StatusMessage;
+        [Ignored]
+        public int PlayersCount => Players.Count;
+        [Ignored]
+        public int TotalPlayers => Players.TotalPlayers;
         public string Id { get; set; } = string.Empty;
         public string HostName { get; set; } = string.Empty;
         public string GuestName { get; set; } = string.Empty;

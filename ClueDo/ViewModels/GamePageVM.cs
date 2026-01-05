@@ -9,6 +9,8 @@ namespace ClueDo.ViewModels
     public partial class GamePageVM : ObservableObject
     {
         private readonly Game game;
+        private readonly GameBoard grdBoard;
+        private readonly OpponentsGrid grdOponnents;
         private readonly List<Label> lstOponnentsLabels = [];
         public string MyName => game.MyName;
         public bool IsMyTurn => game.IsMyTurn();
@@ -25,11 +27,13 @@ namespace ClueDo.ViewModels
                 OnPropertyChanged(nameof(DiceResult));
             }
         }
-        public GamePageVM(Game game, Grid board) 
+        public GamePageVM(Game game,Grid grdOpponents, Grid board) 
         { 
-            this.game = game; 
+            grdBoard = new GameBoard();
+            this.game = game;
+            this.grdOponnents = new OpponentsGrid(grdOpponents, game);
             game.OnGameChanged += OnGameChanged; 
-            InitOponnentsGrid(board); 
+            InitOpponentsGrid(board); 
             if (!game.IsHostUser) 
                 game.UpdateGuestUser(OnComplete); 
             RollDiceCommand = new Command(() => 
@@ -40,8 +44,15 @@ namespace ClueDo.ViewModels
         }
         private void OnGameChanged(object? sender, EventArgs e)
         {
-            DisplayOponnentsNames();
+            grdOponnents.DisplayOponnentsNames();
+            UpdatGameGrid();
             OnPropertyChanged(nameof(IsMyTurn));
+        }
+        private void UpdatGameGrid()
+        {
+            grdBoard.RestoreColors();
+            for (int i = 0; i < game.PlayersCount; i++)
+                grdBoard.UpdateButton(game.GetPlayerPosition(i), game.GetPlayerColor(i));
         }
         private void OnGameDeleted(object? sender, EventArgs e)
         {
@@ -51,21 +62,8 @@ namespace ClueDo.ViewModels
                 Toast.Make(Strings.GameDeleted, CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
             });
         }
-        private void DisplayOponnentsNames()
-        {
-            int lblIndex = 0;
-            for (int i = 0; i < game.MyIndex; i++)
-            {
-                lstOponnentsLabels[lblIndex].Text = game.PlayersNames[i];
-                lstOponnentsLabels[lblIndex++].BackgroundColor = i == game.NextPlay ? Colors.Yellow : Colors.Cyan;
-            }
-            for (int i = game.MyIndex + 1; i < game.PlayersNames.Count; i++)
-            {
-                lstOponnentsLabels[lblIndex].Text = game.PlayersNames[i];
-                lstOponnentsLabels[lblIndex++].BackgroundColor = game.IsOponnentTurn(i) ? Colors.Yellow : Colors.Cyan;
-            }
-        }
-        private void InitOponnentsGrid(Grid grdOponnents)
+        
+        private void InitOpponentsGrid(Grid grdOponnents)
         {
             int oponnentsCount = game.Players.TotalPlayers - 1;
             for (int i = 0; i < oponnentsCount; i++)

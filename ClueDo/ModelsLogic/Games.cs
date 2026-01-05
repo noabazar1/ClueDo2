@@ -57,10 +57,11 @@ namespace ClueDo.ModelsLogic
         public override void AddGame()
         {
             IsBusy = true;
-            currentGame = new Game(new Grid(), SelectedTotalPlayers); 
-            currentGame.HostName = new User().Name;
-            currentGame.Created = DateTime.Now;
-            currentGame.Players.TotalPlayers = SelectedTotalPlayers;
+            currentGame = new Game([])
+            {
+                HostName = new User().Name,
+                Created = DateTime.Now
+            };
             currentGame.SetDocument(OnComplete);
         }
     }

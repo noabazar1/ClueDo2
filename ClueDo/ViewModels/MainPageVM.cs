@@ -9,7 +9,7 @@ namespace ClueDo.ViewModels
     public partial class MainPageVM : ObservableObject
     {
         private readonly Games games = new();
-        public ICommand AddGameCommand => new Command(AddGame);
+        public ICommand AddGameCommand { get; }
         public bool IsBusy => games.IsBusy;
         public ObservableCollection<Game>? GamesList => games.GamesList;
         public Game? SelectedItem
@@ -20,6 +20,7 @@ namespace ClueDo.ViewModels
                 if (value != null)
                 {
                     games.CurrentGame = value;
+                    value.JoinGame();
                     MainThread.InvokeOnMainThreadAsync( () =>
                     {
                         Shell.Current.Navigation.PushAsync(new GamePage(value));
@@ -34,6 +35,7 @@ namespace ClueDo.ViewModels
         }
         public MainPageVM()
         {
+            AddGameCommand = new Command(AddGame);
             games.OnGameAdded += OnGameAdded;
             games.OnGamesChanged += OnGamesChanged;
         }

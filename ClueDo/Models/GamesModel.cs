@@ -13,7 +13,6 @@ namespace ClueDo.Models
         public bool IsBusy { get; set; }
         public Game? CurrentGame { get => currentGame; set => currentGame = value; }
         public ObservableCollection<Game>? GamesList { get; set; } = [];
-        public int SelectedTotalPlayers { get; set; }
         public EventHandler<Game>? OnGameAdded;
         public EventHandler? OnGamesChanged;
         protected abstract void OnChange(IQuerySnapshot snapshot, Exception error);

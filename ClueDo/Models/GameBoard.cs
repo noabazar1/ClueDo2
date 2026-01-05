@@ -95,6 +95,18 @@ namespace ClueDo.ModelsLogic
                 }
             }
         }
+        public void RestoreColors()
+        {
+            foreach (IndexButton btn in buttons!)
+                if (btn != null)
+                    btn.RestoreColor();
+        }
+        public void UpdateButton(Position pos, Color color)
+        {
+            IndexButton btn = buttons![pos.Row, pos.Column];
+            if (btn != null)
+                btn.BackgroundColor = color;
+        }
         public IndexButton GetButton(Position p)
         {
             return buttons[p.Row, p.Column];

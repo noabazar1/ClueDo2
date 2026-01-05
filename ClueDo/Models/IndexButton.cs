@@ -11,13 +11,14 @@ namespace ClueDo.Models
         public int Row { get; set; } 
         public int Column { get; set; }
         public int GridIndex { get; set; }
+        private readonly Color baseColor = Color.FromArgb("#F7D275");
         public IndexButton(int row, int columnIndex)
         {
             Row = row;
             Column = columnIndex;
             HeightRequest = 25;
             WidthRequest = HeightRequest;
-            BackgroundColor = Color.FromArgb("#F7D275");
+            BackgroundColor = baseColor;
             BorderColor = Colors.Black;
             BorderWidth = 0.5;
             CornerRadius = 0;
@@ -28,10 +29,14 @@ namespace ClueDo.Models
             Column = 0;
             HeightRequest = 25;
             WidthRequest = HeightRequest;
-            BackgroundColor = Color.FromArgb("#F7D275");
+            BackgroundColor = baseColor;
             BorderColor = Colors.Black;
             BorderWidth = 0.5;
             CornerRadius = 0;
+        }
+        public void RestoreColor()
+        {
+            BackgroundColor = baseColor;
         }
     }
 }

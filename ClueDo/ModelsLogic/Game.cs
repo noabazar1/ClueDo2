@@ -11,14 +11,13 @@ namespace ClueDo.ModelsLogic
             new GameStatus { CurrentStatus = GameStatus.Status.Play } : new GameStatus { CurrentStatus = GameStatus.Status.Wait };
         private Grid grdBoard;
         private GameBoard? boardLogic;
-        public Game(Grid grdBoard, int totalPlayers)
+        public Game(Grid grdBoard)
         {
             Created = DateTime.Now;
             this.grdBoard = grdBoard;
             Player p = new(new User().Name, 0);
             Players.Add(p);
-            Players.TotalPlayers = totalPlayers;
-            Players.NextPlay = totalPlayers - 1;
+            Players.NextPlay = Players.TotalPlayers - 1;
         }
         public Game()
         {
@@ -31,9 +30,8 @@ namespace ClueDo.ModelsLogic
             int index = Players.Count;
             if (boardLogic != null)
             {
-                // ← צור שחקן זמני כדי לקבל מיקום התחלתי
                 Player tempPlayer = new Player("", index, null!);
-                Position startPos = tempPlayer.Position;  // ← (9,14) לשחקן ראשון!
+                Position startPos = tempPlayer.Position;  
 
                 IndexButton btn = boardLogic.GetButton(startPos);
                 Player player = new Player(playerName, index, btn);
@@ -71,19 +69,15 @@ namespace ClueDo.ModelsLogic
         }
         private void DrawPlayer(Player player)
         {
-            Console.WriteLine($"DrawPlayer: {player.Name} at {player.Position}");
             if (boardLogic == null)
             {
-                Console.WriteLine("boardLogic = null");
                 return;
             }
             IndexButton btn = boardLogic.GetButton(player.Position);
-            Console.WriteLine($"Button found: {btn != null}");
             if (btn != null)
             {
                 btn.BackgroundColor = player.Color;
                 player.Button = btn;
-                Console.WriteLine($"Painted {player.Color} at ({player.Position.Row},{player.Position.Column})");
             }
         }
         public void DrawAllPlayers()
@@ -148,21 +142,20 @@ namespace ClueDo.ModelsLogic
 
         protected override void OnChange(IDocumentSnapshot? snapshot, Exception? error)
         {
-            Game? game = snapshot?.ToObject<Game>();
-            if (game != null)
+            if (snapshot != null && error == null)
             {
-                CurrentPlayers = game.CurrentPlayers;
-                int myIndex = Players.MyIndex;
-                Players = game.Players;
-                Players.MyIndex = myIndex;
-                NextPlay = game.NextPlay;
-                if (CurrentPlayers == Players.Count)
-                    OnGameChanged?.Invoke(this, EventArgs.Empty);
-                else
-                    GameError?.Invoke(this, EventArgs.Empty);
+                Game? game = snapshot?.ToObject<Game>();
+                if (game != null)
+                {
+                    int myIndex = Players.MyIndex;
+                    Players = game.Players;
+                    Players.MyIndex = myIndex;
+                    IsHostTurn = game.IsHostTurn;
+                    NextPlay = game.NextPlay;
+                    CurrentPlayers = game.CurrentPlayers;
+                    OnGameChanged?.Invoke(this,EventArgs.Empty);
+                }
             }
-            else
-                OnGameDeleted?.Invoke(this, EventArgs.Empty);
         }
 
         public override void DeleteDocument(Action<Task> OnComplete)
@@ -236,7 +229,8 @@ namespace ClueDo.ModelsLogic
         {
             Dictionary<string, object> dict = new()
             {
-                {nameof(IsHostTurn), IsHostTurn }
+                {nameof(IsHostTurn), IsHostTurn },
+                {nameof(Players), Players}
             };
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
