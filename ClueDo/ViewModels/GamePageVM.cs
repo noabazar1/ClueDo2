@@ -16,15 +16,17 @@ namespace ClueDo.ViewModels
         public bool IsMyTurn => game.IsMyTurn();
         public string StatusMessage => game.StatusMessage;
         public ICommand RollDiceCommand { get; }
-        public Dice Dice { get; set; } = new Dice();
         private string diceResult = "";
         public string DiceResult
         {
-            get { return diceResult; }
-            set
+            get
             {
-                diceResult = value;
-                OnPropertyChanged(nameof(DiceResult));
+                Player me = game.Players.PlayersList[game.Players.MyIndex];
+
+                if (me.DiceValue > 0)
+                    return me.DiceValue.ToString();
+
+                return "";
             }
         }
         public GamePageVM(Game game,Grid grdOpponents, Grid board) 
@@ -35,18 +37,19 @@ namespace ClueDo.ViewModels
             game.OnGameChanged += OnGameChanged; 
             InitOpponentsGrid(board); 
             if (!game.IsHostUser) 
-                game.UpdateGuestUser(OnComplete); 
-            RollDiceCommand = new Command(() => 
-            { 
-                Dice.RollDice(); 
-                DiceResult = Dice.Die1 + " , " + Dice.Die2; 
-            }); 
+                game.UpdateGuestUser(OnComplete);
+            RollDiceCommand = new Command(() =>
+            {
+                game.RollDiceForCurrentPlayer();
+            });
         }
         private void OnGameChanged(object? sender, EventArgs e)
         {
             grdOponnents.DisplayOponnentsNames();
             UpdatGameGrid();
             OnPropertyChanged(nameof(IsMyTurn));
+            OnPropertyChanged(nameof(StatusMessage));
+            OnPropertyChanged(nameof(DiceResult));
         }
         private void UpdatGameGrid()
         {

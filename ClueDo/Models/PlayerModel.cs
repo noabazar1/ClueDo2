@@ -13,6 +13,8 @@ namespace ClueDo.Models
         [Ignored]
         public IndexButton Button { get; set; }
         public Position Position { get; set; }
+        public int MovesLeft { get; set; }
+        public int DiceValue { get; set; }
         [Ignored]
         public Color Color => playerColors[Index];
         public PlayerModel(string name, int index, IndexButton button)

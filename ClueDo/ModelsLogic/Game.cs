@@ -11,6 +11,7 @@ namespace ClueDo.ModelsLogic
             new GameStatus { CurrentStatus = GameStatus.Status.Play } : new GameStatus { CurrentStatus = GameStatus.Status.Wait };
         private Grid grdBoard;
         private GameBoard? boardLogic;
+        private Dice dice = new Dice();
         public Game(Grid grdBoard)
         {
             Created = DateTime.Now;
@@ -144,20 +145,30 @@ namespace ClueDo.ModelsLogic
         {
             if (snapshot != null && error == null)
             {
-                Game? game = snapshot?.ToObject<Game>();
+                Game? game = snapshot.ToObject<Game>();
                 if (game != null)
                 {
                     int myIndex = Players.MyIndex;
                     Players = game.Players;
                     Players.MyIndex = myIndex;
+
                     IsHostTurn = game.IsHostTurn;
                     NextPlay = game.NextPlay;
                     CurrentPlayers = game.CurrentPlayers;
-                    OnGameChanged?.Invoke(this,EventArgs.Empty);
+                    CurrentTurnIndex = game.CurrentTurnIndex;
+                    _status.CurrentStatus = IsMyTurn() ? GameStatus.Status.Play : GameStatus.Status.Wait;
+                    SyncStatus();
+
+                    if (boardLogic != null)
+                    {
+                        boardLogic.ResetBoardColors();
+                        DrawAllPlayers();
+                    }
+
+                    OnGameChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
-
         public override void DeleteDocument(Action<Task> OnComplete)
         {
             fbd.DeleteDocument(Keys.GamesCollection, Id, OnComplete);
@@ -172,6 +183,12 @@ namespace ClueDo.ModelsLogic
                 return; 
             boardLogic = new GameBoard();
             boardLogic.Build(grid, OnButtonClicked);
+        }
+        private void SyncStatus()
+        {
+            _status.CurrentStatus = IsMyTurn()
+                ? GameStatus.Status.Play
+                : GameStatus.Status.Wait;
         }
 
         public override void OnButtonClicked(object? sender, EventArgs e)
@@ -198,6 +215,8 @@ namespace ClueDo.ModelsLogic
                 return;
 
             Player currentPlayer = Players.PlayersList[Players.MyIndex];
+            if (currentPlayer.MovesLeft <= 0)
+                return;
 
             if (currentPlayer.Button != null)
             {
@@ -206,14 +225,20 @@ namespace ClueDo.ModelsLogic
 
             currentPlayer.Button = targetBtn;
             currentPlayer.Position = new Position(rowIndex, columnIndex);
+            currentPlayer.MovesLeft--;
 
             boardLogic.ResetBoardColors();
             DrawAllPlayers();
 
 
             boardLogic.MyTurn();
-            _status.UpdateStatus();
-            IsHostTurn = !IsHostTurn;
+            if (currentPlayer.MovesLeft == 0)
+            {
+                CurrentTurnIndex++;
+
+                if (CurrentTurnIndex >= Players.PlayersList.Count)
+                    CurrentTurnIndex = 0;
+            }
 
             UpdateFbMove();
             fbd.UpdateField(
@@ -224,19 +249,39 @@ namespace ClueDo.ModelsLogic
                 OnComplete
             );
         }
+        public void RollDiceForCurrentPlayer()
+        {
+            if (!IsMyTurn())
+                return;
+
+            Player me = Players.PlayersList[Players.MyIndex];
+
+            if (me.MovesLeft > 0)
+                return;
+
+            dice.RollDice();
+
+            int total = dice.Die1 + dice.Die2;  
+
+            me.DiceValue = total;
+            me.MovesLeft = total;
+            SyncStatus();
+            UpdateFbMove();
+            OnGameChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         protected override void UpdateFbMove()
         {
             Dictionary<string, object> dict = new()
             {
-                {nameof(IsHostTurn), IsHostTurn },
+                { nameof(CurrentTurnIndex), CurrentTurnIndex },
                 {nameof(Players), Players}
             };
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
         public override bool IsMyTurn()
         {
-            return Players.IsMyTurn();
+            return Players.MyIndex == CurrentTurnIndex;
         }
         public override bool IsOponnentTurn(int oponnentIndex)
         {

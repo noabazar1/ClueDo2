@@ -11,6 +11,7 @@
         <Grid 
             x:Name="grdOponnents" 
             HorizontalOptions="Center"/>
+        <Label/>
         <Label
             FontFamily="ClueFont"
             HorizontalOptions="Center"

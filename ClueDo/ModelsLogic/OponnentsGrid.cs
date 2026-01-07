@@ -27,6 +27,7 @@ namespace ClueDo.ModelsLogic
                 lstOponnentsLabels.Add(new Label
                 {
                     Text = Strings.Waiting,
+                    TextColor = Colors.White,
                     FontSize = 14,
                     FontFamily = "ClueFont",
                     Margin = new Thickness(1),

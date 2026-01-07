@@ -32,6 +32,7 @@ namespace ClueDo.Models
         public string GuestName { get; set; } = string.Empty;
         public DateTime Created { get; set; }
         public bool IsFull { get; set; }
+        public int CurrentTurnIndex { get; set; }
         public bool IsHostTurn { get; set; } = false;
         [Ignored]
         public string MyName { get; set; } = new User().Name;
