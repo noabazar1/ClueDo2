@@ -9,9 +9,9 @@ namespace ClueDo.ModelsLogic
         public override string JoinStatus => $"{CurrentPlayers}/{Players.TotalPlayers}";
         protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
             new GameStatus { CurrentStatus = GameStatus.Status.Play } : new GameStatus { CurrentStatus = GameStatus.Status.Wait };
-        private Grid grdBoard;
+        private readonly Grid grdBoard;
         private GameBoard? boardLogic;
-        private Dice dice = new Dice();
+        private readonly Dice dice = new();
         public Game(Grid grdBoard)
         {
             Created = DateTime.Now;
@@ -22,7 +22,7 @@ namespace ClueDo.ModelsLogic
         }
         public Game()
         {
-            grdBoard = new Grid();
+            grdBoard = [];
             Players.TotalPlayers = 0;
         }
 
@@ -31,11 +31,11 @@ namespace ClueDo.ModelsLogic
             int index = Players.Count;
             if (boardLogic != null)
             {
-                Player tempPlayer = new Player("", index, null!);
+                Player tempPlayer = new("", index, null!);
                 Position startPos = tempPlayer.Position;  
 
                 IndexButton btn = boardLogic.GetButton(startPos);
-                Player player = new Player(playerName, index, btn);
+                Player player = new(playerName, index, btn);
                 Players.Add(player);
                 PlayersNames.Add(playerName);
                 return true;

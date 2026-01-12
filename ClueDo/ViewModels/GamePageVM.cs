@@ -16,7 +16,6 @@ namespace ClueDo.ViewModels
         public bool IsMyTurn => game.IsMyTurn();
         public string StatusMessage => game.StatusMessage;
         public ICommand RollDiceCommand { get; }
-        private string diceResult = "";
         public string DiceResult
         {
             get
