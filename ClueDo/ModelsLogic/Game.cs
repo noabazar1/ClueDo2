@@ -7,8 +7,7 @@ namespace ClueDo.ModelsLogic
     public class Game : GameModel
     {
         public override string JoinStatus => $"{CurrentPlayers}/{Players.TotalPlayers}";
-        protected override GameStatus Status => IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
-            new GameStatus { CurrentStatus = GameStatus.Status.Play } : new GameStatus { CurrentStatus = GameStatus.Status.Wait };
+        protected override GameStatus Status => _status;
         private readonly Grid grdBoard;
         private GameBoard? boardLogic;
         private readonly Dice dice = new();
@@ -90,7 +89,7 @@ namespace ClueDo.ModelsLogic
         }
         protected override void UpdateStatus()
         {
-            _status.CurrentStatus = IsHostUser && IsHostTurn || !IsHostUser && !IsHostTurn ?
+            _status.CurrentStatus = IsMyTurn() ?
                 GameStatus.Status.Play : GameStatus.Status.Wait;
         }
 
@@ -165,7 +164,11 @@ namespace ClueDo.ModelsLogic
                         DrawAllPlayers();
                     }
 
+                    _status.CurrentStatus = IsMyTurn()
+                        ? GameStatus.Status.Play
+                        : GameStatus.Status.Wait;
                     OnGameChanged?.Invoke(this, EventArgs.Empty);
+
                 }
             }
         }
@@ -217,7 +220,8 @@ namespace ClueDo.ModelsLogic
             Player currentPlayer = Players.PlayersList[Players.MyIndex];
             if (currentPlayer.MovesLeft <= 0)
                 return;
-
+            if (!CanMoveTo(currentPlayer, rowIndex, columnIndex))
+                return;
             if (currentPlayer.Button != null)
             {
                 currentPlayer.Button.BackgroundColor = Color.FromArgb("#F7D275");
@@ -268,6 +272,13 @@ namespace ClueDo.ModelsLogic
             SyncStatus();
             UpdateFbMove();
             OnGameChanged?.Invoke(this, EventArgs.Empty);
+        }
+        private bool CanMoveTo(Player player, int targetRow, int targetCol)
+        {
+            int dRow = Math.Abs(player.Position.Row - targetRow);
+            int dCol = Math.Abs(player.Position.Column - targetCol);
+
+            return dRow + dCol == 1;
         }
 
         protected override void UpdateFbMove()

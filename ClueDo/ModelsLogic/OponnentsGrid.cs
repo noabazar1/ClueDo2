@@ -7,15 +7,22 @@ namespace ClueDo.ModelsLogic
         public override void DisplayOponnentsNames()
         {
             int lblIndex = 0;
-            for (int i = 0; i < game.MyIndex; i++)
+            int myIndex = game.Players.MyIndex;
+
+            for (int i = 0; i < game.PlayersCount; i++)
             {
-                lstOponnentsLabels[lblIndex].Text = game.GetPlayerName(i);
-                lstOponnentsLabels[lblIndex++].BackgroundColor = i == game.NextPlay ? Colors.Transparent : Color.FromArgb("#003c00");
-            }
-            for (int i = game.MyIndex + 1; i < game.PlayersCount; i++)
-            {
-                lstOponnentsLabels[lblIndex].Text = game.GetPlayerName(i);
-                lstOponnentsLabels[lblIndex++].BackgroundColor = game.IsOponnentTurn(i) ? Colors.Transparent : Color.FromArgb("#003c00");
+                if (i == myIndex)
+                    continue;
+
+                Label lbl = lstOponnentsLabels[lblIndex];
+                lbl.Text = game.GetPlayerName(i);
+
+                if (game.IsOponnentTurn(i))
+                    lbl.BackgroundColor = game.GetPlayerColor(i);
+                else
+                    lbl.BackgroundColor = game.Players.PlayersList[i].Color;
+
+                lblIndex++;
             }
         }
         public OpponentsGrid(Grid grdOponnents, Game game) : base(grdOponnents, game)
