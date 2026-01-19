@@ -42,6 +42,7 @@ namespace ClueDo.ViewModels
                 game.RollDiceForCurrentPlayer();
             });
         }
+
         private void OnGameChanged(object? sender, EventArgs e)
         {
             grdOponnents.DisplayOponnentsNames();

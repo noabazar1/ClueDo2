@@ -71,16 +71,31 @@ namespace ClueDo.ModelsLogic
         public void BuildRooms()
         {
             BlockArea(11, 14, 11, 14); // Kitchen
+            MakeDoor(11, 11);
             BlockArea(0, 3, 11, 14);  // Conservatory
+            MakeDoor(3, 11);
             BlockArea(0, 4, 0, 2);    // Study
+            MakeDoor(4, 2);
             BlockArea(11, 14, 0, 3);  // Lounge
+            MakeDoor(11, 3);
             BlockArea(10, 14, 6, 9);  // Dining Room
+            MakeDoor(10, 7);
             BlockArea(5, 9, 11, 13);  // Ballroom
             BlockArea(6, 8, 14, 14);  // Ballroom side
             BlockArea(5, 8, 10, 10);  // Ballroom side
+            MakeDoor(7, 10);
             BlockArea(0, 3, 8, 9);    // Billiard Room
+            MakeDoor(3, 8);
             BlockArea(0, 4, 5, 6);    // Library
+            MakeDoor(4, 5);
             BlockArea(6, 9, 0, 4);    // Hall
+            MakeDoor(7, 4);
+        }
+        public void MakeDoor(int row, int col)
+        {
+            IndexButton btn = buttons[row, col];
+            btn.IsEnabled = true;
+            btn.BackgroundColor = Colors.LightPink;
         }
         public void ResetBoardColors()
         {

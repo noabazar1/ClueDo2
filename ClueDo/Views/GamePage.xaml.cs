@@ -1,6 +1,8 @@
+using ClueDo.Models;
 using ClueDo.ModelsLogic;
 using ClueDo.ViewModels;
 using System.Security.Cryptography.Xml;
+using System.Threading.Tasks;
 
 namespace ClueDo.Views;
 

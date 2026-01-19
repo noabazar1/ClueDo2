@@ -22,5 +22,9 @@
         public const string WaitMessage = "Opponent's turn";
         public const string PlayMessage = "Your turn";
         public const string Waiting = "Waiting...";
+        public const string Interrogate = "Interrogate";
+        public const string MurderWeapon = "Murder Weapon";
+        public const string SuspectName = "Suspect Name";
+        public const string Send = "Send";
     }
 }
