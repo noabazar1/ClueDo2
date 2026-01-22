@@ -11,6 +11,8 @@ namespace ClueDo.Models
         public int Row { get; set; } 
         public int Column { get; set; }
         public int GridIndex { get; set; }
+        public bool IsDoor { get; set; }
+        public string? RoomName { get; set; }
         private readonly Color baseColor = Color.FromArgb("#F7D275");
         public IndexButton(int row, int columnIndex)
         {

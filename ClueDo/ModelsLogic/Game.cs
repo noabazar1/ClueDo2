@@ -1,7 +1,8 @@
 ﻿using ClueDo.Models;
 using Plugin.CloudFirestore;
 using System.Diagnostics;
-
+using CommunityToolkit.Maui.Views;
+using ClueDo.Views;
 namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
@@ -11,6 +12,8 @@ namespace ClueDo.ModelsLogic
         private readonly Grid grdBoard;
         private GameBoard? boardLogic;
         private readonly Dice dice = new();
+        public event Action<string>? DoorClicked;
+        public string? CurrentRoom { get; private set; }
         public Game(Grid grdBoard)
         {
             Created = DateTime.Now;
@@ -23,6 +26,16 @@ namespace ClueDo.ModelsLogic
         {
             grdBoard = [];
             Players.TotalPlayers = 0;
+        }
+        public void EnsureAnswerGenerated(string myUserId)
+        {
+            if (Answer != null)
+                return;
+
+            if (myUserId != HostId)
+                return;
+
+            Answer = Answer.Generate();
         }
 
         public override bool AddPlayer(string playerName)
@@ -199,9 +212,14 @@ namespace ClueDo.ModelsLogic
             if (sender is not IndexButton btn)
                 return;
 
+            if (btn.IsDoor)
+            {
+                CurrentRoom = btn.RoomName;
+                DoorClicked?.Invoke(btn.RoomName!);
+                return;
+            }
             Play(btn.Row, btn.Column);
         }
-
         protected override void Play(int rowIndex, int columnIndex)
         {
             if (boardLogic == null || Players?.PlayersList == null)
@@ -253,6 +271,24 @@ namespace ClueDo.ModelsLogic
                 OnComplete
             );
         }
+        public void EndTurnAfterSuggestion()
+        {
+            if (!IsMyTurn())
+                return;
+
+            Player me = Players.PlayersList[Players.MyIndex];
+
+            me.MovesLeft = 0;
+
+            CurrentTurnIndex++;
+            if (CurrentTurnIndex >= Players.PlayersList.Count)
+                CurrentTurnIndex = 0;
+
+            SyncStatus();
+            UpdateFbMove();
+            OnGameChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         public void RollDiceForCurrentPlayer()
         {
             if (!IsMyTurn())

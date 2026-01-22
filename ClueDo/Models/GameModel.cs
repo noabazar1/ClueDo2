@@ -47,6 +47,8 @@ namespace ClueDo.Models
         public List<string> PlayersNames { get; set; } = [];
         public string DiceResult { get; set; } = string.Empty;
         public Players Players { get; set; } = new();
+        public string HostId { get; set; } = string.Empty;
+        public Answer? Answer { get; set; }
         public abstract void SetDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void RemoveSnapshotListener();
         public abstract void AddSnapshotListener();

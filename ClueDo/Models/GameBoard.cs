@@ -70,31 +70,33 @@ namespace ClueDo.ModelsLogic
         }
         public void BuildRooms()
         {
-            BlockArea(11, 14, 11, 14); // Kitchen
-            MakeDoor(11, 11);
-            BlockArea(0, 3, 11, 14);  // Conservatory
-            MakeDoor(3, 11);
-            BlockArea(0, 4, 0, 2);    // Study
-            MakeDoor(4, 2);
-            BlockArea(11, 14, 0, 3);  // Lounge
-            MakeDoor(11, 3);
-            BlockArea(10, 14, 6, 9);  // Dining Room
-            MakeDoor(10, 7);
-            BlockArea(5, 9, 11, 13);  // Ballroom
-            BlockArea(6, 8, 14, 14);  // Ballroom side
-            BlockArea(5, 8, 10, 10);  // Ballroom side
-            MakeDoor(7, 10);
-            BlockArea(0, 3, 8, 9);    // Billiard Room
-            MakeDoor(3, 8);
-            BlockArea(0, 4, 5, 6);    // Library
-            MakeDoor(4, 5);
-            BlockArea(6, 9, 0, 4);    // Hall
-            MakeDoor(7, 4);
+            BlockArea(11, 14, 11, 14); 
+            MakeDoor(11, 11, Strings.Kitchen);
+            BlockArea(0, 3, 11, 14);  
+            MakeDoor(3, 11, Strings.Conservatory);
+            BlockArea(0, 4, 0, 2);   
+            MakeDoor(4, 2, Strings.Study);
+            BlockArea(11, 14, 0, 3); 
+            MakeDoor(11, 3, Strings.Lounge);
+            BlockArea(10, 14, 6, 9); 
+            MakeDoor(10, 7, Strings.DiningRoom);
+            BlockArea(5, 9, 11, 13); 
+            BlockArea(6, 8, 14, 14); 
+            BlockArea(5, 8, 10, 10);  
+            MakeDoor(7, 10, Strings.Ballroom);
+            BlockArea(0, 3, 8, 9);   
+            MakeDoor(3, 8, Strings.BilliardRoom);
+            BlockArea(0, 4, 5, 6);   
+            MakeDoor(4, 5, Strings.Library);
+            BlockArea(6, 9, 0, 4);  
+            MakeDoor(7, 4, Strings.Hall);
         }
-        public void MakeDoor(int row, int col)
+        public void MakeDoor(int row, int col, string roomName)
         {
             IndexButton btn = buttons[row, col];
             btn.IsEnabled = true;
+            btn.IsDoor = true;
+            btn.RoomName = roomName;
             btn.BackgroundColor = Colors.LightPink;
         }
         public void ResetBoardColors()

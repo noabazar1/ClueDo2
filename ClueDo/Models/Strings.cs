@@ -26,5 +26,15 @@
         public const string MurderWeapon = "Murder Weapon";
         public const string SuspectName = "Suspect Name";
         public const string Send = "Send";
+
+        public const string Kitchen = "Kitchen";
+        public const string Conservatory = "Conservatory";
+        public const string Study = "Study";
+        public const string Lounge = "Lounge";
+        public const string DiningRoom = "Dining Room";
+        public const string Ballroom = "Ballroom";
+        public const string BilliardRoom = "Billiard Room";
+        public const string Library = "Library";
+        public const string Hall = "Hall";
     }
 }
