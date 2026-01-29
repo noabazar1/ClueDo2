@@ -4,6 +4,7 @@ namespace ClueDo.ModelsLogic
 {
     public class Players : PlayersModel
     {
+        public Players() { }
         public override void Add(Player p)
         {
             PlayersList.Add(p);

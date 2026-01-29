@@ -36,5 +36,19 @@
         public const string BilliardRoom = "Billiard Room";
         public const string Library = "Library";
         public const string Hall = "Hall";
+
+        public const string Knife = "Knife";
+        public const string Rope = "Rope";
+        public const string Candlestick = "Candlestick";
+        public const string LeadPipe = "Lead Pipe";
+        public const string Revolver = "Revolver";
+        public const string Wrench = "Wrench";
+
+        public const string MissScarlet = "Miss Scarlet";
+        public const string ColonelMustard = "Colonel Mustard";
+        public const string ProfessorPlum = "Professor Plum";
+        public const string MrsWhite = "Mrs. White";
+        public const string ReverendGreen = "Reverend Green";
+        public const string MrsPeacock = "Mrs. Peacock";
     }
 }

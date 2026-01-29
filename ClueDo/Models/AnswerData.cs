@@ -4,17 +4,17 @@
     {
         public static readonly List<string> Rooms = new()
         {
-            "Kitchen", "Ballroom", "Study", "Library"
+            Strings.Kitchen, Strings.Ballroom, Strings.Study, Strings.Library
         };
 
         public static readonly List<string> Weapons = new()
         {
-            "Knife", "Rope", "Candlestick", "Lead Pipe", "Revolver", "Wrench"
+            Strings.Knife, Strings.Rope, Strings.Candlestick, Strings.LeadPipe, Strings.Revolver, Strings.Wrench
         };
 
         public static readonly List<string> Suspects = new()
         {
-            "Miss Scarlet", "Colonel Mustard", "Professor Plum", "Mrs. White", "Reverend Green", "Mrs. Peacock"
+            Strings.MissScarlet, Strings.ColonelMustard, Strings.ProfessorPlum, Strings.MrsWhite, Strings.ReverendGreen, Strings.MrsPeacock 
         };
     }
 }
