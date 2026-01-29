@@ -19,5 +19,12 @@
                 Suspect = AnswerData.Suspects[rnd.Next(AnswerData.Suspects.Count)]
             };
         }
+        public bool Matches(Accusation accusation)
+        {
+            return Room == accusation.Room &&
+                   Weapon == accusation.Weapon &&
+                   Suspect == accusation.Suspect;
+        }
+
     }
 }

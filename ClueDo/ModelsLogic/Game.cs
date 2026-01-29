@@ -36,7 +36,16 @@ namespace ClueDo.ModelsLogic
                 return;
 
             Answer = Answer.Generate();
+
+            fbd.UpdateField(
+                Keys.GamesCollection,
+                Id,
+                nameof(Answer),
+                Answer,
+                OnComplete
+            );
         }
+
 
         public override bool AddPlayer(string playerName)
         {
@@ -214,7 +223,13 @@ namespace ClueDo.ModelsLogic
 
             if (btn.IsDoor)
             {
+                Player me = Players.PlayersList[Players.MyIndex];
+                if (me.MovesLeft <= 0)
+                    return;
+                if (!CanMoveTo(me, btn.Row, btn.Column))
+                    return;
                 CurrentRoom = btn.RoomName;
+                me.IsInRoom = true;
                 DoorClicked?.Invoke(btn.RoomName!);
                 return;
             }
@@ -315,6 +330,13 @@ namespace ClueDo.ModelsLogic
             int dCol = Math.Abs(player.Position.Column - targetCol);
 
             return dRow + dCol == 1;
+        }
+        public bool CheckAccusation(Accusation accusation)
+        {
+            if (Answer == null)
+                return false;
+
+            return Answer.Matches(accusation);
         }
 
         protected override void UpdateFbMove()

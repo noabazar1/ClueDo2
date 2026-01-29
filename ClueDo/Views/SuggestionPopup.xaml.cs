@@ -1,3 +1,5 @@
+using ClueDo.Models;
+using ClueDo.ModelsLogic;
 using CommunityToolkit.Maui.Views;
 
 namespace ClueDo.Views;
@@ -26,6 +28,23 @@ public partial class SuggestionPopup : Popup
 
     private void OnConfirm(object sender, EventArgs e)
     {
-        Close(true);
+        string? room = RoomPicker.SelectedItem as string;
+        string? weapon = WeaponPicker.SelectedItem as string;
+        string? suspect = SuspectPicker.SelectedItem as string;
+
+        if (room == null || weapon == null || suspect == null)
+        {
+            return;
+        }
+
+        Accusation accusation = new Accusation
+        {
+            Room = room,
+            Weapon = weapon,
+            Suspect = suspect
+        };
+
+        Close(accusation);
     }
+
 }

@@ -15,6 +15,7 @@ namespace ClueDo.Models
         public Position Position { get; set; }
         public int MovesLeft { get; set; }
         public int DiceValue { get; set; }
+        public bool IsInRoom { get; set; }
         [Ignored]
         public Color Color => playerColors[Index];
         public PlayerModel(string name, int index, IndexButton button)
