@@ -3,7 +3,8 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    x:Class="ClueDo.Views.SuggestionPopup">
+    x:Class="ClueDo.Views.SuggestionPopup"
+    Color="Transparent">
 
     <Frame Padding="20"
            CornerRadius="20"
@@ -19,12 +20,13 @@
                    TextColor="White"
                    HorizontalOptions="Center"/>
 
-            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" x:Name="RoomPicker" Title="room"/>
-            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" x:Name="WeaponPicker" Title="weapon"/>
-            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" x:Name="SuspectPicker" Title="suspect"/>
+            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="RoomPicker" Title="room"/>
+            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="WeaponPicker" Title="weapon"/>
+            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="SuspectPicker" Title="suspect"/>
 
             <Button Text="send"
-                    Clicked="OnConfirm"/>
+                    Clicked="OnConfirm"
+                    BackgroundColor="#E4BD40"/>
 
         </VerticalStackLayout>
     </Frame>

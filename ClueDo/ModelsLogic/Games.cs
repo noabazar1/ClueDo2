@@ -58,19 +58,26 @@ namespace ClueDo.ModelsLogic
         {
             IsBusy = true;
 
-            string myUserId = new User().Name; 
+            string myUserId = new User().Name;
 
             currentGame = new Game([])
             {
-                HostName = new User().Name,
+                HostName = myUserId,
                 HostId = myUserId,
                 Created = DateTime.Now
             };
 
-            currentGame.EnsureAnswerGenerated(myUserId);
+            currentGame.SetDocument(task =>
+            {
+                if (task.IsCompletedSuccessfully)
+                {
+                    currentGame.EnsureAnswerGenerated(myUserId);
+                }
 
-            currentGame.SetDocument(OnComplete);
+                OnComplete(task);
+            });
         }
+
 
     }
 }

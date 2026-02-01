@@ -25,6 +25,23 @@
                    Weapon == accusation.Weapon &&
                    Suspect == accusation.Suspect;
         }
+        public List<string> GetMatchingParts(Accusation suggestion)
+        {
+            List<string> result = new List<string>();
 
+            if (Room == null || Weapon == null || Suspect == null)
+                return result;
+
+            if (Room == suggestion.Room)
+                result.Add("Room");
+
+            if (Weapon == suggestion.Weapon)
+                result.Add("Weapon");
+
+            if (Suspect == suggestion.Suspect)
+                result.Add("Suspect");
+
+            return result;
+        }
     }
 }

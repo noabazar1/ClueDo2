@@ -35,6 +35,9 @@ namespace ClueDo.ModelsLogic
             if (myUserId != HostId)
                 return;
 
+            if (string.IsNullOrEmpty(Id))
+                return; 
+
             Answer = Answer.Generate();
 
             fbd.UpdateField(
@@ -45,8 +48,6 @@ namespace ClueDo.ModelsLogic
                 OnComplete
             );
         }
-
-
         public override bool AddPlayer(string playerName)
         {
             int index = Players.Count;
