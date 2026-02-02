@@ -7,7 +7,7 @@
     Title="GamePage"
     x:DataType="vm:GamePageVM"
     BackgroundImageSource="background.jpg">
-    <VerticalStackLayout>
+    <VerticalStackLayout BackgroundColor="Transparent">
         <Grid 
             x:Name="grdOponnents" 
             HorizontalOptions="Center"/>
@@ -26,21 +26,24 @@
             HorizontalOptions="Center"
             Text="{Binding MyName}"
             TextColor="White" />
-        <Button
+        <ImageButton
+            Source="dice.png"
             BackgroundColor="#E4BD40"
-            Command="{Binding RollDiceCommand}"
-            CornerRadius="360"
-            FontFamily="ClueFont"
-            Text="Roll Dice"
-            TextColor="White">
-            <Button.Shadow>
+            WidthRequest="110"
+            HeightRequest="110"
+            CornerRadius="70"
+            Padding="15"
+            Margin="5"
+            Aspect="AspectFit"
+            Command="{Binding RollDiceCommand}">
+            <ImageButton.Shadow>
                 <Shadow
                     Brush="Black"
                     Opacity="0.8"
                     Radius="18"
                     Offset="5,5" />
-            </Button.Shadow>
-        </Button>
+            </ImageButton.Shadow>
+        </ImageButton>
         <Label
             Margin="5"
             FontFamily="ClueFont"

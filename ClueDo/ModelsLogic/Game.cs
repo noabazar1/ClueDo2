@@ -314,7 +314,7 @@ namespace ClueDo.ModelsLogic
 
             if (me.MovesLeft > 0)
                 return;
-
+            dice.StartAnimation();
             dice.RollDice();
 
             int total = dice.Die1 + dice.Die2;  

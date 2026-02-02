@@ -35,45 +35,34 @@ public partial class GamePage : ContentPage
 
             if (result is Accusation accusation)
             {
-                List<string> matches = game.Answer.GetMatchingParts(accusation);
-                if (matches.Count == 3)
-                {
-                    await DisplayAlert(
-                        "You win!",
-                        "You solved the mystery!",
-                        "Amazing"
-                    );
-                    return;
-                }
-
+                List<string> matches = game.Answer!.GetMatchingParts(accusation);
                 if (matches.Count == 0)
                 {
                     await DisplayAlert(
-                        "Wrong",
-                        "No correct guesses",
-                        "Okay"
+                        Strings.Wrong,
+                        Strings.NoCorrectGuesses,
+                        Strings.Ok
                     );
                 }
                 else
                 {
-                    string message = "The correct parameters:\n";
+                    string message = Strings.CorrectParameters;
 
-                    if (matches.Contains("Room"))
-                        message += "The room\n";
+                    if (matches.Contains(Strings.Room))
+                        message += Strings.TheRoom;
 
-                    if (matches.Contains("Weapon"))
-                        message += "The murder weapon\n";
+                    if (matches.Contains(Strings.Weapon))
+                        message += Strings.TheMurderWeapon;
 
-                    if (matches.Contains("Suspect"))
-                        message += "The suspect\n";
+                    if (matches.Contains(Strings.Suspect))
+                        message += Strings.TheSuspect;
 
                     await DisplayAlert(
-                        "Check",
+                        Strings.Check,
                         message.TrimEnd(),
-                        "Okay"
+                        Strings.Ok
                     );
                 }
-
                 game.EndTurnAfterSuggestion();
             }
         };
