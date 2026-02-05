@@ -3,6 +3,7 @@ using Plugin.CloudFirestore;
 using System.Diagnostics;
 using CommunityToolkit.Maui.Views;
 using ClueDo.Views;
+using System.Threading.Tasks;
 namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
@@ -227,7 +228,7 @@ namespace ClueDo.ModelsLogic
                 Player me = Players.PlayersList[Players.MyIndex];
                 if (me.MovesLeft <= 0)
                     return;
-                if (!CanMoveTo(me, btn.Row, btn.Column))
+                if (!Game.CanMoveTo(me, btn.Row, btn.Column))
                     return;
                 CurrentRoom = btn.RoomName;
                 me.IsInRoom = true;
@@ -254,7 +255,7 @@ namespace ClueDo.ModelsLogic
             Player currentPlayer = Players.PlayersList[Players.MyIndex];
             if (currentPlayer.MovesLeft <= 0)
                 return;
-            if (!CanMoveTo(currentPlayer, rowIndex, columnIndex))
+            if (!Game.CanMoveTo(currentPlayer, rowIndex, columnIndex))
                 return;
             if (currentPlayer.Button != null)
             {
@@ -325,7 +326,7 @@ namespace ClueDo.ModelsLogic
             UpdateFbMove();
             OnGameChanged?.Invoke(this, EventArgs.Empty);
         }
-        private bool CanMoveTo(Player player, int targetRow, int targetCol)
+        private static bool CanMoveTo(Player player, int targetRow, int targetCol)
         {
             int dRow = Math.Abs(player.Position.Row - targetRow);
             int dCol = Math.Abs(player.Position.Column - targetCol);

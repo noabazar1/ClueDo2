@@ -1,12 +1,12 @@
 ﻿using ClueDo.Models;
 using ClueDo.ModelsLogic;
-using ClueDo.Views;
 using CommunityToolkit.Maui.Alerts;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace ClueDo.ViewModels
 {
-    public partial class GamePageVM : ObservableObject
+    public partial class GamePageVM : Models.ObservableObject
     {
         private readonly Game game;
         private readonly GameBoard grdBoard;
@@ -15,7 +15,13 @@ namespace ClueDo.ViewModels
         public string MyName => game.MyName;
         public bool IsMyTurn => game.IsMyTurn();
         public string StatusMessage => game.StatusMessage;
-        public ICommand RollDiceCommand { get; }
+        private readonly TimerSettings animationTimer = new TimerSettings(800, 40);
+        [RelayCommand]
+        private async Task RollDice()
+        {
+            await PlayDiceAnimation();
+            game.RollDiceForCurrentPlayer();
+        }
         public string DiceResult
         {
             get
@@ -28,6 +34,19 @@ namespace ClueDo.ViewModels
                 return "";
             }
         }
+        public string diceImage = "Dice1.png";
+        public string DiceImage
+        {
+            get => diceImage;
+            set
+            {
+                if (diceImage != value)
+                {
+                    diceImage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public GamePageVM(Game game,Grid grdOpponents, Grid board) 
         { 
             grdBoard = new GameBoard();
@@ -37,10 +56,6 @@ namespace ClueDo.ViewModels
             InitOpponentsGrid(board); 
             if (!game.IsHostUser) 
                 game.UpdateGuestUser(OnComplete);
-            RollDiceCommand = new Command(() =>
-            {
-                game.RollDiceForCurrentPlayer();
-            });
         }
 
         private void OnGameChanged(object? sender, EventArgs e)
@@ -82,7 +97,21 @@ namespace ClueDo.ViewModels
                 grdOponnents.Add(lstOponnentsLabels[i], i, 0);
             }
         }
-
+        private async Task PlayDiceAnimation()
+        {
+            int totalFrames = 49;
+            int interations = (int)(animationTimer.TotalTimeInMilliseconds / animationTimer.IntervalInMilliseconds);
+            double step = (double)totalFrames / interations;
+            double frameIndex = 0;
+            for (int i = 0; i < interations; i++)
+            {
+                int currentFrame = Math.Min((int)frameIndex + 1, totalFrames);
+                DiceImage = $"Dice{currentFrame}.png";
+                await MainThread.InvokeOnMainThreadAsync(() => { });
+                frameIndex += step;
+                await Task.Delay((int)animationTimer.IntervalInMilliseconds);
+            }
+        }
         private void OnComplete(Task task)
         {
             if (!task.IsCompletedSuccessfully)

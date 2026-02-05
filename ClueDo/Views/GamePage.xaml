@@ -27,12 +27,12 @@
             Text="{Binding MyName}"
             TextColor="White" />
         <ImageButton
-            Source="dice.png"
+            Source="{Binding DiceImage}"
             BackgroundColor="#E4BD40"
             WidthRequest="110"
             HeightRequest="110"
             CornerRadius="70"
-            Padding="15"
+            Padding="0"
             Margin="5"
             Aspect="AspectFit"
             Command="{Binding RollDiceCommand}">
