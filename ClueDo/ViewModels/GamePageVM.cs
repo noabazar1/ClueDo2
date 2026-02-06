@@ -34,7 +34,7 @@ namespace ClueDo.ViewModels
                 return "";
             }
         }
-        public string diceImage = "Dice1.png";
+        public string diceImage = "Dice/dice1c.png";
         public string DiceImage
         {
             get => diceImage;
@@ -99,14 +99,14 @@ namespace ClueDo.ViewModels
         }
         private async Task PlayDiceAnimation()
         {
-            int totalFrames = 49;
+            int totalFrames = 30;
             int interations = (int)(animationTimer.TotalTimeInMilliseconds / animationTimer.IntervalInMilliseconds);
             double step = (double)totalFrames / interations;
             double frameIndex = 0;
             for (int i = 0; i < interations; i++)
             {
                 int currentFrame = Math.Min((int)frameIndex + 1, totalFrames);
-                DiceImage = $"Dice{currentFrame}.png";
+                DiceImage = $"Dice/dice{currentFrame}c.png";
                 await MainThread.InvokeOnMainThreadAsync(() => { });
                 frameIndex += step;
                 await Task.Delay((int)animationTimer.IntervalInMilliseconds);

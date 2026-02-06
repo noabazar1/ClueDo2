@@ -1,3 +1,4 @@
+using ClueDo.Models;
 using CommunityToolkit.Maui.Views;
 namespace ClueDo.Views;
 
@@ -16,12 +17,12 @@ public partial class CheckPopup : Popup
 		label.FontFamily = null;
 		if (isCorrect)
 		{
-			label.Text = "\u2714";
+			label.Text = Keys.CheckMark;
 			label.TextColor = Colors.Green;
 		}
 		else
 		{
-			label.Text = "\u2716";
+			label.Text = Keys.X;
 			label.TextColor = Colors.Red;
 		}
 	}

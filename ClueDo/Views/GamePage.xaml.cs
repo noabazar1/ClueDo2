@@ -43,7 +43,7 @@ public partial class GamePage : ContentPage
             }
         };
     }
-
+    
     protected override void OnAppearing()
     {
         base.OnAppearing();

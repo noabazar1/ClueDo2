@@ -94,15 +94,59 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\Dice\Dice1.png" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <GoogleServicesJson Include="Resources\Raw\google-services.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiAsset Include="Resources\Images\Dice\Dice1.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice10c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice11c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice12c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice13c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice14c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice15c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice16c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice17c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice18c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice19c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice1c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice20c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice21c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice22c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice23c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice24c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice25c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice26c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice27c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice28c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice29c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice2c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice30c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice31c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice32c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice33c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice34c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice35c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice36c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice37c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice38c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice39c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice3c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice40c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice41c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice42c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice43c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice44c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice45c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice46c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice47c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice48c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice49c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice4c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice5c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice6c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice7c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice8c.png" />
+	  <MauiImage Include="Resources\Images\Dice\dice9c.png" />
 	</ItemGroup>
 
 	<ItemGroup>

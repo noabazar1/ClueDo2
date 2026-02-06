@@ -26,5 +26,7 @@
         public const string WordsDelimiter = " ";
         public const string UpperCaseDelimiter = @"(?=[A-Z}[a-z])";
         public const string NewLine = "\n";
+        public const string X = "\u2716";
+        public const string CheckMark = "\u2714";
     }
 }
