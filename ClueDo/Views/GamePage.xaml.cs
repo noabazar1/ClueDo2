@@ -35,34 +35,10 @@ public partial class GamePage : ContentPage
 
             if (result is Accusation accusation)
             {
-                List<string> matches = game.Answer!.GetMatchingParts(accusation);
-                if (matches.Count == 0)
-                {
-                    await DisplayAlert(
-                        Strings.Wrong,
-                        Strings.NoCorrectGuesses,
-                        Strings.Ok
-                    );
-                }
-                else
-                {
-                    string message = Strings.CorrectParameters;
-
-                    if (matches.Contains(Strings.Room))
-                        message += Strings.TheRoom;
-
-                    if (matches.Contains(Strings.Weapon))
-                        message += Strings.TheMurderWeapon;
-
-                    if (matches.Contains(Strings.Suspect))
-                        message += Strings.TheSuspect;
-
-                    await DisplayAlert(
-                        Strings.Check,
-                        message.TrimEnd(),
-                        Strings.Ok
-                    );
-                }
+                bool roomCorrect = game.Answer!.Room == accusation.Room;
+                bool weaponCorrect = game.Answer!.Weapon == accusation.Weapon;
+                bool suspectCorrect = game.Answer!.Suspect == accusation.Suspect;
+                await this.ShowPopupAsync(new CheckPopup(roomCorrect, weaponCorrect, suspectCorrect));
                 game.EndTurnAfterSuggestion();
             }
         };

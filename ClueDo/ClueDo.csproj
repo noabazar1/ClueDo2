@@ -94,7 +94,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\Dice\Dice1.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <GoogleServicesJson Include="Resources\Raw\google-services.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiAsset Include="Resources\Images\Dice\Dice1.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -123,10 +131,10 @@
 	  <MauiXaml Update="Views\AuthPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\GamePage.xaml">
+	  <MauiXaml Update="Views\CheckPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\GuessResultPopup.xaml">
+	  <MauiXaml Update="Views\GamePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\SuggestionPopup.xaml">
