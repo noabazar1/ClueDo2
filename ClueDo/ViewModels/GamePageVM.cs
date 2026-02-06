@@ -15,7 +15,7 @@ namespace ClueDo.ViewModels
         public string MyName => game.MyName;
         public bool IsMyTurn => game.IsMyTurn();
         public string StatusMessage => game.StatusMessage;
-        private readonly TimerSettings animationTimer = new TimerSettings(800, 40);
+        private readonly TimerSettings animationTimer = new TimerSettings(600, 30);
         [RelayCommand]
         private async Task RollDice()
         {

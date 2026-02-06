@@ -35,7 +35,10 @@
             Padding="0"
             Margin="5"
             Aspect="AspectFit"
-            Command="{Binding RollDiceCommand}">
+            Command="{Binding RollDiceCommand}"
+            Opacity="1">
+            
+            
             <ImageButton.Shadow>
                 <Shadow
                     Brush="Black"
