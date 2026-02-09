@@ -37,8 +37,6 @@
             Aspect="AspectFit"
             Command="{Binding RollDiceCommand}"
             Opacity="1">
-            
-            
             <ImageButton.Shadow>
                 <Shadow
                     Brush="Black"
@@ -54,5 +52,11 @@
             HorizontalOptions="Center"
             Text="{Binding DiceResult}"
             TextColor="White" />
+        <Button Text="Start Game"
+                FontFamily="ClueFont"
+                BackgroundColor="#E4BD40"
+                IsVisible="{Binding IsStartButtonVisible}"
+                IsEnabled="{Binding IsStarted, Converter={StaticResource invertBoolConvert}}"
+                Command="{Binding StartGameCommand}"/>
     </VerticalStackLayout>
 </ContentPage>

@@ -38,8 +38,16 @@ public partial class GamePage : ContentPage
                 bool roomCorrect = game.Answer!.Room == accusation.Room;
                 bool weaponCorrect = game.Answer!.Weapon == accusation.Weapon;
                 bool suspectCorrect = game.Answer!.Suspect == accusation.Suspect;
-                await this.ShowPopupAsync(new CheckPopup(roomCorrect, weaponCorrect, suspectCorrect));
-                game.EndTurnAfterSuggestion();
+                if (roomCorrect && weaponCorrect && suspectCorrect)
+                {
+                    await this.ShowPopupAsync(new VictoryPopup());
+                }
+                else
+                {
+                    await this.ShowPopupAsync(new CheckPopup(roomCorrect, weaponCorrect, suspectCorrect));
+                    game.EndTurnAfterSuggestion();
+                }
+                    
             }
         };
     }

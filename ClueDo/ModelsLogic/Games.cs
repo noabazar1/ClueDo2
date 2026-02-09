@@ -64,6 +64,7 @@ namespace ClueDo.ModelsLogic
             {
                 HostName = myUserId,
                 HostId = myUserId,
+                IsHostUser = true,
                 Created = DateTime.Now
             };
 

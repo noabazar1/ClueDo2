@@ -15,12 +15,24 @@ namespace ClueDo.ViewModels
         public string MyName => game.MyName;
         public bool IsMyTurn => game.IsMyTurn();
         public string StatusMessage => game.StatusMessage;
+        public bool IsStarted => game.IsStarted;
+        public bool IsHostUser => game.IsHostUser;
+        public bool IsStartButtonVisible => IsHostUser && !game.IsStarted;
         private readonly TimerSettings animationTimer = new TimerSettings(600, 30);
         [RelayCommand]
         private async Task RollDice()
         {
-            await PlayDiceAnimation();
-            game.RollDiceForCurrentPlayer();
+                await PlayDiceAnimation();
+                game.RollDiceForCurrentPlayer();
+        }
+        [RelayCommand]
+        private void StartGame()
+        {
+            if (!IsHostUser) 
+                return;
+            game.IsStarted = true;
+            game.SetDocument(_ => { });
+            OnPropertyChanged(nameof(IsStartButtonVisible));
         }
         public string DiceResult
         {
@@ -65,6 +77,7 @@ namespace ClueDo.ViewModels
             OnPropertyChanged(nameof(IsMyTurn));
             OnPropertyChanged(nameof(StatusMessage));
             OnPropertyChanged(nameof(DiceResult));
+            RollDiceCommand.NotifyCanExecuteChanged();
         }
         private void UpdatGameGrid()
         {
@@ -99,6 +112,8 @@ namespace ClueDo.ViewModels
         }
         private async Task PlayDiceAnimation()
         {
+            if (!game.IsMyTurn())
+                return;
             int totalFrames = 30;
             int interations = (int)(animationTimer.TotalTimeInMilliseconds / animationTimer.IntervalInMilliseconds);
             double step = (double)totalFrames / interations;

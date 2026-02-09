@@ -308,9 +308,10 @@ namespace ClueDo.ModelsLogic
 
         public void RollDiceForCurrentPlayer()
         {
-            if (!IsMyTurn())
+            if (!IsStarted)
                 return;
-
+            if (!IsMyTurn()) 
+                return;
             Player me = Players.PlayersList[Players.MyIndex];
 
             if (me.MovesLeft > 0)
