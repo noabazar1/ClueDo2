@@ -10,6 +10,7 @@ public partial class GamePage : ContentPage
     private readonly GamePageVM gpVM;
     private readonly Game game;
     bool popupOpen = false;
+    private EventHandler? gameChangedHandler;
 
     public GamePage(Game game)
     {
@@ -40,7 +41,8 @@ public partial class GamePage : ContentPage
                 bool suspectCorrect = game.Answer!.Suspect == accusation.Suspect;
                 if (roomCorrect && weaponCorrect && suspectCorrect)
                 {
-                    await this.ShowPopupAsync(new VictoryPopup());
+                    game.EndGame(game.MyName);
+                    return;
                 }
                 else
                 {
@@ -50,8 +52,27 @@ public partial class GamePage : ContentPage
                     
             }
         };
+        gameChangedHandler = async (_, __) =>
+        {
+            if (!game.IsGameOver)
+                return;
+
+            if (popupOpen)
+                return;
+
+            popupOpen = true;
+
+            if (game.WinnerName == game.MyName)
+                await this.ShowPopupAsync(new VictoryPopup());
+            else
+                await this.ShowPopupAsync(new LosePopup(game.WinnerName!));
+        };
+
+        game.OnGameChanged += gameChangedHandler;
+
+
     }
-    
+
     protected override void OnAppearing()
     {
         base.OnAppearing();
@@ -61,6 +82,9 @@ public partial class GamePage : ContentPage
     protected override void OnDisappearing()
     {
         gpVM.RemoveSnapshotListener();
+        if (gameChangedHandler != null)
+            game.OnGameChanged -= gameChangedHandler;
+
         base.OnDisappearing();
     }
 }

@@ -13,27 +13,27 @@ namespace ClueDo.Models
         public int GridIndex { get; set; }
         public bool IsDoor { get; set; }
         public string? RoomName { get; set; }
-        private readonly Color baseColor = Color.FromArgb("#F7D275");
+        private readonly Color baseColor = Colors.Transparent;
         public IndexButton(int row, int columnIndex)
         {
             Row = row;
             Column = columnIndex;
-            HeightRequest = 25;
-            WidthRequest = HeightRequest;
             BackgroundColor = baseColor;
-            BorderColor = Colors.Black;
             BorderWidth = 0.5;
+            BorderColor = Colors.Black;
+            Margin = 0;
+            Padding = 0;
             CornerRadius = 0;
         }
         public IndexButton()
         {
             Row = 0;
             Column = 0;
-            HeightRequest = 25;
-            WidthRequest = HeightRequest;
             BackgroundColor = baseColor;
-            BorderColor = Colors.Black;
             BorderWidth = 0.5;
+            BorderColor = Colors.Black;
+            Margin = 0;
+            Padding = 0;
             CornerRadius = 0;
         }
         public void RestoreColor()

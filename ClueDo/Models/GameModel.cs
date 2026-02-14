@@ -50,6 +50,8 @@ namespace ClueDo.Models
         public string HostId { get; set; } = string.Empty;
         public Answer? Answer { get; set; }
         public bool IsStarted { get; set; }
+        public bool IsGameOver { get; set; }
+        public string? WinnerName { get; set; }
         public abstract void SetDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void RemoveSnapshotListener();
         public abstract void AddSnapshotListener();

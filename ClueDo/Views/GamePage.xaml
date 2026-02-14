@@ -18,9 +18,24 @@
             Text="{Binding StatusMessage}"
             TextColor="White" />
         <Grid
-            x:Name="grdBoard"
-            HorizontalOptions="Center"
-            VerticalOptions="Center" />
+    x:Name="BoardContainer"
+    HorizontalOptions="Center"
+    VerticalOptions="Center">
+
+            <!-- תמונת הלוח -->
+            <Image
+        x:Name="imgBoard"
+        Source="board.png"
+        Aspect="AspectFit" />
+
+            <Grid x:Name="grdBoard"
+                  Margin="0, 0, 0, 0"
+                  RowSpacing="0"
+                  ColumnSpacing="0"
+          HorizontalOptions="Fill"
+          VerticalOptions="Fill" />
+        </Grid>
+
         <Label
             FontFamily="ClueFont"
             HorizontalOptions="Center"

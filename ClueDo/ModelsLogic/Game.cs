@@ -21,7 +21,6 @@ namespace ClueDo.ModelsLogic
             this.grdBoard = grdBoard;
             Player p = new(new User().Name, 0);
             Players.Add(p);
-            Players.NextPlay = Players.TotalPlayers - 1;
         }
         public Game()
         {
@@ -75,7 +74,7 @@ namespace ClueDo.ModelsLogic
             Players.Add(p);
             fbd.StartBatch();
             fbd.BatchIncrementField(Keys.GamesCollection, Id, nameof(CurrentPlayers), 1);
-            fbd.BatchUpdateField(Keys.GamesCollection, Id, nameof(PlayersNames), PlayersNames);
+            fbd.BatchUpdateField(Keys.GamesCollection, Id, nameof(Players), Players);
             fbd.CommitBatch(OnComplete);
         }
         public override Position GetPlayerPosition(int playerIndex)
@@ -174,11 +173,15 @@ namespace ClueDo.ModelsLogic
                     int myIndex = Players.MyIndex;
                     Players = game.Players;
                     Players.MyIndex = myIndex;
+                    IsStarted = game.IsStarted;
 
                     IsHostTurn = game.IsHostTurn;
                     NextPlay = game.NextPlay;
                     CurrentPlayers = game.CurrentPlayers;
                     CurrentTurnIndex = game.CurrentTurnIndex;
+
+                    IsGameOver = game.IsGameOver;
+                    WinnerName = game.WinnerName;
                     _status.CurrentStatus = IsMyTurn() ? GameStatus.Status.Play : GameStatus.Status.Wait;
                     SyncStatus();
 
@@ -259,7 +262,7 @@ namespace ClueDo.ModelsLogic
                 return;
             if (currentPlayer.Button != null)
             {
-                currentPlayer.Button.BackgroundColor = Color.FromArgb("#F7D275");
+                currentPlayer.Button.BackgroundColor = Colors.Transparent;
             }
 
             currentPlayer.Button = targetBtn;
@@ -340,6 +343,19 @@ namespace ClueDo.ModelsLogic
                 return false;
 
             return Answer.Matches(accusation);
+        }
+        public void EndGame(string winnerName)
+        {
+            IsGameOver = true;
+            WinnerName = winnerName;
+            Console.WriteLine("EndGame called, IsGameOver=" + IsGameOver);
+            Dictionary<string, object> dict = new()
+            {
+                { nameof(IsGameOver), IsGameOver },
+                { nameof(WinnerName), WinnerName }
+            };
+
+            fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
 
         protected override void UpdateFbMove()

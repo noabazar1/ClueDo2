@@ -36,8 +36,8 @@ namespace ClueDo.ModelsLogic
 
             for (int i = 0; i < BoardSize; i++)
             {
-                board.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                board.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+                board.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+                board.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
             }
         }
         public void CreateButtons(Grid board, EventHandler clickHandler)
@@ -64,7 +64,10 @@ namespace ClueDo.ModelsLogic
                     blocked[row, col] = true;
 
                     buttons[row, col].IsEnabled = false;
-                    buttons[row, col].BackgroundColor = Colors.LightCoral;
+                    buttons[row, col].BackgroundColor = Colors.Transparent;
+                    buttons[row, col].BorderWidth = 0;
+                    buttons[row, col].Padding = 0;
+                    buttons[row, col].Margin = 0;
                 }
             }
         }
@@ -80,7 +83,7 @@ namespace ClueDo.ModelsLogic
             MakeDoor(11, 3, Strings.Lounge);
             BlockArea(10, 14, 6, 9); 
             MakeDoor(10, 7, Strings.DiningRoom);
-            BlockArea(5, 9, 11, 13); 
+            BlockArea(5, 9, 11, 14); 
             BlockArea(6, 8, 14, 14); 
             BlockArea(5, 8, 10, 10);  
             MakeDoor(7, 10, Strings.Ballroom);
@@ -97,7 +100,6 @@ namespace ClueDo.ModelsLogic
             btn.IsEnabled = true;
             btn.IsDoor = true;
             btn.RoomName = roomName;
-            btn.BackgroundColor = Colors.LightPink;
         }
         public void ResetBoardColors()
         {
@@ -107,7 +109,7 @@ namespace ClueDo.ModelsLogic
                 {
                     if (!blocked[row, col])
                     {
-                        buttons[row, col].BackgroundColor = Color.FromArgb("#F7D275");
+                        buttons[row, col].BackgroundColor = Colors.Transparent;
                     }
                 }
             }

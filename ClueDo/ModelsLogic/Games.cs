@@ -8,7 +8,7 @@ namespace ClueDo.ModelsLogic
     {
         protected override void OnChange(IQuerySnapshot snapshot, Exception error)
         {
-            fbd.GetDocumentsWhereEqualTo(Keys.GamesCollection, nameof(GameModel.IsFull), false, OnComplete);
+            OnComplete(snapshot);
         }
         protected override void OnComplete(Task task)
         {
@@ -36,7 +36,11 @@ namespace ClueDo.ModelsLogic
                 Game? game = ds.ToObject<Game>();
                 if (game != null)
                 {
+                    if (game.IsStarted ||game.IsGameOver)
+                        continue;
+
                     game.Id = ds.Id;
+                    Console.WriteLine($"Game: {game!.Id}  IsGameOver: {game.IsGameOver}");
                     GamesList.Add(game);
                 }
             }
@@ -53,6 +57,7 @@ namespace ClueDo.ModelsLogic
         public override void RemoveSnapshotListener()
         {
             ilr?.Remove();
+            ilr = null;
         }
         public override void AddGame()
         {

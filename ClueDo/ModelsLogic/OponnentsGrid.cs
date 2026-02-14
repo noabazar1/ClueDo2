@@ -33,7 +33,7 @@ namespace ClueDo.ModelsLogic
                 grdOponnents.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
                 lstOponnentsLabels.Add(new Label
                 {
-                    Text = Strings.Waiting,
+                    Text = string.Empty,
                     TextColor = Colors.White,
                     FontSize = 14,
                     FontFamily = "ClueFont",

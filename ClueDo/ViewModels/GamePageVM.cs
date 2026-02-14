@@ -1,6 +1,8 @@
 ﻿using ClueDo.Models;
 using ClueDo.ModelsLogic;
+using ClueDo.Views;
 using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -22,8 +24,8 @@ namespace ClueDo.ViewModels
         [RelayCommand]
         private async Task RollDice()
         {
-                await PlayDiceAnimation();
-                game.RollDiceForCurrentPlayer();
+            await PlayDiceAnimation();
+            game.RollDiceForCurrentPlayer();
         }
         [RelayCommand]
         private void StartGame()
@@ -102,7 +104,7 @@ namespace ClueDo.ViewModels
                 grdOponnents.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
                 lstOponnentsLabels.Add(new Label
                 {
-                    Text = Strings.Waiting,
+                    Text = string.Empty,
                     FontSize = 16,
                     Margin = new Thickness(5),
                     Padding = new Thickness(12)
@@ -112,7 +114,7 @@ namespace ClueDo.ViewModels
         }
         private async Task PlayDiceAnimation()
         {
-            if (!game.IsMyTurn())
+            if (!game.IsMyTurn() || !IsStarted)
                 return;
             int totalFrames = 30;
             int interations = (int)(animationTimer.TotalTimeInMilliseconds / animationTimer.IntervalInMilliseconds);

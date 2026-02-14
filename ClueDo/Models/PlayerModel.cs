@@ -6,7 +6,7 @@ namespace ClueDo.Models
 {
     public abstract class PlayerModel
     {
-        public Position[] startPositions = [new(9, 14), new(4, 14), new(0, 10), new(0, 4)];
+        public Position[] startPositions = [new(10, 14), new(4, 14), new(0, 10), new(0, 4)];
         protected Color[] playerColors = [Colors.Red, Colors.Green, Colors.Orange, Colors.Beige];
         public int Index { get; set; }
         public string Name { get; set; }
