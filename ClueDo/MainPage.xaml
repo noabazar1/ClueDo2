@@ -8,9 +8,9 @@
     x:DataType="vm:MainPageVM"
     BackgroundImageSource="background.jpg"
     IsBusy="{Binding IsBusy}">
-    <VerticalStackLayout>
-        <Grid Padding="5" ColumnSpacing="5">
-            <Button
+        <VerticalStackLayout Grid.Row="0">
+            <Grid Padding="5" ColumnSpacing="5">
+                <Button
                 Margin="10"
                 BackgroundColor="#E4BD40"
                 Command="{Binding AddGameCommand}"
@@ -18,21 +18,21 @@
                 FontSize="Body"
                 HorizontalOptions="Fill"
                 Text="{x:Static m:Strings.AddGame}">
-                <Button.Shadow>
-                    <Shadow
+                    <Button.Shadow>
+                        <Shadow
                         Brush="Black"
                         Opacity="0.8"
                         Radius="18"
                         Offset="5,5" />
-                </Button.Shadow>
-            </Button>
-        </Grid>
-        <ListView ItemsSource="{Binding GamesList}" SelectedItem="{Binding SelectedItem}">
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="m:GameModel">
-                    <ViewCell>
-                        <Grid ColumnDefinitions="*,2*,0.5*">
-                            <Label
+                    </Button.Shadow>
+                </Button>
+            </Grid>
+            <ListView ItemsSource="{Binding GamesList}" SelectedItem="{Binding SelectedItem}">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="m:GameModel">
+                        <ViewCell>
+                            <Grid ColumnDefinitions="*,2*,0.5*">
+                                <Label
                                 Grid.Column="0"
                                 Margin="20,0,0,0"
                                 FontAttributes="Bold"
@@ -41,16 +41,16 @@
                                 HorizontalTextAlignment="Start"
                                 Text="{Binding HostName}"
                                 TextColor="White" />
-                            <Label
+                                <Label
                                 Grid.Column="1"
                                 FontFamily="ClueFont"
                                 FontSize="20"
                                 Text="{Binding Created}"
                                 TextColor="White" />
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-    </VerticalStackLayout>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
 </ContentPage>
