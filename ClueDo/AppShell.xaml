@@ -8,13 +8,21 @@
     Title="ClueDo"
     Shell.BackgroundColor="#003c00"
     Shell.FlyoutBehavior="Disabled"
-    Shell.TitleColor="White">
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-    <ShellContent
-        Title=""
-        ContentTemplate="{DataTemplate v:GamePage}"
-        Route="GamePage" />
+    Shell.TitleColor="White"
+    Shell.TabBarBackgroundColor="#003c00"
+    Shell.TabBarTitleColor="White"
+    Shell.TabBarForegroundColor="#E4BD40"
+    Shell.TabBarUnselectedColor="White">
+
+    <TabBar>
+        <Tab Title="Home Page" Icon="home.png">
+            <ShellContent ContentTemplate="{DataTemplate local:MainPage}"/>
+        </Tab>
+        <Tab Title="Friends" Icon="friends.png">
+            <ShellContent ContentTemplate="{DataTemplate v:FriendsPage}"/>
+        </Tab>
+        <Tab Title="Rules" Icon="rules.png">
+            <ShellContent ContentTemplate="{DataTemplate v:RulesPage}"/>
+        </Tab>
+    </TabBar>
 </Shell>

@@ -1,4 +1,7 @@
-﻿using CommunityToolkit.Maui;
+﻿using ClueDo.Services;
+using ClueDo.ViewModels;
+using ClueDo.Views;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 
 namespace ClueDo
@@ -18,6 +21,9 @@ namespace ClueDo
                     fonts.AddFont("MaterialSymbolsOutlined.ttf", "MaterialSymbols");
                     fonts.AddFont("Sigmar-Regular.ttf", "ClueFont");
                 });
+            builder.Services.AddTransient<FriendsPageVM>();
+            builder.Services.AddSingleton<IContactsService, ContactsService>();
+            builder.Services.AddTransient<FriendsPage>();
 
 #if DEBUG
     		builder.Logging.AddDebug();
