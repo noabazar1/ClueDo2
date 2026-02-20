@@ -23,6 +23,7 @@ namespace ClueDo.ModelsLogic
             IsBusy = false;
             if (task.IsCompletedSuccessfully)
             {
+                Preferences.Set("FirebaseUserId", FirebaseUserId);
                 if (CurrentAction == Actions.Register)
                     SaveToPreferences();
                 OnAuthComplete?.Invoke(this, true);
@@ -61,6 +62,7 @@ namespace ClueDo.ModelsLogic
             Name = Preferences.Get(Keys.NameKey, string.Empty);
             Email = Preferences.Get(Keys.EmailKey, string.Empty);
             Password = Preferences.Get(Keys.PasswordKey, string.Empty);
+            FirebaseUserId = Preferences.Get("FirebaseUserId", string.Empty);
         }
     }
 }

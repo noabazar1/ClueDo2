@@ -24,6 +24,7 @@ namespace ClueDo
             builder.Services.AddTransient<FriendsPageVM>();
             builder.Services.AddSingleton<IContactsService, ContactsService>();
             builder.Services.AddTransient<FriendsPage>();
+            builder.Services.AddSingleton<IFriendsService, FriendsService>();
 
 #if DEBUG
     		builder.Logging.AddDebug();
