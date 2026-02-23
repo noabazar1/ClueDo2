@@ -1,4 +1,5 @@
 ﻿using ClueDo.Models;
+using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Database.Query;
 using System.Collections.Generic;
@@ -15,18 +16,20 @@ namespace ClueDo.Services
         }
         public async Task AddFriendAsync(FriendContact friend)
         {
+            string userId = Preferences.Get("UserId", string.Empty);
             FirebaseObject<FriendContact> response = await _firebase
                 .Child("users")
-                .Child("defaultUser")
+                .Child(userId)
                 .Child("friends")
                 .PostAsync(friend);
             friend.Id = response.Key;
         }
         public async Task<List<FriendContact>> GetFriendsAsync()
         {
+            string userId = Preferences.Get("UserId", string.Empty);
             IReadOnlyCollection<FirebaseObject<FriendContact>> result = await _firebase
                 .Child("users")
-                .Child("defaultUser")
+                .Child(userId)
                 .Child("friends")
                 .OnceAsync<FriendContact>();
             List<FriendContact> friends = result.Select(item => new FriendContact
@@ -39,7 +42,8 @@ namespace ClueDo.Services
         }
         public async Task DeleteFriendAsync(string friendId)
         {
-            await _firebase.Child("users").Child("defaultUser").Child("friends").Child(friendId).DeleteAsync();
+            string userId = Preferences.Get("UserId", string.Empty);
+            await _firebase.Child("users").Child(userId).Child("friends").Child(friendId).DeleteAsync();
         }
     }
 }
