@@ -5,6 +5,7 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ClueDo.ViewModels
 {
@@ -70,8 +71,26 @@ namespace ClueDo.ViewModels
             InitOpponentsGrid(board); 
             if (!game.IsHostUser) 
                 game.UpdateGuestUser(OnComplete);
+            WeakReferenceMessenger.Default.Register<AppMessage<bool>>(this, (r, m) =>
+            {
+                OnIncomingCall();
+            });
         }
+        private void OnIncomingCall()
+        {
+            if (!IsStarted)
+                return;
 
+            WeakReferenceMessenger.Default.Send(
+                new AppMessage<TimerSettings>(
+                    new TimerSettings(10000, 1000))); 
+
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                var popup = new ChallengePopup();
+                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+            });
+        }
         private void OnGameChanged(object? sender, EventArgs e)
         {
             grdOponnents.DisplayOponnentsNames();

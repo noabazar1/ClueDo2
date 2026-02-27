@@ -1,8 +1,12 @@
 ﻿using Android.App;
-using Android.OS;
 using Android.Content.PM;
-using CommunityToolkit.Mvvm.Messaging;
+using Android.OS;
+using Android.Telephony;
+using AndroidX.Core.Content;
 using ClueDo.Models;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Runtime.Versioning;
+using Android.Util;
 
 namespace ClueDo.Platforms.Android
 {
@@ -10,17 +14,24 @@ namespace ClueDo.Platforms.Android
     public class MainActivity : MauiAppCompatActivity
     {
         MyTimer? mTimer;
-        override protected void OnCreate(Bundle? savedInstanceState)
+        protected override async void OnCreate(Bundle? savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            WeakReferenceMessenger.Default.Register<AppMessage<TimerSettings>>(this, (r, m) =>
+
+            PermissionStatus status = await Permissions.RequestAsync<Permissions.Phone>();
+
+            if (status == PermissionStatus.Granted)
             {
-                OnMessageReceived(m.Value);
-            });
-            WeakReferenceMessenger.Default.Register<AppMessage<bool>>(this, (r, m) =>
-            {
-                OnMessageReceived(m.Value);
-            });
+                WeakReferenceMessenger.Default.Register<AppMessage<TimerSettings>>(this, (r, m) =>
+                {
+                    OnMessageReceived(m.Value);
+                });
+
+                WeakReferenceMessenger.Default.Register<AppMessage<bool>>(this, (r, m) =>
+                {
+                    OnMessageReceived(m.Value);
+                });
+            }
         }
 
         private void OnMessageReceived(bool value)

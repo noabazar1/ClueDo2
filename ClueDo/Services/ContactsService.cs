@@ -10,7 +10,7 @@ namespace ClueDo.Services
                 await Permissions.RequestAsync<Permissions.ContactsRead>();
             if (permissionStatus != PermissionStatus.Granted)
                 return null;
-            Contact contact = await Contacts.Default.PickContactAsync();
+            Contact? contact = await Contacts.Default.PickContactAsync();
             if (contact == null)
                 return null;
             return new FriendContact

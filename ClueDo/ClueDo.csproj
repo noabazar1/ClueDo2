@@ -157,6 +157,9 @@
 	  <MauiXaml Update="Views\AuthPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\ChallengePopup.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\CheckPopup.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

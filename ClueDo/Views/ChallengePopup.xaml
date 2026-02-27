@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="ClueDo.Views.ChallengePopup">
+
+    <VerticalStackLayout Padding="25" BackgroundColor="White">
+        <Label Text="A friend is calling"
+               FontSize="22"
+               HorizontalOptions="Center"/>
+        <Label Text="{Binding TimerText}"
+       FontSize="40"
+       HorizontalOptions="Center" />
+
+        <Label Text="Press 20 times in 10 seconds!"
+               HorizontalOptions="Center"/>
+
+        <Label x:Name="lblCounter"
+               Text="0 / 20"
+               FontSize="18"
+               HorizontalOptions="Center"/>
+
+        <Button Text="hurry!"
+                Clicked="OnClicked"/>
+    </VerticalStackLayout>
+</toolkit:Popup>

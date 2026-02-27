@@ -45,5 +45,20 @@ namespace ClueDo.Services
             string userId = Preferences.Get("UserId", string.Empty);
             await _firebase.Child("users").Child(userId).Child("friends").Child(friendId).DeleteAsync();
         }
+        public async Task<bool> IsFriendAsync(string phone)
+        {
+            var friends = await GetFriendsAsync();
+
+            return friends.Any(f =>
+                Normalize(f.Phone) == Normalize(phone));
+        }
+
+        private string Normalize(string? phone)
+        {
+            if (string.IsNullOrEmpty(phone))
+                return string.Empty;
+
+            return new string(phone.Where(char.IsDigit).ToArray());
+        }
     }
 }

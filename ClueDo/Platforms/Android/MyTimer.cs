@@ -13,6 +13,7 @@ namespace ClueDo.Platforms.Android
 
         public override void OnTick(long millisUntilFinished)
         {
+            System.Console.WriteLine("TICK: " + millisUntilFinished);
             WeakReferenceMessenger.Default.Send(new AppMessage<long>(millisUntilFinished));
         }
     }

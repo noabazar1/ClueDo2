@@ -1,7 +1,9 @@
 using ClueDo.Models;
 using ClueDo.ModelsLogic;
+using ClueDo.Services;
 using ClueDo.ViewModels;
 using CommunityToolkit.Maui.Views;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace ClueDo.Views;
 
@@ -11,6 +13,7 @@ public partial class GamePage : ContentPage
     private readonly Game game;
     bool popupOpen = false;
     private EventHandler? gameChangedHandler;
+    private readonly IFriendsService friendsService = new FriendsService();
 
     public GamePage(Game game)
     {
@@ -69,8 +72,32 @@ public partial class GamePage : ContentPage
         };
 
         game.OnGameChanged += gameChangedHandler;
+        WeakReferenceMessenger.Default.Register<AppMessage<string>>(this, async (r, m) =>
+        {
+            string incomingNumber = m.Value;
 
+            if (!game.IsStarted || game.IsGameOver)
+                return;
 
+            if (popupOpen)
+                return;
+
+            popupOpen = true;
+
+            object? result = await this.ShowPopupAsync(new ChallengePopup());
+
+            popupOpen = false;
+
+            if (result is bool success && !success)
+            {
+                string winner = game.Players
+                    .PlayersList
+                    .First(p => p.Name != game.MyName)
+                    .Name;
+
+                game.EndGame(winner);
+            }
+        });
     }
 
     protected override void OnAppearing()
@@ -84,7 +111,7 @@ public partial class GamePage : ContentPage
         gpVM.RemoveSnapshotListener();
         if (gameChangedHandler != null)
             game.OnGameChanged -= gameChangedHandler;
-
+        WeakReferenceMessenger.Default.UnregisterAll(this);
         base.OnDisappearing();
     }
 }
