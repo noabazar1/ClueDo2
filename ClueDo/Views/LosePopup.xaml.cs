@@ -4,13 +4,13 @@ namespace ClueDo.Views;
 
 public partial class LosePopup : Popup
 {
-	public LosePopup(string winnerName)
+	public LosePopup()
 	{
 		InitializeComponent();
 	}
     private async void OnBackClicked(object sender, EventArgs e)
     {
         Close();
-        await Shell.Current.GoToAsync("//MainPage");
+        await Shell.Current.GoToAsync("//MainArea");
     }
 }

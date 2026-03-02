@@ -47,9 +47,9 @@ namespace ClueDo.ViewModels
         private void OnGameAdded(object? sender, Game game)
         {
             OnPropertyChanged(nameof(IsBusy));
-            MainThread.InvokeOnMainThreadAsync(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
-                Shell.Current.Navigation.PushAsync(new GamePage(game), true);
+                await Shell.Current.Navigation.PushAsync(new GamePage(game));
             });
         }
         public void AddSnapshotListener()

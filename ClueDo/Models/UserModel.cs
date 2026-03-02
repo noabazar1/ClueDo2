@@ -13,7 +13,7 @@ namespace ClueDo.Models
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string FirebaseUserId { get; set; }
+        public string? FirebaseUserId { get; set; }
         public abstract void Register();
         public abstract void Login();
         public abstract bool IsValid();

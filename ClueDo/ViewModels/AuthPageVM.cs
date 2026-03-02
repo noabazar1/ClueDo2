@@ -58,17 +58,13 @@ namespace ClueDo.ViewModels
             user.OnAuthComplete += OnAuthComplete;
         }
 
-
-
-        private void OnAuthComplete(object? sender, bool success)
+        private async void OnAuthComplete(object? sender, bool success)
         {
             OnPropertyChanged(nameof(IsBusy));
-            if (success && Application.Current != null)
+
+            if (success)
             {
-                MainThread.InvokeOnMainThreadAsync(() =>
-                {
-                    Application.Current.MainPage = new AppShell();
-                });
+                await Shell.Current.GoToAsync("//MainArea");
             }
         }
 

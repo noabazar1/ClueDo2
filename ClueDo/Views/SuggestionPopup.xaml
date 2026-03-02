@@ -20,12 +20,12 @@
                    TextColor="White"
                    HorizontalOptions="Center"/>
 
-            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="RoomPicker" Title="room"/>
-            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="WeaponPicker" Title="weapon"/>
-            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="SuspectPicker" Title="suspect"/>
+            <Entry BackgroundColor="#003c00" FontFamily="ClueFont" TextColor="White" Text="{Binding Room}" IsReadOnly="True"/>
+            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="WeaponPicker" Title="weapon" ItemsSource="{Binding Weapons}" SelectedItem="{Binding SelectedWeapon}"/>
+            <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="SuspectPicker" Title="suspect" ItemsSource="{Binding Suspects}" SelectedItem="{Binding SelectedSuspect}"/>
 
             <Button Text="send"
-                    Clicked="OnConfirm"
+                    Command="{Binding ConfirmCommand}"
                     BackgroundColor="#E4BD40"/>
 
         </VerticalStackLayout>

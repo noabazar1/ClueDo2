@@ -14,6 +14,7 @@ namespace ClueDo.ModelsLogic
         private GameBoard? boardLogic;
         private readonly Dice dice = new();
         public event Action<string>? DoorClicked;
+        private bool _gameOverPopupShown = false;
         public string? CurrentRoom { get; private set; }
         public Game(Grid grdBoard)
         {
@@ -21,6 +22,7 @@ namespace ClueDo.ModelsLogic
             this.grdBoard = grdBoard;
             Player p = new(new User().Name, 0);
             Players.Add(p);
+            InitBoard(grdBoard);
         }
         public Game()
         {
@@ -182,6 +184,23 @@ namespace ClueDo.ModelsLogic
 
                     IsGameOver = game.IsGameOver;
                     WinnerName = game.WinnerName;
+
+                    if (IsGameOver && !_gameOverPopupShown)
+                    {
+                        _gameOverPopupShown = true;
+
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            if (WinnerName == Players.PlayersList[Players.MyIndex].Name)
+                            {
+                                await Shell.Current.CurrentPage.ShowPopupAsync(new VictoryPopup());
+                            }
+                            else
+                            {
+                                await Shell.Current.CurrentPage.ShowPopupAsync(new LosePopup());
+                            }
+                        });
+                    }
                     _status.CurrentStatus = IsMyTurn() ? GameStatus.Status.Play : GameStatus.Status.Wait;
                     SyncStatus();
 
@@ -223,22 +242,25 @@ namespace ClueDo.ModelsLogic
 
         public override void OnButtonClicked(object? sender, EventArgs e)
         {
-            if (sender is not IndexButton btn)
-                return;
-
-            if (btn.IsDoor)
+            if (IsStarted)
             {
-                Player me = Players.PlayersList[Players.MyIndex];
-                if (me.MovesLeft <= 0)
+                if (sender is not IndexButton btn)
                     return;
-                if (!Game.CanMoveTo(me, btn.Row, btn.Column))
+
+                if (btn.IsDoor)
+                {
+                    Player me = Players.PlayersList[Players.MyIndex];
+                    if (me.MovesLeft <= 0)
+                        return;
+                    if (!Game.CanMoveTo(me, btn.Row, btn.Column))
+                        return;
+                    CurrentRoom = btn.RoomName;
+                    me.IsInRoom = true;
+                    DoorClicked?.Invoke(btn.RoomName!);
                     return;
-                CurrentRoom = btn.RoomName;
-                me.IsInRoom = true;
-                DoorClicked?.Invoke(btn.RoomName!);
-                return;
+                }
+                Play(btn.Row, btn.Column);
             }
-            Play(btn.Row, btn.Column);
         }
         protected override void Play(int rowIndex, int columnIndex)
         {
@@ -268,7 +290,7 @@ namespace ClueDo.ModelsLogic
             currentPlayer.Button = targetBtn;
             currentPlayer.Position = new Position(rowIndex, columnIndex);
             currentPlayer.MovesLeft--;
-
+            Debug.WriteLine($"Dice rolled: {currentPlayer.MovesLeft}");
             boardLogic.ResetBoardColors();
             DrawAllPlayers();
 
@@ -344,17 +366,15 @@ namespace ClueDo.ModelsLogic
 
             return Answer.Matches(accusation);
         }
-        public void EndGame(string winnerName)
+        public void EndGame()
         {
             IsGameOver = true;
-            WinnerName = winnerName;
-            Console.WriteLine("EndGame called, IsGameOver=" + IsGameOver);
+            WinnerName = Players.PlayersList[MyIndex].Name;
             Dictionary<string, object> dict = new()
             {
                 { nameof(IsGameOver), IsGameOver },
                 { nameof(WinnerName), WinnerName }
             };
-
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
 
@@ -366,6 +386,18 @@ namespace ClueDo.ModelsLogic
                 {nameof(Players), Players}
             };
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
+        }
+        public override bool CheckRoom(string room)
+        {
+            return room == Answer!.Room;
+        }
+        public override bool CheckWeapon(string weapon)
+        {
+            return weapon == Answer!.Weapon;
+        }
+        public override bool CheckSuspect(string suspect)
+        {
+            return suspect == Answer!.Suspect;
         }
         public override bool IsMyTurn()
         {

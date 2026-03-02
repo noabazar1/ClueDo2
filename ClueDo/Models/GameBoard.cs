@@ -107,7 +107,7 @@ namespace ClueDo.ModelsLogic
             {
                 for (int col = 0; col < BoardSize; col++)
                 {
-                    if (!blocked[row, col])
+                    if (!blocked[row, col] && buttons[row, col] != null)
                     {
                         buttons[row, col].BackgroundColor = Colors.Transparent;
                     }

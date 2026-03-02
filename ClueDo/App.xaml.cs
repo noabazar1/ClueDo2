@@ -13,7 +13,7 @@ namespace ClueDo
                 userId = Guid.NewGuid().ToString();
                 Preferences.Set("UserId", userId);
             }
-            MainPage = new AuthPage();
+            MainPage = new AppShell();
         }
     }
 }

@@ -67,6 +67,9 @@ namespace ClueDo.Models
         public abstract bool AddPlayer(string name);
         public abstract bool IsMyTurn();
         public abstract bool IsOponnentTurn(int oponnentIndex);
+        public abstract bool CheckRoom(string room);
+        public abstract bool CheckWeapon(string weapon);
+        public abstract bool CheckSuspect(string suspect);
         protected abstract void OnChange(IDocumentSnapshot? snapshot, Exception? error);
     }
 }

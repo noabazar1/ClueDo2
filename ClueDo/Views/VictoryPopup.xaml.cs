@@ -12,6 +12,6 @@ public partial class VictoryPopup : Popup
 	private async void OnBackClicked(object sender, EventArgs e)
 	{
 		Close();
-		await Shell.Current.GoToAsync("//MainPage");
+		await Shell.Current.GoToAsync("//MainArea");
 	}
 }

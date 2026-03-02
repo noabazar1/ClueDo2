@@ -16,12 +16,11 @@
         <Label Text="Press 20 times in 10 seconds!"
                HorizontalOptions="Center"/>
 
-        <Label x:Name="lblCounter"
-               Text="0 / 20"
+        <Label Text="{Binding CounterText}"
                FontSize="18"
                HorizontalOptions="Center"/>
 
         <Button Text="hurry!"
-                Clicked="OnClicked"/>
+                Command="{Binding ClickCommand}"/>
     </VerticalStackLayout>
 </toolkit:Popup>
