@@ -71,5 +71,14 @@ namespace ClueDo.Models
         public abstract bool CheckWeapon(string weapon);
         public abstract bool CheckSuspect(string suspect);
         protected abstract void OnChange(IDocumentSnapshot? snapshot, Exception? error);
+        public abstract void EnsureAnswerGenerated(string myUserId);
+        public abstract void DrawAllPlayers();
+        public abstract void UpdateGuestUser(Action<Task> OnComplete);
+        public abstract void PlacePlayer(int playerIndex, int row, int col);
+        public abstract void InitBoard(Grid grid);
+        public abstract void EndTurnAfterSuggestion();
+        public abstract void RollDiceForCurrentPlayer();
+        public abstract void EndGame();
+
     }
 }

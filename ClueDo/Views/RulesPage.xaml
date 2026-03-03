@@ -2,16 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="ClueDo.Views.RulesPage"
-             Title="RulesPage"
+             Title="Rules"
              xmlns:m="clr-namespace:ClueDo.Models"
              xmlns:vm="clr-namespace:ClueDo.ViewModels"
-             x:DataType="vm:MainPageVM"
-             BackgroundImageSource="background.jpg">
-    <VerticalStackLayout>
-        <Label 
-            Text="Rules"
+             x:DataType="vm:RulesPageVM"
+             BackgroundImageSource="background.jpg"
+             Shell.NavBarIsVisible="False">
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label 
+            Text="RULES"
             TextColor="#E4BD40"
+            FontSize="30"
+            FontFamily="ClueFont"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-    </VerticalStackLayout>
+            <Frame
+            BackgroundColor="#003c00"
+            CornerRadius="50"
+            Margin="10">
+                <VerticalStackLayout>
+                    <Label Text="{Binding Rules1}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{Binding Rules2}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{Binding Rules3}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{Binding Rules4}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{Binding Rules5}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{Binding Rules6}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{Binding Rules7}" TextColor="White" FontFamily="ClueFont"/>
+                </VerticalStackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

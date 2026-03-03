@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:v="clr-namespace:ClueDo.ViewModels"
              x:Class="ClueDo.Views.FriendsPage"
-             Title="FriendsPage"
-             BackgroundImageSource="background.jpg">
+             Title="Friends"
+             BackgroundImageSource="background.jpg"
+             Shell.NavBarIsVisible="False">
     <VerticalStackLayout>
         <Label Text="FRIENDS"
                FontFamily="ClueFont"

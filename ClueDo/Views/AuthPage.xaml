@@ -8,7 +8,8 @@
     xmlns:vm="clr-namespace:ClueDo.ViewModels"
     x:DataType="vm:AuthPageVM"
     BackgroundImageSource="background.jpg"
-    IsBusy="{Binding IsBusy}">
+    IsBusy="{Binding IsBusy}"
+    Shell.NavBarIsVisible="False">
     <VerticalStackLayout
         Padding="7"
         HorizontalOptions="Center"

@@ -18,14 +18,14 @@ namespace ClueDo.ModelsLogic
         }
         public void Build(Grid board, EventHandler clickHandler)
         {
-            if (isBuilt)
-                return;
+            if (!isBuilt)
+            {
+                isBuilt = true;
 
-            isBuilt = true;
-
-            CreateGrid(board);
-            CreateButtons(board, clickHandler);
-            BuildRooms();
+                CreateGrid(board);
+                CreateButtons(board, clickHandler);
+                BuildRooms();
+            }
         }
 
         public static void CreateGrid(Grid board)
@@ -88,11 +88,11 @@ namespace ClueDo.ModelsLogic
             BlockArea(5, 8, 10, 10);  
             MakeDoor(7, 10, Strings.Ballroom);
             BlockArea(0, 3, 8, 9);   
-            MakeDoor(3, 8, Strings.BilliardRoom);
+            MakeDoor(3, 8, Strings.Hall);
             BlockArea(0, 4, 5, 6);   
             MakeDoor(4, 5, Strings.Library);
             BlockArea(6, 9, 0, 4);  
-            MakeDoor(7, 4, Strings.Hall);
+            MakeDoor(7, 4, Strings.BilliardRoom);
         }
         public void MakeDoor(int row, int col, string roomName)
         {

@@ -83,7 +83,5 @@ namespace ClueDo.ModelsLogic
                 OnComplete(task);
             });
         }
-
-
     }
 }

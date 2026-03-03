@@ -16,7 +16,7 @@
                    FontFamily="ClueFont"
                    FontSize="30"/>
             <Button Text="Back to main page"
-                    Clicked="OnBackClicked"
+                    Command="{Binding BackCommand}"
                     FontFamily="ClueFont"
                     Margin="5"
                     BackgroundColor="#E4BD40"/>

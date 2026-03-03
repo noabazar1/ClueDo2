@@ -29,7 +29,7 @@ namespace ClueDo.ModelsLogic
             grdBoard = [];
             Players.TotalPlayers = 0;
         }
-        public void EnsureAnswerGenerated(string myUserId)
+        public override void EnsureAnswerGenerated(string myUserId)
         {
             if (Answer != null)
                 return;
@@ -105,7 +105,7 @@ namespace ClueDo.ModelsLogic
                 player.Button = btn;
             }
         }
-        public void DrawAllPlayers()
+        public override void DrawAllPlayers()
         {
             foreach (Player player in Players.PlayersList)
             {
@@ -123,7 +123,7 @@ namespace ClueDo.ModelsLogic
             Id = fbd.SetDocument(this, Keys.GamesCollection, Id, OnComplete);
         }
 
-        public void UpdateGuestUser(Action<Task> OnComplete)
+        public override void UpdateGuestUser(Action<Task> OnComplete)
         {
             IsFull = Players.Count >= 5; 
             UpdateFbJoinGame(OnComplete);
@@ -222,11 +222,11 @@ namespace ClueDo.ModelsLogic
         {
             fbd.DeleteDocument(Keys.GamesCollection, Id, OnComplete);
         }
-        public void PlacePlayer(int playerIndex, int row, int col)
+        public override void PlacePlayer(int playerIndex, int row, int col)
         {
             Players.PlayersList[playerIndex].Position = new Position(row, col);
         }
-        public void InitBoard(Grid grid)
+        public override void InitBoard(Grid grid)
         {
             if (boardLogic != null)
                 return; 
@@ -313,7 +313,7 @@ namespace ClueDo.ModelsLogic
                 OnComplete
             );
         }
-        public void EndTurnAfterSuggestion()
+        public override void EndTurnAfterSuggestion()
         {
             if (!IsMyTurn())
                 return;
@@ -331,7 +331,7 @@ namespace ClueDo.ModelsLogic
             OnGameChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public void RollDiceForCurrentPlayer()
+        public override void RollDiceForCurrentPlayer()
         {
             if (!IsStarted)
                 return;
@@ -359,14 +359,7 @@ namespace ClueDo.ModelsLogic
 
             return dRow + dCol == 1;
         }
-        public bool CheckAccusation(Accusation accusation)
-        {
-            if (Answer == null)
-                return false;
-
-            return Answer.Matches(accusation);
-        }
-        public void EndGame()
+        public override void EndGame()
         {
             IsGameOver = true;
             WinnerName = Players.PlayersList[MyIndex].Name;

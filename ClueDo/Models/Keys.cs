@@ -28,5 +28,6 @@
         public const string NewLine = "\n";
         public const string X = "\u2716";
         public const string CheckMark = "\u2714";
+        
     }
 }

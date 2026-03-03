@@ -14,9 +14,9 @@
     Shell.TabBarForegroundColor="#E4BD40"
     Shell.TabBarUnselectedColor="White">
     <ShellContent
-    Title="AuthPage"
-    ContentTemplate="{DataTemplate v:AuthPage}"
-    Route="AuthPage"/>
+        Title="AuthPage"
+        ContentTemplate="{DataTemplate v:AuthPage}"
+        Route="AuthPage"/>
     <TabBar Route="MainArea">
         <Tab Title="Home Page" Icon="home.png">
             <ShellContent ContentTemplate="{DataTemplate local:MainPage}"/>
