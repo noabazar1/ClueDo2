@@ -21,18 +21,18 @@ public partial class ChallengePopupVM
     public ChallengePopupVM(Popup popup)
     {
         this.popup = popup;
-
         WeakReferenceMessenger.Default.Register<AppMessage<long>>(this, (r, m) =>
         {
             if (m.Value == Keys.FinishedSignal)
             {
                 TimerText = "00:00";
                 popup.Close();
-                return;
             }
-
-            var time = TimeSpan.FromMilliseconds(m.Value);
-            TimerText = time.ToString(@"mm\:ss");
+            else
+            {
+                TimeSpan time = TimeSpan.FromMilliseconds(m.Value);
+                TimerText = time.ToString(@"mm\:ss");
+            }
         });
     }
 

@@ -43,17 +43,16 @@ namespace ClueDo.ViewModels
 
         private void OnConfirm()
         {
-            if (SelectedWeapon == null || SelectedSuspect == null)
-                return;
-
-            Accusation accusation = new Accusation
+            if (SelectedWeapon != null && SelectedSuspect != null)
             {
-                Room = Room,
-                Weapon = SelectedWeapon,
-                Suspect = SelectedSuspect
-            };
-
-            popup.Close(accusation);
+                Accusation accusation = new Accusation
+                {
+                    Room = Room,
+                    Weapon = SelectedWeapon,
+                    Suspect = SelectedSuspect
+                };
+                popup.Close(accusation);
+            }
         }
     }
 }

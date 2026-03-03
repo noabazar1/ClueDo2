@@ -45,21 +45,17 @@ namespace ClueDo.ViewModels
 
         private async Task AddFriend()
         {
-            FriendContact? friend =
-                await _contactsService.PickContactAsync();
-
-            if (friend == null)
-                return;
-
-            bool alreadyExists =
-                Contacts.Any(f => f.Phone == friend.Phone);
-
-            if (alreadyExists)
-                return;
-
-            Contacts.Add(friend);
-
-            await _friendsService.AddFriendAsync(friend);
+            FriendContact? friend = await _contactsService.PickContactAsync();
+            if (friend != null)
+            {
+                bool alreadyExists =
+                    Contacts.Any(f => f.Phone == friend.Phone);
+                if (!alreadyExists)
+                {
+                    Contacts.Add(friend);
+                    await _friendsService.AddFriendAsync(friend);
+                }
+            }
         }
     }
 }

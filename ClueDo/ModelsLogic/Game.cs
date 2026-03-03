@@ -31,24 +31,18 @@ namespace ClueDo.ModelsLogic
         }
         public override void EnsureAnswerGenerated(string myUserId)
         {
-            if (Answer != null)
-                return;
+            if (Answer == null && myUserId == HostId && !string.IsNullOrEmpty(Id))
+            {
+                Answer = Answer.Generate();
 
-            if (myUserId != HostId)
-                return;
-
-            if (string.IsNullOrEmpty(Id))
-                return; 
-
-            Answer = Answer.Generate();
-
-            fbd.UpdateField(
-                Keys.GamesCollection,
-                Id,
-                nameof(Answer),
-                Answer,
-                OnComplete
-            );
+                fbd.UpdateField(
+                    Keys.GamesCollection,
+                    Id,
+                    nameof(Answer),
+                    Answer,
+                    OnComplete
+                );
+            }
         }
         public override bool AddPlayer(string playerName)
         {
@@ -94,15 +88,14 @@ namespace ClueDo.ModelsLogic
         }
         private void DrawPlayer(Player player)
         {
-            if (boardLogic == null)
+            if (boardLogic != null)
             {
-                return;
-            }
-            IndexButton btn = boardLogic.GetButton(player.Position);
-            if (btn != null)
-            {
-                btn.BackgroundColor = player.Color;
-                player.Button = btn;
+                IndexButton btn = boardLogic.GetButton(player.Position);
+                if (btn != null)
+                {
+                    btn.BackgroundColor = player.Color;
+                    player.Button = btn;
+                }
             }
         }
         public override void DrawAllPlayers()
@@ -142,13 +135,13 @@ namespace ClueDo.ModelsLogic
 
         public override void AddSnapshotListener()
         {
-            if (ilr != null)
-                return;
-
-            if (string.IsNullOrEmpty(Id))
-                return;
-
-            ilr = fbd.AddSnapshotListener(Keys.GamesCollection, Id, OnChange);
+            if (ilr == null && !string.IsNullOrEmpty(Id))
+            {
+                ilr = fbd.AddSnapshotListener(
+                    Keys.GamesCollection,
+                    Id,
+                    OnChange);
+            }
         }
         public override void RemoveSnapshotListener()
         {
@@ -228,10 +221,11 @@ namespace ClueDo.ModelsLogic
         }
         public override void InitBoard(Grid grid)
         {
-            if (boardLogic != null)
-                return; 
-            boardLogic = new GameBoard();
-            boardLogic.Build(grid, OnButtonClicked);
+            if (boardLogic == null)
+            {
+                boardLogic = new GameBoard();
+                boardLogic.Build(grid, OnButtonClicked);
+            } 
         }
         private void SyncStatus()
         {
@@ -244,113 +238,100 @@ namespace ClueDo.ModelsLogic
         {
             if (IsStarted)
             {
-                if (sender is not IndexButton btn)
-                    return;
-
-                if (btn.IsDoor)
+                if (sender is IndexButton btn)
                 {
-                    Player me = Players.PlayersList[Players.MyIndex];
-                    if (me.MovesLeft <= 0)
-                        return;
-                    if (!Game.CanMoveTo(me, btn.Row, btn.Column))
-                        return;
-                    CurrentRoom = btn.RoomName;
-                    me.IsInRoom = true;
-                    DoorClicked?.Invoke(btn.RoomName!);
-                    return;
+                    if (btn.IsDoor)
+                    {
+                        Player me = Players.PlayersList[Players.MyIndex];
+
+                        if (me.MovesLeft > 0 &&
+                            Game.CanMoveTo(me, btn.Row, btn.Column))
+                        {
+                            CurrentRoom = btn.RoomName;
+                            me.IsInRoom = true;
+                            DoorClicked?.Invoke(btn.RoomName!);
+                        }
+                    }
+                    else
+                    {
+                        Play(btn.Row, btn.Column);
+                    }
                 }
-                Play(btn.Row, btn.Column);
             }
         }
         protected override void Play(int rowIndex, int columnIndex)
         {
-            if (boardLogic == null || Players?.PlayersList == null)
-                return;
-
-            if (Players.PlayersList.Count == 0)
-                return;
-
-            if (Players.MyIndex < 0 || Players.MyIndex >= Players.PlayersList.Count)
-                return;
-
-            IndexButton targetBtn = boardLogic.GetButton(new Position(rowIndex, columnIndex));
-            if (targetBtn == null)
-                return;
-
-            Player currentPlayer = Players.PlayersList[Players.MyIndex];
-            if (currentPlayer.MovesLeft <= 0)
-                return;
-            if (!Game.CanMoveTo(currentPlayer, rowIndex, columnIndex))
-                return;
-            if (currentPlayer.Button != null)
+            if (boardLogic != null && Players?.PlayersList != null && Players.PlayersList.Count > 0 &&
+                Players.MyIndex >= 0 && Players.MyIndex < Players.PlayersList.Count)
             {
-                currentPlayer.Button.BackgroundColor = Colors.Transparent;
+                IndexButton targetBtn = boardLogic.GetButton(new Position(rowIndex, columnIndex));
+                if (targetBtn != null)
+                {
+                    Player currentPlayer = Players.PlayersList[Players.MyIndex];
+                    if (currentPlayer.MovesLeft > 0 && Game.CanMoveTo(currentPlayer, rowIndex, columnIndex))
+                    {
+                        if (currentPlayer.Button != null)
+                        {
+                            currentPlayer.Button.BackgroundColor = Colors.Transparent;
+                        }
+                        currentPlayer.Button = targetBtn;
+                        currentPlayer.Position = new Position(rowIndex, columnIndex);
+                        currentPlayer.MovesLeft--;
+                        boardLogic.ResetBoardColors();
+                        DrawAllPlayers();
+                        boardLogic.MyTurn();
+                        if (currentPlayer.MovesLeft == 0)
+                        {
+                            CurrentTurnIndex++;
+                            if (CurrentTurnIndex >= Players.PlayersList.Count)
+                            {
+                                CurrentTurnIndex = 0;
+                            }
+                        }
+                        UpdateFbMove();
+                        fbd.UpdateField(
+                            Keys.GamesCollection,
+                            Id,
+                            nameof(Players),
+                            Players,
+                            OnComplete
+                        );
+                    }
+                }
             }
-
-            currentPlayer.Button = targetBtn;
-            currentPlayer.Position = new Position(rowIndex, columnIndex);
-            currentPlayer.MovesLeft--;
-            Debug.WriteLine($"Dice rolled: {currentPlayer.MovesLeft}");
-            boardLogic.ResetBoardColors();
-            DrawAllPlayers();
-
-
-            boardLogic.MyTurn();
-            if (currentPlayer.MovesLeft == 0)
-            {
-                CurrentTurnIndex++;
-
-                if (CurrentTurnIndex >= Players.PlayersList.Count)
-                    CurrentTurnIndex = 0;
-            }
-
-            UpdateFbMove();
-            fbd.UpdateField(
-                Keys.GamesCollection,
-                Id,
-                nameof(Players),
-                Players,
-                OnComplete
-            );
         }
         public override void EndTurnAfterSuggestion()
         {
-            if (!IsMyTurn())
-                return;
-
-            Player me = Players.PlayersList[Players.MyIndex];
-
-            me.MovesLeft = 0;
-
-            CurrentTurnIndex++;
-            if (CurrentTurnIndex >= Players.PlayersList.Count)
-                CurrentTurnIndex = 0;
-
-            SyncStatus();
-            UpdateFbMove();
-            OnGameChanged?.Invoke(this, EventArgs.Empty);
+            if (IsMyTurn())
+            {
+                Player me = Players.PlayersList[Players.MyIndex];
+                me.MovesLeft = 0;
+                CurrentTurnIndex++;
+                if (CurrentTurnIndex >= Players.PlayersList.Count)
+                    CurrentTurnIndex = 0;
+                SyncStatus();
+                UpdateFbMove();
+                OnGameChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public override void RollDiceForCurrentPlayer()
         {
-            if (!IsStarted)
-                return;
-            if (!IsMyTurn()) 
-                return;
-            Player me = Players.PlayersList[Players.MyIndex];
-
-            if (me.MovesLeft > 0)
-                return;
-            dice.StartAnimation();
-            dice.RollDice();
-
-            int total = dice.Die1 + dice.Die2;  
-
-            me.DiceValue = total;
-            me.MovesLeft = total;
-            SyncStatus();
-            UpdateFbMove();
-            OnGameChanged?.Invoke(this, EventArgs.Empty);
+            if (IsStarted && IsMyTurn())
+            {
+                Player me = Players.PlayersList[Players.MyIndex];
+                if (me.MovesLeft == 0)
+                {
+                    dice.StartAnimation();
+                    dice.RollDice();
+                    int total = dice.Die1 + dice.Die2;
+                    me.DiceValue = total;
+                    me.MovesLeft = total;
+                    SyncStatus();
+                    UpdateFbMove();
+                    OnGameChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
         }
         private static bool CanMoveTo(Player player, int targetRow, int targetCol)
         {

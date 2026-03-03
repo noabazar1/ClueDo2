@@ -48,10 +48,8 @@ namespace ClueDo.ModelsLogic
         }
         public override void AddSnapshotListener()
         {
-            if (ilr != null)
-                return;
-
-            ilr = fbd.AddSnapshotListener(Keys.GamesCollection, OnChange!);
+            if (ilr == null)
+                ilr = fbd.AddSnapshotListener(Keys.GamesCollection, OnChange!);
         }
 
         public override void RemoveSnapshotListener()

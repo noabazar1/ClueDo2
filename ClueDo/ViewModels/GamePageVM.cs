@@ -95,41 +95,37 @@ namespace ClueDo.ViewModels
         [RelayCommand]
         private void StartGame()
         {
-            if (!IsHostUser)
-                return;
+            if (IsHostUser)
+            {
+                game.IsStarted = true;
+                game.SetDocument(_ => { });
 
-            game.IsStarted = true;
-            game.SetDocument(_ => { });
-
-            OnPropertyChanged(nameof(IsStartButtonVisible));
+                OnPropertyChanged(nameof(IsStartButtonVisible));
+            }
         }
         private void OnIncomingCall()
         {
-            if (!IsStarted || popupOpen)
-                return;
-
-            popupOpen = true;
-
-            WeakReferenceMessenger.Default.Send(
-                new AppMessage<TimerSettings>(
-                    new TimerSettings(10000, 1000)));
-
-            MainThread.BeginInvokeOnMainThread(async () =>
+            if (IsStarted && !popupOpen)
             {
-                var popup = new ChallengePopup();
-                await Shell.Current.CurrentPage.ShowPopupAsync(popup);
-                popupOpen = false;
-            });
+                popupOpen = true;
+                WeakReferenceMessenger.Default.Send(new AppMessage<TimerSettings>(
+                    new TimerSettings(10000, 1000)));
+                MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    ChallengePopup popup = new ChallengePopup();
+                    await Shell.Current.CurrentPage
+                        .ShowPopupAsync(popup);
+                    popupOpen = false;
+                });
+            }
         }
         private void OnGameChanged(object? sender, EventArgs e)
         {
             grdOponnents.DisplayOponnentsNames();
             UpdateGameGrid();
-
             OnPropertyChanged(nameof(IsMyTurn));
             OnPropertyChanged(nameof(StatusMessage));
             OnPropertyChanged(nameof(DiceResult));
-
             RollDiceCommand.NotifyCanExecuteChanged();
         }
 
@@ -174,57 +170,41 @@ namespace ClueDo.ViewModels
         }
         private async Task PlayDiceAnimation()
         {
-            if (!game.IsMyTurn() || !IsStarted)
-                return;
-
-            int totalFrames = 30;
-            int iterations =
-                (int)(animationTimer.TotalTimeInMilliseconds /
-                animationTimer.IntervalInMilliseconds);
-
-            double step = (double)totalFrames / iterations;
-            double frameIndex = 0;
-
-            for (int i = 0; i < iterations; i++)
+            if (game.IsMyTurn() && IsStarted)
             {
-                int currentFrame =
-                    Math.Min((int)frameIndex + 1, totalFrames);
-
-                DiceImage = $"Dice/dice{currentFrame}c.png";
-
-                await Task.Delay(
-                    (int)animationTimer.IntervalInMilliseconds);
-
-                frameIndex += step;
+                int totalFrames = 30;
+                int iterations = (int)(animationTimer.TotalTimeInMilliseconds / 
+                    animationTimer.IntervalInMilliseconds);
+                double step = (double)totalFrames / iterations;
+                double frameIndex = 0;
+                for (int i = 0; i < iterations; i++)
+                {
+                    int currentFrame = Math.Min((int)frameIndex + 1, totalFrames);
+                    DiceImage = $"Dice/dice{currentFrame}c.png";
+                    await Task.Delay((int)animationTimer.IntervalInMilliseconds);
+                    frameIndex += step;
+                }
             }
         }
         public async Task HandleDoorAsync(string roomName)
         {
             SuggestionPopup suggestionPopup = new SuggestionPopup(roomName);
-
-            object? result =
-                await Shell.Current.CurrentPage.ShowPopupAsync(suggestionPopup);
-
+            object? result = await Shell.Current.CurrentPage .ShowPopupAsync(suggestionPopup);
             Accusation? accusation = result as Accusation;
-            if (accusation == null)
-                return;
-
-            bool roomCorrect = game.CheckRoom(accusation.Room);
-            bool weaponCorrect = game.CheckWeapon(accusation.Weapon);
-            bool suspectCorrect = game.CheckSuspect(accusation.Suspect);
-
-            if (suspectCorrect && roomCorrect && weaponCorrect)
+            if (accusation != null)
             {
-                game.EndGame();
-                return;
+                bool roomCorrect = game.CheckRoom(accusation.Room);
+                bool weaponCorrect = game.CheckWeapon(accusation.Weapon);
+                bool suspectCorrect = game.CheckSuspect(accusation.Suspect);
+                if (suspectCorrect && roomCorrect && weaponCorrect)
+                    game.EndGame();
+                else
+                {
+                    CheckPopup checkPopup = new CheckPopup(roomCorrect, weaponCorrect, suspectCorrect);
+                    await Shell.Current.CurrentPage.ShowPopupAsync(checkPopup);
+                    game.EndTurnAfterSuggestion();
+                }
             }
-
-            CheckPopup checkPopup =
-                new CheckPopup(roomCorrect, weaponCorrect, suspectCorrect);
-
-            await Shell.Current.CurrentPage.ShowPopupAsync(checkPopup);
-
-            game.EndTurnAfterSuggestion(); 
         }
         private void OnComplete(Task task)
         {
