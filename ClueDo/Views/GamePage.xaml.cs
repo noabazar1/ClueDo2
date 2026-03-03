@@ -15,6 +15,7 @@ public partial class GamePage : ContentPage
 
         board = new GameBoard();
         board.Build(grdBoard, game.OnButtonClicked);
+        game.InitBoard(grdBoard);
         game.DoorClicked += OnDoorClicked;
         vm = new GamePageVM(game, grdOponnents, board);
         BindingContext = vm;
