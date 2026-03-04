@@ -30,7 +30,6 @@
         public const string NoCorrectGuesses = "No correct guesses";
         public const string CorrectParameters = "The correct parameters:\n";
         public const string Check = "Check";
-
         public const string Room = "Room";
         public const string Kitchen = "Kitchen";
         public const string Conservatory = "Conservatory";
@@ -41,7 +40,6 @@
         public const string BilliardRoom = "Billiard Room";
         public const string Library = "Library";
         public const string Hall = "Hall";
-
         public const string Weapon = "Weapon";
         public const string Knife = "Knife";
         public const string Rope = "Rope";
@@ -49,7 +47,6 @@
         public const string LeadPipe = "Lead Pipe";
         public const string Revolver = "Revolver";
         public const string Wrench = "Wrench";
-
         public const string Suspect = "Suspect";
         public const string MissScarlet = "Miss Scarlet";
         public const string ColonelMustard = "Colonel Mustard";
@@ -57,11 +54,9 @@
         public const string MrsWhite = "Mrs. White";
         public const string ReverendGreen = "Reverend Green";
         public const string MrsPeacock = "Mrs. Peacock";
-
         public const string TheRoom = "The room\n";
         public const string TheMurderWeapon = "The murder weapon\n";
         public const string TheSuspect = "The suspect\n";
-
         public const string Rules1 = "When the game begins, wait until it is your turn." +
             " You can act only during your own turn. When your turn starts, press the dice button to roll." +
             " The total result of the two dice determines how many steps you may move during that turn." +

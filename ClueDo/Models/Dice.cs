@@ -21,10 +21,5 @@ namespace ClueDo.Models
             Die1 = rand.Next(1, 7);
             Die2 = rand.Next(1, 7);
         }
-
-        public void StartAnimation()
-        {
-            
-        }
     }
 }

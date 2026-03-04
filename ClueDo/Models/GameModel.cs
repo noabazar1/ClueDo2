@@ -61,16 +61,13 @@ namespace ClueDo.Models
         public abstract string GetPlayerName(int playerIndex);
         public abstract void DeleteDocument(Action<System.Threading.Tasks.Task> OnComplete);
         public abstract void OnButtonClicked(object? sender, EventArgs e);
-        protected abstract void Play(int rowIndex, int columnIndex);
-        protected abstract void UpdateStatus();
-        protected abstract void UpdateFbMove();
+        public abstract void EliminateCurrentPlayer();
         public abstract bool AddPlayer(string name);
         public abstract bool IsMyTurn();
         public abstract bool IsOponnentTurn(int oponnentIndex);
         public abstract bool CheckRoom(string room);
         public abstract bool CheckWeapon(string weapon);
         public abstract bool CheckSuspect(string suspect);
-        protected abstract void OnChange(IDocumentSnapshot? snapshot, Exception? error);
         public abstract void EnsureAnswerGenerated(string myUserId);
         public abstract void DrawAllPlayers();
         public abstract void UpdateGuestUser(Action<Task> OnComplete);
@@ -79,6 +76,9 @@ namespace ClueDo.Models
         public abstract void EndTurnAfterSuggestion();
         public abstract void RollDiceForCurrentPlayer();
         public abstract void EndGame();
-
+        protected abstract void Play(int rowIndex, int columnIndex);
+        protected abstract void UpdateStatus();
+        protected abstract void UpdateFbMove();
+        protected abstract void OnChange(IDocumentSnapshot? snapshot, Exception? error);
     }
 }

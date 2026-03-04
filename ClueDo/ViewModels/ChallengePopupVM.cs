@@ -6,11 +6,11 @@ using CommunityToolkit.Mvvm.Messaging;
 
 namespace ClueDo.ViewModels;
 
-public partial class ChallengePopupVM
-    : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+public partial class ChallengePopupVM : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
 {
     private readonly Popup popup;
     private int count = 0;
+    private bool success = false;
 
     [ObservableProperty]
     private string timerText = "00:10";
@@ -26,7 +26,7 @@ public partial class ChallengePopupVM
             if (m.Value == Keys.FinishedSignal)
             {
                 TimerText = "00:00";
-                popup.Close();
+                popup.Close(false);
             }
             else
             {
@@ -43,7 +43,10 @@ public partial class ChallengePopupVM
         CounterText = $"{count} / 20";
 
         if (count == 20)
+        {
             popup.Close();
+            success = true;
+        }
     }
 
     public void Cleanup()

@@ -6,6 +6,13 @@ namespace ClueDo.ModelsLogic
 {
     public class User : UserModel
     {
+        public User()
+        {
+            Name = Preferences.Get(Keys.NameKey, string.Empty);
+            Email = Preferences.Get(Keys.EmailKey, string.Empty);
+            Password = Preferences.Get(Keys.PasswordKey, string.Empty);
+            FirebaseUserId = Preferences.Get("FirebaseUserId", string.Empty);
+        }
         public override void Register()
         {
             IsBusy = true;
@@ -17,7 +24,12 @@ namespace ClueDo.ModelsLogic
             IsBusy = true;
             fbd.SignInWithEmailAndPasswordAsync(Email, Password, OnComplete);
         }
-
+        public override bool IsValid()
+        {
+            return !string.IsNullOrWhiteSpace(Name)
+                && !string.IsNullOrWhiteSpace(Password)
+                && !string.IsNullOrWhiteSpace(Email);
+        }
         private void OnComplete(Task task)
         {
             IsBusy = false;
@@ -37,7 +49,6 @@ namespace ClueDo.ModelsLogic
             else
                 ShowAlert(Strings.UnknownError);
         }
-
         private void ShowAlert(string errMessage)
         {
             errMessage = fbd.GetErrorMessage(errMessage);
@@ -51,18 +62,6 @@ namespace ClueDo.ModelsLogic
             Preferences.Set(Keys.NameKey, Name);
             Preferences.Set(Keys.EmailKey, Email);
             Preferences.Set(Keys.PasswordKey, Password);
-        }
-
-        public override bool IsValid()
-        {
-            return !string.IsNullOrWhiteSpace(Name) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(Email);
-        }
-        public User()
-        {
-            Name = Preferences.Get(Keys.NameKey, string.Empty);
-            Email = Preferences.Get(Keys.EmailKey, string.Empty);
-            Password = Preferences.Get(Keys.PasswordKey, string.Empty);
-            FirebaseUserId = Preferences.Get("FirebaseUserId", string.Empty);
         }
     }
 }

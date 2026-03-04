@@ -8,12 +8,12 @@ namespace ClueDo.Models
 {
     public class IndexButton : Button
     {
-        public int Row { get; set; } 
+        private readonly Color baseColor = Colors.Transparent;
+        public int Row { get; set; }
         public int Column { get; set; }
         public int GridIndex { get; set; }
         public bool IsDoor { get; set; }
         public string? RoomName { get; set; }
-        private readonly Color baseColor = Colors.Transparent;
         public IndexButton(int row, int columnIndex)
         {
             Row = row;

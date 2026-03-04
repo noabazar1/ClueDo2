@@ -18,17 +18,20 @@
                    FontSize="30"/>
             <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto, Auto">
                 <Label Grid.Row="0" Text="Room" TextColor="White" FontFamily="ClueFont" />
-                <Label x:Name="RoomMark" Grid.Row="0" Grid.Column="1" FontSize="18" />
+                <Label Text="{Binding RoomMark}" TextColor="{Binding RoomColor}" Grid.Row="0"
+                       Grid.Column="1" FontSize="18" />
 
                 <Label Grid.Row="1" Text="Weapon" TextColor="White" FontFamily="ClueFont" />
-                <Label x:Name="WeaponMark" Grid.Row="1" Grid.Column="1" FontSize="18" />
+                <Label  Text="{Binding WeaponMark}" TextColor="{Binding WeaponColor}" Grid.Row="1"
+                        Grid.Column="1" FontSize="18" />
 
                 <Label Grid.Row="2" Text="Suspect" TextColor="White" FontFamily="ClueFont" />
-                <Label x:Name="SuspectMark" Grid.Row="2" Grid.Column="1" FontSize="18" />
+                <Label Text="{Binding SuspectMark}" TextColor="{Binding SuspectColor}" Grid.Row="2"
+                       Grid.Column="1" FontSize="18" />
             </Grid>
             <Button
                 Text="OK"
-                Clicked="OnOkClicked"
+                Command="{Binding CloseCommand}"
                 BackgroundColor="#E4BD40"/>
         </VerticalStackLayout>
     </Frame>

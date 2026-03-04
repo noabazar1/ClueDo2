@@ -6,7 +6,6 @@
         public enum Status { Wait, Play }
         public Status CurrentStatus { get; set; } = Status.Wait;
         public string StatusMessage => msgs[(int)CurrentStatus];
-
         internal void UpdateStatus()
         {
             CurrentStatus = CurrentStatus == Status.Play ? Status.Wait : Status.Play;

@@ -42,11 +42,17 @@ namespace ClueDo.ViewModels
                 }
             }
         }
-
         public string DiceResult
         {
             get
             {
+                if (game.Players.PlayersList.Count == 0)
+                    return "";
+
+                if (game.Players.MyIndex < 0 ||
+                    game.Players.MyIndex >= game.Players.PlayersList.Count)
+                    return "";
+
                 Player me = game.Players.PlayersList[game.Players.MyIndex];
                 return me.DiceValue > 0 ? me.DiceValue.ToString() : "";
             }
@@ -85,6 +91,10 @@ namespace ClueDo.ViewModels
 
             game.RemoveSnapshotListener();
         }
+        private async void GoHome()
+        {
+            await Shell.Current.GoToAsync("//MainArea");
+        }
         [RelayCommand]
         private async Task RollDice()
         {
@@ -113,8 +123,15 @@ namespace ClueDo.ViewModels
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
                     ChallengePopup popup = new ChallengePopup();
-                    await Shell.Current.CurrentPage
-                        .ShowPopupAsync(popup);
+                    object? result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
+
+                    bool success = result is bool b && b;
+
+                    if (!success)
+                    {
+                        game.EliminateCurrentPlayer();
+                        GoHome();
+                    }
                     popupOpen = false;
                 });
             }
