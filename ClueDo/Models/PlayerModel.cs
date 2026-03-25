@@ -1,6 +1,4 @@
 ﻿using Plugin.CloudFirestore.Attributes;
-using ClueDo.Models;
-using System.Runtime.Serialization;
 
 namespace ClueDo.Models
 {

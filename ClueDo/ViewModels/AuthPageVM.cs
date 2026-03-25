@@ -36,7 +36,6 @@ namespace ClueDo.ViewModels
                 }
             }
         }
-
         public string Password
         {
             get => user.Password;
@@ -50,24 +49,21 @@ namespace ClueDo.ViewModels
             }
         }
         public bool IsPassword { get; set; } = true;
-
         public AuthPageVM()
         {
             AuthCommand = user.IsRegistered ? new Command(Login, CanAuth) : new Command(Register, CanAuth);
             ToggleIsPasswordCommand = new Command(ToggleIsPassword);
             user.OnAuthComplete += OnAuthComplete;
         }
-
         private async void OnAuthComplete(object? sender, bool success)
         {
             OnPropertyChanged(nameof(IsBusy));
 
             if (success)
             {
-                await Shell.Current.GoToAsync("//MainArea");
+                await Shell.Current.GoToAsync(Keys.MainArea);
             }
         }
-
         private bool CanAuth()
         {
             return user.IsValid();
@@ -82,7 +78,6 @@ namespace ClueDo.ViewModels
             user.Register();
             OnPropertyChanged(nameof(IsBusy));
         }
-
         private void ToggleIsPassword()
         {
             IsPassword = !IsPassword;

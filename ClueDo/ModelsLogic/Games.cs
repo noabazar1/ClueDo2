@@ -1,7 +1,6 @@
-﻿using Plugin.CloudFirestore;
-using ClueDo.Models;
-using ClueDo.ModelsLogic;
+﻿using ClueDo.Models;
 using CommunityToolkit.Maui.Alerts;
+using Plugin.CloudFirestore;
 
 namespace ClueDo.ModelsLogic
 {
@@ -9,8 +8,7 @@ namespace ClueDo.ModelsLogic
     {
         public override void AddSnapshotListener()
         {
-            if (ilr == null)
-                ilr = fbd.AddSnapshotListener(Keys.GamesCollection, OnChange!);
+            ilr ??= fbd.AddSnapshotListener(Keys.GamesCollection, OnChange!);
         }
         public override void RemoveSnapshotListener()
         {
@@ -31,10 +29,7 @@ namespace ClueDo.ModelsLogic
             currentGame.SetDocument(task =>
             {
                 if (task.IsCompletedSuccessfully)
-                {
                     currentGame.EnsureAnswerGenerated(myUserId);
-                }
-
                 OnComplete(task);
             });
         }
@@ -48,12 +43,10 @@ namespace ClueDo.ModelsLogic
             if (task.IsCompletedSuccessfully)
                 OnGameAdded?.Invoke(this, currentGame!);
             else if (task.IsFaulted && task.Exception != null)
-            {
                 MainThread.InvokeOnMainThreadAsync(() =>
                 {
                     Toast.Make(fbd.GetErrorMessage(task.Exception.Message), CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
                 });
-            }
         }
         protected override void OnComplete(IQuerySnapshot qs)
         {
@@ -65,9 +58,8 @@ namespace ClueDo.ModelsLogic
                 {
                     if (game.IsStarted || game.IsGameOver)
                         continue;
-
                     game.Id = ds.Id;
-                    Console.WriteLine($"Game: {game!.Id}  IsGameOver: {game.IsGameOver}");
+                    Console.WriteLine(string.Format(Strings.GameStatus, game!.Id, game.IsGameOver));
                     GamesList.Add(game);
                 }
             }

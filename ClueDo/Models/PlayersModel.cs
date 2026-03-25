@@ -12,7 +12,6 @@ namespace ClueDo.Models
         public List<Player> PlayersList { get; set; } = [];
         public int NextPlay { get; set; }
         public int TotalPlayers = 4;
-
         public abstract void Add(Player p);
         public abstract string GetPlayerName(int index);
         public abstract bool IsOponnentTurn(int oponnentIndex);

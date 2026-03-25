@@ -6,18 +6,21 @@ namespace ClueDo.Services
     {
         public async Task<FriendContact?> PickContactAsync()
         {
-            PermissionStatus permissionStatus =
-                await Permissions.RequestAsync<Permissions.ContactsRead>();
-            if (permissionStatus != PermissionStatus.Granted)
-                return null;
-            Contact? contact = await Contacts.Default.PickContactAsync();
-            if (contact == null)
-                return null;
-            return new FriendContact
+            FriendContact? result = null;
+            PermissionStatus permissionStatus = await Permissions.RequestAsync<Permissions.ContactsRead>();
+            if (permissionStatus == PermissionStatus.Granted)
             {
-                Name = contact.DisplayName,
-                Phone = contact.Phones.FirstOrDefault()?.PhoneNumber
-            };
+                Contact? contact = await Contacts.Default.PickContactAsync();
+                if (contact != null)
+                {
+                    result = new FriendContact
+                    {
+                        Name = contact.DisplayName,
+                        Phone = contact.Phones.FirstOrDefault()?.PhoneNumber
+                    };
+                }
+            }
+            return result;
         }
     }
 }

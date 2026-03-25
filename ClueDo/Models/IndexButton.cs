@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClueDo.Models
+﻿namespace ClueDo.Models
 {
-    public class IndexButton : Button
+    public partial class IndexButton : Button
     {
         private readonly Color baseColor = Colors.Transparent;
         public int Row { get; set; }

@@ -15,7 +15,7 @@ namespace ClueDo.ModelsLogic
                     Text = string.Empty,
                     TextColor = Colors.White,
                     FontSize = 14,
-                    FontFamily = "ClueFont",
+                    FontFamily = Keys.ClueFont,
                     Margin = new Thickness(1),
                     Padding = new Thickness(1)
                 });
@@ -32,12 +32,10 @@ namespace ClueDo.ModelsLogic
                     continue;
                 Label lbl = lstOponnentsLabels[lblIndex];
                 lbl.Text = game.GetPlayerName(i);
-
                 if (game.IsOponnentTurn(i))
                     lbl.BackgroundColor = game.GetPlayerColor(i);
                 else
                     lbl.BackgroundColor = game.Players.PlayersList[i].Color;
-
                 lblIndex++;
             }
         }

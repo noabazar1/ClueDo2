@@ -6,8 +6,8 @@ using CommunityToolkit.Maui.Views;
 namespace ClueDo.Views;
 public partial class GamePage : ContentPage
 {
-    private GamePageVM? vm;
-    private GameBoard? board;
+    private readonly GamePageVM? vm;
+    private readonly GameBoard? board;
 
     public GamePage(Game game)
     {

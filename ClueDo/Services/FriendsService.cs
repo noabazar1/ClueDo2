@@ -1,10 +1,6 @@
 ﻿using ClueDo.Models;
-using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Database.Query;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 namespace ClueDo.Services
 {
     public class FriendsService : IFriendsService
@@ -16,49 +12,49 @@ namespace ClueDo.Services
         }
         public async Task AddFriendAsync(FriendContact friend)
         {
-            string userId = Preferences.Get("UserId", string.Empty);
+            string userId = Preferences.Get(Keys.UserId, string.Empty);
             FirebaseObject<FriendContact> response = await _firebase
-                .Child("users")
+                .Child(Keys.users)
                 .Child(userId)
-                .Child("friends")
+                .Child(Keys.friends)
                 .PostAsync(friend);
             friend.Id = response.Key;
         }
         public async Task<List<FriendContact>> GetFriendsAsync()
         {
-            string userId = Preferences.Get("UserId", string.Empty);
+            string userId = Preferences.Get(Keys.UserId, string.Empty);
             IReadOnlyCollection<FirebaseObject<FriendContact>> result = await _firebase
-                .Child("users")
+                .Child(Keys.users)
                 .Child(userId)
-                .Child("friends")
+                .Child(Keys.friends)
                 .OnceAsync<FriendContact>();
-            List<FriendContact> friends = result.Select(item => new FriendContact
+            List<FriendContact> friends = [.. result.Select(item => new FriendContact
             {
                 Id = item.Key,
                 Name = item.Object.Name,
                 Phone = item.Object.Phone
-            }).ToList();
+            })];
             return friends;
         }
         public async Task DeleteFriendAsync(string friendId)
         {
-            string userId = Preferences.Get("UserId", string.Empty);
-            await _firebase.Child("users").Child(userId).Child("friends").Child(friendId).DeleteAsync();
+            string userId = Preferences.Get(Keys.UserId, string.Empty);
+            await _firebase.Child(Keys.users).Child(userId).Child(Keys.friends).Child(friendId).DeleteAsync();
         }
         public async Task<bool> IsFriendAsync(string phone)
         {
-            var friends = await GetFriendsAsync();
-
+            List<FriendContact> friends = await GetFriendsAsync();
             return friends.Any(f =>
                 Normalize(f.Phone) == Normalize(phone));
         }
-
-        private string Normalize(string? phone)
+        private static string Normalize(string? phone)
         {
-            if (string.IsNullOrEmpty(phone))
-                return string.Empty;
-
-            return new string(phone.Where(char.IsDigit).ToArray());
+            string result = string.Empty;
+            if (!string.IsNullOrEmpty(phone))
+            {
+                result = new string([.. phone.Where(char.IsDigit)]);
+            }
+            return result;
         }
     }
 }

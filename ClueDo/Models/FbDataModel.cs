@@ -1,5 +1,4 @@
-﻿using ClueDo.Models;
-using Firebase.Auth;
+﻿using Firebase.Auth;
 using Firebase.Auth.Providers;
 using Plugin.CloudFirestore;
 

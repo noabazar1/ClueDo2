@@ -1,35 +1,29 @@
 ﻿using ClueDo.Models;
 using ClueDo.ModelsLogic;
-using ClueDo.Services;
 using ClueDo.Views;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace ClueDo.ViewModels
 {
-    public partial class GamePageVM : Models.ObservableObject
+    public partial class GamePageVM(Game game, Grid grdOpponentsGrid, GameBoard board) : Models.ObservableObject
     {
-        private readonly Game game;
-        private readonly GameBoard grdBoard;
-        private readonly OpponentsGrid grdOponnents;
+        private readonly Game game = game;
+        private readonly GameBoard grdBoard = board;
+        private readonly OpponentsGrid grdOponnents = new(grdOpponentsGrid, game);
         private readonly List<Label> lstOponnentsLabels = [];
-
         private bool popupOpen = false;
         private EventHandler? gameChangedHandler;
-
         public string MyName => game.MyName;
         public bool IsMyTurn => game.IsMyTurn();
         public string StatusMessage => game.StatusMessage;
         public bool IsStarted => game.IsStarted;
         public bool IsHostUser => game.IsHostUser;
         public bool IsStartButtonVisible => IsHostUser && !game.IsStarted;
-
-        private readonly TimerSettings animationTimer = new TimerSettings(600, 30);
-
-        public string diceImage = "Dice/dice1c.png";
+        private readonly TimerSettings animationTimer = new(600, 30);
+        public string diceImage = Keys.DiceImage;
         public string DiceImage
         {
             get => diceImage;
@@ -47,29 +41,20 @@ namespace ClueDo.ViewModels
             get
             {
                 if (game.Players.PlayersList.Count == 0)
-                    return "";
+                    return string.Empty;
 
                 if (game.Players.MyIndex < 0 ||
                     game.Players.MyIndex >= game.Players.PlayersList.Count)
-                    return "";
-
+                    return string.Empty;
                 Player me = game.Players.PlayersList[game.Players.MyIndex];
-                return me.DiceValue > 0 ? me.DiceValue.ToString() : "";
+                return me.DiceValue > 0 ? me.DiceValue.ToString() : string.Empty;
             }
-        }
-        public GamePageVM(Game game, Grid grdOpponentsGrid, GameBoard board)
-        {
-            this.game = game;
-            this.grdBoard = board;
-            grdOponnents = new OpponentsGrid(grdOpponentsGrid, game);
         }
         public void Initialize()
         {
             gameChangedHandler = OnGameChanged;
             game.OnGameChanged += gameChangedHandler;
-
             game.OnGameDeleted += OnGameDeleted;
-
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);
             WeakReferenceMessenger.Default.UnregisterAll(this);
@@ -77,23 +62,19 @@ namespace ClueDo.ViewModels
             {
                 OnIncomingCall();
             });
-
             game.AddSnapshotListener();
         }
         public void Cleanup()
         {
             if (gameChangedHandler != null)
                 game.OnGameChanged -= gameChangedHandler;
-
             game.OnGameDeleted -= OnGameDeleted;
-
             WeakReferenceMessenger.Default.UnregisterAll(this);
-
             game.RemoveSnapshotListener();
         }
-        private async void GoHome()
+        private static async void GoHome()
         {
-            await Shell.Current.GoToAsync("//MainArea");
+            await Shell.Current.GoToAsync(Keys.MainArea);
         }
         [RelayCommand]
         private async Task RollDice()
@@ -101,7 +82,6 @@ namespace ClueDo.ViewModels
             await PlayDiceAnimation();
             game.RollDiceForCurrentPlayer();
         }
-
         [RelayCommand]
         private void StartGame()
         {
@@ -109,7 +89,6 @@ namespace ClueDo.ViewModels
             {
                 game.IsStarted = true;
                 game.SetDocument(_ => { });
-
                 OnPropertyChanged(nameof(IsStartButtonVisible));
             }
         }
@@ -122,15 +101,13 @@ namespace ClueDo.ViewModels
                     new TimerSettings(10000, 1000)));
                 MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    ChallengePopup popup = new ChallengePopup();
+                    ChallengePopup popup = new();
                     object? result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
-
                     bool success = result is bool b && b;
-
                     if (!success)
                     {
                         game.EliminateCurrentPlayer();
-                        GoHome();
+                        GamePageVM.GoHome();
                     }
                     popupOpen = false;
                 });
@@ -151,9 +128,7 @@ namespace ClueDo.ViewModels
             grdBoard.RestoreColors();
 
             for (int i = 0; i < game.PlayersCount; i++)
-                grdBoard.UpdateButton(
-                    game.GetPlayerPosition(i),
-                    game.GetPlayerColor(i));
+                grdBoard.UpdateButton(game.GetPlayerPosition(i), game.GetPlayerColor(i));
         }
 
         private void OnGameDeleted(object? sender, EventArgs e)
@@ -164,26 +139,6 @@ namespace ClueDo.ViewModels
                 Toast.Make(Strings.GameDeleted,
                     CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
             });
-        }
-        private void InitOpponentsGrid(Grid grdOponnents)
-        {
-            int opponentsCount = game.Players.TotalPlayers - 1;
-
-            for (int i = 0; i < opponentsCount; i++)
-            {
-                grdOponnents.ColumnDefinitions.Add(
-                    new ColumnDefinition { Width = GridLength.Star });
-
-                lstOponnentsLabels.Add(new Label
-                {
-                    Text = string.Empty,
-                    FontSize = 16,
-                    Margin = new Thickness(5),
-                    Padding = new Thickness(12)
-                });
-
-                grdOponnents.Add(lstOponnentsLabels[i], i, 0);
-            }
         }
         private async Task PlayDiceAnimation()
         {
@@ -197,7 +152,7 @@ namespace ClueDo.ViewModels
                 for (int i = 0; i < iterations; i++)
                 {
                     int currentFrame = Math.Min((int)frameIndex + 1, totalFrames);
-                    DiceImage = $"Dice/dice{currentFrame}c.png";
+                    DiceImage = DiceImage = string.Format(Keys.DiceImageFormat, currentFrame);
                     await Task.Delay((int)animationTimer.IntervalInMilliseconds);
                     frameIndex += step;
                 }
@@ -205,10 +160,9 @@ namespace ClueDo.ViewModels
         }
         public async Task HandleDoorAsync(string roomName)
         {
-            SuggestionPopup suggestionPopup = new SuggestionPopup(roomName);
+            SuggestionPopup suggestionPopup = new(roomName);
             object? result = await Shell.Current.CurrentPage .ShowPopupAsync(suggestionPopup);
-            Accusation? accusation = result as Accusation;
-            if (accusation != null)
+            if (result is Accusation accusation)
             {
                 bool roomCorrect = game.CheckRoom(accusation.Room);
                 bool weaponCorrect = game.CheckWeapon(accusation.Weapon);
@@ -217,7 +171,7 @@ namespace ClueDo.ViewModels
                     game.EndGame();
                 else
                 {
-                    CheckPopup checkPopup = new CheckPopup(roomCorrect, weaponCorrect, suspectCorrect);
+                    CheckPopup checkPopup = new(roomCorrect, weaponCorrect, suspectCorrect);
                     await Shell.Current.CurrentPage.ShowPopupAsync(checkPopup);
                     game.EndTurnAfterSuggestion();
                 }

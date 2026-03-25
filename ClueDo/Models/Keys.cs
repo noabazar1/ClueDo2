@@ -28,6 +28,14 @@
         public const string NewLine = "\n";
         public const string X = "\u2716";
         public const string CheckMark = "\u2714";
-        
+        public const string ClueFont = "ClueFont";
+        public const string FirebaseUserId = "FirebaseUserId";
+        public const string UserId = "UserId";
+        public const string users = "users";
+        public const string friends = "friends";
+        public const string MainArea = "//MainArea";
+        public const string TimerFormat = @"mm\:ss";
+        public const string DiceImage = "Dice/dice1c.png";
+        public const string DiceImageFormat = "Dice/dice{0}c.png";
     }
 }

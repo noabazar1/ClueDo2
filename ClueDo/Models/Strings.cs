@@ -57,6 +57,13 @@
         public const string TheRoom = "The room\n";
         public const string TheMurderWeapon = "The murder weapon\n";
         public const string TheSuspect = "The suspect\n";
+        public const string GameStatus = "Game: {0}  IsGameOver: {1}";
+        public const string TimerText = "00:10";
+        public const string TimerText2 = "00:00";
+        public const string CounterText = "0 / 20";
+        public const string CounterFormat = "{0} / 20";
+        public const string Emergency = "Emergency!";
+        public const string Press = "Press 20 times in 10 seconds!";
         public const string Rules1 = "When the game begins, wait until it is your turn." +
             " You can act only during your own turn. When your turn starts, press the dice button to roll." +
             " The total result of the two dice determines how many steps you may move during that turn." +

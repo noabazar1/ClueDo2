@@ -10,14 +10,10 @@ public partial class ChallengePopupVM : CommunityToolkit.Mvvm.ComponentModel.Obs
 {
     private readonly Popup popup;
     private int count = 0;
-    private bool success = false;
-
     [ObservableProperty]
-    private string timerText = "00:10";
-
+    private string timerText = Strings.TimerText;
     [ObservableProperty]
-    private string counterText = "0 / 20";
-
+    private string counterText = Strings.CounterText;
     public ChallengePopupVM(Popup popup)
     {
         this.popup = popup;
@@ -25,30 +21,24 @@ public partial class ChallengePopupVM : CommunityToolkit.Mvvm.ComponentModel.Obs
         {
             if (m.Value == Keys.FinishedSignal)
             {
-                TimerText = "00:00";
+                TimerText = Strings.TimerText2;
                 popup.Close(false);
             }
             else
             {
                 TimeSpan time = TimeSpan.FromMilliseconds(m.Value);
-                TimerText = time.ToString(@"mm\:ss");
+                TimerText = time.ToString(Keys.TimerFormat);
             }
         });
     }
-
     [RelayCommand]
     private void Click()
     {
         count++;
-        CounterText = $"{count} / 20";
-
+        CounterText = string.Format(Strings.CounterFormat, count);
         if (count == 20)
-        {
             popup.Close();
-            success = true;
-        }
     }
-
     public void Cleanup()
     {
         WeakReferenceMessenger.Default.UnregisterAll(this);

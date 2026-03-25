@@ -2,13 +2,11 @@
 {
     public class Answer
     {
-        private static readonly Random rnd = new Random();
+        private static readonly Random rnd = new();
         public string? Room { get; set; }
         public string? Weapon { get; set; }
         public string? Suspect { get; set; }
         public Answer() { } 
-
-
         public static Answer Generate()
         {
             return new Answer
@@ -26,20 +24,16 @@
         }
         public List<string> GetMatchingParts(Accusation suggestion)
         {
-            List<string> result = new List<string>();
-
-            if (Room == null || Weapon == null || Suspect == null)
-                return result;
-
-            if (Room == suggestion.Room)
-                result.Add("Room");
-
-            if (Weapon == suggestion.Weapon)
-                result.Add("Weapon");
-
-            if (Suspect == suggestion.Suspect)
-                result.Add("Suspect");
-
+            List<string> result = [];
+            if (Room != null && Weapon != null && Suspect != null)
+            {
+                if (Room == suggestion.Room)
+                    result.Add(Strings.Room);
+                if (Weapon == suggestion.Weapon)
+                    result.Add(Strings.Weapon);
+                if (Suspect == suggestion.Suspect)
+                    result.Add(Strings.Suspect);
+            }
             return result;
         }
     }

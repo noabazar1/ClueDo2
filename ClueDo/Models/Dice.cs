@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ClueDo.Models
+﻿namespace ClueDo.Models
 {
     public class Dice
     {
@@ -17,7 +11,7 @@ namespace ClueDo.Models
         }
         public void RollDice()
         {
-            Random rand = new Random();
+            Random rand = new();
             Die1 = rand.Next(1, 7);
             Die2 = rand.Next(1, 7);
         }

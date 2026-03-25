@@ -1,9 +1,7 @@
 ﻿using ClueDo.Models;
-using Plugin.CloudFirestore;
-using System.Diagnostics;
-using CommunityToolkit.Maui.Views;
 using ClueDo.Views;
-using System.Threading.Tasks;
+using CommunityToolkit.Maui.Views;
+using Plugin.CloudFirestore;
 
 namespace ClueDo.ModelsLogic
 {
@@ -40,28 +38,27 @@ namespace ClueDo.ModelsLogic
         }
         public override bool AddPlayer(string playerName)
         {
+            bool result = false;
             int index = Players.Count;
             if (boardLogic != null)
             {
-                Player tempPlayer = new("", index, null!);
+                Player tempPlayer = new(string.Empty, index, null!);
                 Position startPos = tempPlayer.Position;
                 IndexButton btn = boardLogic.GetButton(startPos);
                 Player player = new(playerName, index, btn);
                 Players.Add(player);
                 PlayersNames.Add(playerName);
-                return true;
+                result = true;
             }
-            return false;
+            return result;
         }
         public override void JoinGame()
         {
             if (CurrentPlayers + 1 == Players.TotalPlayers)
                 fbd.UpdateField(Keys.GamesCollection, Id, nameof(IsFull), true, OnComplete);
-
             Players.MyIndex = CurrentPlayers;
             Player p = new(MyName, CurrentPlayers);
             Players.Add(p);
-
             fbd.StartBatch();
             fbd.BatchIncrementField(Keys.GamesCollection, Id, nameof(CurrentPlayers), 1);
             fbd.BatchUpdateField(Keys.GamesCollection, Id, nameof(Players), Players);
@@ -82,9 +79,8 @@ namespace ClueDo.ModelsLogic
         public override void DrawAllPlayers()
         {
             foreach (Player player in Players.PlayersList)
-            {
                 DrawPlayer(player);
-            }
+
         }
         public override void SetDocument(Action<Task> OnComplete)
         {
@@ -98,12 +94,7 @@ namespace ClueDo.ModelsLogic
         public override void AddSnapshotListener()
         {
             if (ilr == null && !string.IsNullOrEmpty(Id))
-            {
-                ilr = fbd.AddSnapshotListener(
-                    Keys.GamesCollection,
-                    Id,
-                    OnChange);
-            }
+                ilr = fbd.AddSnapshotListener(Keys.GamesCollection, Id, OnChange);
         }
         public override void RemoveSnapshotListener()
         {
@@ -129,15 +120,11 @@ namespace ClueDo.ModelsLogic
         public override void OnButtonClicked(object? sender, EventArgs e)
         {
             if (IsStarted)
-            {
                 if (sender is IndexButton btn)
-                {
                     if (btn.IsDoor)
                     {
                         Player me = Players.PlayersList[Players.MyIndex];
-
-                        if (me.MovesLeft > 0 &&
-                            Game.CanMoveTo(me, btn.Row, btn.Column))
+                        if (me.MovesLeft > 0 && Game.CanMoveTo(me, btn.Row, btn.Column))
                         {
                             CurrentRoom = btn.RoomName;
                             me.IsInRoom = true;
@@ -145,11 +132,7 @@ namespace ClueDo.ModelsLogic
                         }
                     }
                     else
-                    {
                         Play(btn.Row, btn.Column);
-                    }
-                }
-            }
         }
         public override void EndTurnAfterSuggestion()
         {
@@ -157,12 +140,10 @@ namespace ClueDo.ModelsLogic
             {
                 Player me = Players.PlayersList[Players.MyIndex];
                 me.MovesLeft = 0;
-
                 CurrentTurnIndex++;
                 if (CurrentTurnIndex >= Players.PlayersList.Count)
                     CurrentTurnIndex = 0;
-
-                SyncStatus();
+                UpdateStatus();
                 UpdateFbMove();
                 OnGameChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -178,8 +159,7 @@ namespace ClueDo.ModelsLogic
                     int total = dice.Die1 + dice.Die2;
                     me.DiceValue = total;
                     me.MovesLeft = total;
-
-                    SyncStatus();
+                    UpdateStatus();
                     UpdateFbMove();
                     OnGameChanged?.Invoke(this, EventArgs.Empty);
                 }
@@ -189,13 +169,11 @@ namespace ClueDo.ModelsLogic
         {
             IsGameOver = true;
             WinnerName = Players.PlayersList[MyIndex].Name;
-
             Dictionary<string, object> dict = new()
             {
                 { nameof(IsGameOver), IsGameOver },
                 { nameof(WinnerName), WinnerName }
             };
-
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
         public override bool CheckRoom(string room)
@@ -223,16 +201,13 @@ namespace ClueDo.ModelsLogic
             Player me = Players.PlayersList[Players.MyIndex];
             Players.PlayersList.Remove(me);
             me.IsEliminated = true;
-
             if (Players.MyIndex >= Players.PlayersList.Count)
                 Players.MyIndex = 0;
-
             if (Players.PlayersList.Count == 1)
             {
                 WinnerName = Players.PlayersList[0].Name;
                 IsGameOver = true;
             }
-
             Dictionary<string, object> dict = new()
             {
                 { nameof(Players), Players },
@@ -241,7 +216,6 @@ namespace ClueDo.ModelsLogic
             };
             if (IsGameOver && WinnerName != null)
                 dict.Add(nameof(WinnerName), WinnerName);
-
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
         protected override void UpdateStatus()
@@ -267,11 +241,9 @@ namespace ClueDo.ModelsLogic
                     CurrentTurnIndex = game.CurrentTurnIndex;
                     IsGameOver = game.IsGameOver;
                     WinnerName = game.WinnerName;
-
                     if (IsGameOver && !_gameOverPopupShown)
                     {
                         _gameOverPopupShown = true;
-
                         MainThread.BeginInvokeOnMainThread(async () =>
                         {
                             if (WinnerName == Players.PlayersList[Players.MyIndex].Name)
@@ -280,15 +252,12 @@ namespace ClueDo.ModelsLogic
                                 await Shell.Current.CurrentPage.ShowPopupAsync(new LosePopup());
                         });
                     }
-
-                    SyncStatus();
-
+                    UpdateStatus();
                     if (boardLogic != null)
                     {
                         boardLogic.ResetBoardColors();
                         DrawAllPlayers();
                     }
-
                     OnGameChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
@@ -304,27 +273,21 @@ namespace ClueDo.ModelsLogic
                 if (targetBtn != null)
                 {
                     Player currentPlayer = Players.PlayersList[Players.MyIndex];
-                    if (currentPlayer.MovesLeft > 0 &&
-                        Game.CanMoveTo(currentPlayer, rowIndex, columnIndex))
-                    {
+                    if (currentPlayer.MovesLeft > 0 && Game.CanMoveTo(currentPlayer, rowIndex, columnIndex))
                         if (currentPlayer.Button != null)
                             currentPlayer.Button.BackgroundColor = Colors.Transparent;
-
                         currentPlayer.Button = targetBtn;
                         currentPlayer.Position = new Position(rowIndex, columnIndex);
                         currentPlayer.MovesLeft--;
-
                         boardLogic.ResetBoardColors();
                         DrawAllPlayers();
                         boardLogic.MyTurn();
-
                         if (currentPlayer.MovesLeft == 0)
                         {
                             CurrentTurnIndex++;
                             if (CurrentTurnIndex >= Players.PlayersList.Count)
                                 CurrentTurnIndex = 0;
                         }
-
                         UpdateFbMove();
                         fbd.UpdateField(
                             Keys.GamesCollection,
@@ -332,7 +295,6 @@ namespace ClueDo.ModelsLogic
                             nameof(Players),
                             Players,
                             OnComplete);
-                    }
                 }
             }
         }
@@ -343,7 +305,6 @@ namespace ClueDo.ModelsLogic
                 { nameof(CurrentTurnIndex), CurrentTurnIndex },
                 { nameof(Players), Players }
             };
-
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
         private void DrawPlayer(Player player)
@@ -365,25 +326,16 @@ namespace ClueDo.ModelsLogic
                 { nameof(IsFull), IsFull },
                 { nameof(Players), Players }
             };
-
             action = Actions.Changed;
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
         private void OnComplete(Task task)
         {
             if (task.IsCompletedSuccessfully)
-            {
                 if (action == Actions.Deleted)
                     OnGameDeleted?.Invoke(this, EventArgs.Empty);
                 else
                     OnGameChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-        private void SyncStatus()
-        {
-            _status.CurrentStatus = IsMyTurn()
-                ? GameStatus.Status.Play
-                : GameStatus.Status.Wait;
         }
         private static bool CanMoveTo(Player player, int targetRow, int targetCol)
         {

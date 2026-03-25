@@ -2,6 +2,7 @@
 <toolkit:Popup
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:m="clr-namespace:ClueDo.Models"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="ClueDo.Views.ChallengePopup"
     Color="Transparent">
@@ -15,7 +16,7 @@
         WidthRequest="250"
         HeightRequest="270">
         <VerticalStackLayout>
-            <Label Text="Emergency!"
+            <Label Text="{x:Static m:Strings.Emergency}"
                FontSize="20"
                FontFamily="ClueFont"
                HorizontalOptions="Center"
@@ -27,9 +28,8 @@
                 FontSize="25"
                 FontFamily="ClueFont"
                 HorizontalOptions="Center" />
-
             <Label 
-                Text="Press 20 times in 10 seconds!"
+                Text="{x:Static m:Strings.Press}"
                 TextColor="White"
                 FontFamily="ClueFont"
                 HorizontalOptions="Center"/>

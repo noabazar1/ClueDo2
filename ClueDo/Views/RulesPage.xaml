@@ -22,13 +22,13 @@
             CornerRadius="50"
             Margin="10">
                 <VerticalStackLayout>
-                    <Label Text="{Binding Rules1}" TextColor="White" FontFamily="ClueFont"/>
-                    <Label Text="{Binding Rules2}" TextColor="White" FontFamily="ClueFont"/>
-                    <Label Text="{Binding Rules3}" TextColor="White" FontFamily="ClueFont"/>
-                    <Label Text="{Binding Rules4}" TextColor="White" FontFamily="ClueFont"/>
-                    <Label Text="{Binding Rules5}" TextColor="White" FontFamily="ClueFont"/>
-                    <Label Text="{Binding Rules6}" TextColor="White" FontFamily="ClueFont"/>
-                    <Label Text="{Binding Rules7}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{x:Static m:Strings.Rules1}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{x:Static m:Strings.Rules2}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{x:Static m:Strings.Rules3}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{x:Static m:Strings.Rules4}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{x:Static m:Strings.Rules5}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{x:Static m:Strings.Rules6}" TextColor="White" FontFamily="ClueFont"/>
+                    <Label Text="{x:Static m:Strings.Rules7}" TextColor="White" FontFamily="ClueFont"/>
                 </VerticalStackLayout>
             </Frame>
         </VerticalStackLayout>
