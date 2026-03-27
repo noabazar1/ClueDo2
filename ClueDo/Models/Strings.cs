@@ -64,6 +64,8 @@
         public const string CounterFormat = "{0} / 20";
         public const string Emergency = "Emergency!";
         public const string Press = "Press 20 times in 10 seconds!";
+        public const string NoInternet = "No Internet Connection";
+        public const string CheckConnection = "Please Check Your Connection";
         public const string Rules1 = "When the game begins, wait until it is your turn." +
             " You can act only during your own turn. When your turn starts, press the dice button to roll." +
             " The total result of the two dice determines how many steps you may move during that turn." +

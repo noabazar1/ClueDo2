@@ -138,5 +138,11 @@ namespace ClueDo.ModelsLogic
                 }
             }
         }
+        public void DrawPlayers(Game game)
+        {
+            RestoreColors();
+            for (int i = 0; i < game.PlayersCount; i++)
+                UpdateButton(game.GetPlayerPosition(i), game.GetPlayerColor(i));
+        }
     }
 }

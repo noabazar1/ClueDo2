@@ -76,6 +76,10 @@ namespace ClueDo.Models
         public abstract void EndTurnAfterSuggestion();
         public abstract void RollDiceForCurrentPlayer();
         public abstract void EndGame();
+        public abstract bool HandleIncomingCallResult(bool success);
+        public abstract List<int> GenerateDiceFrames(int totalFrames, long totalTime, long interval);
+        public abstract (bool roomCorrect, bool weaponCorrect, bool suspectCorrect, bool isWin) CheckAccusation
+    (Accusation accusation);
         protected abstract void Play(int rowIndex, int columnIndex);
         protected abstract void UpdateStatus();
         protected abstract void UpdateFbMove();

@@ -15,6 +15,7 @@ namespace ClueDo.ModelsLogic
         public override string JoinStatus => $"{CurrentPlayers}/{Players.TotalPlayers}";
         protected override GameStatus Status => _status;
         public string? CurrentRoom { get; private set; }
+        public event Action<bool>? GameEnded;
         public Game(Grid grdBoard)
         {
             Created = DateTime.Now;
@@ -218,6 +219,39 @@ namespace ClueDo.ModelsLogic
                 dict.Add(nameof(WinnerName), WinnerName);
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
+        public override bool HandleIncomingCallResult(bool success)
+        {
+            bool result = true;
+            if (!success)
+            {
+                EliminateCurrentPlayer();
+                result = false;
+            }
+            return result;
+        }
+        public override List<int> GenerateDiceFrames(int totalFrames, long totalTime, long interval)
+        {
+            List<int> frames = new List<int>();
+            int iterations = (int)(totalTime / interval);
+            double step = (double)totalFrames / iterations;
+            double frameIndex = 0;
+            for (int i = 0; i < iterations; i++)
+            {
+                int currentFrame = Math.Min((int)frameIndex + 1, totalFrames);
+                frames.Add(currentFrame);
+                frameIndex += step;
+            }
+            return frames;
+        }
+        public override (bool roomCorrect, bool weaponCorrect, bool suspectCorrect, bool isWin) CheckAccusation
+            (Accusation accusation)
+        {
+            bool roomCorrect = CheckRoom(accusation.Room);
+            bool weaponCorrect = CheckWeapon(accusation.Weapon);
+            bool suspectCorrect = CheckSuspect(accusation.Suspect);
+            bool isWin = roomCorrect && weaponCorrect && suspectCorrect;
+            return (roomCorrect, weaponCorrect, suspectCorrect, isWin);
+        }
         protected override void UpdateStatus()
         {
             _status.CurrentStatus = IsMyTurn()
@@ -244,13 +278,8 @@ namespace ClueDo.ModelsLogic
                     if (IsGameOver && !_gameOverPopupShown)
                     {
                         _gameOverPopupShown = true;
-                        MainThread.BeginInvokeOnMainThread(async () =>
-                        {
-                            if (WinnerName == Players.PlayersList[Players.MyIndex].Name)
-                                await Shell.Current.CurrentPage.ShowPopupAsync(new VictoryPopup());
-                            else
-                                await Shell.Current.CurrentPage.ShowPopupAsync(new LosePopup());
-                        });
+                        bool isWinner = WinnerName == MyName;
+                        GameEnded?.Invoke(isWinner);
                     }
                     UpdateStatus();
                     if (boardLogic != null)
@@ -274,6 +303,7 @@ namespace ClueDo.ModelsLogic
                 {
                     Player currentPlayer = Players.PlayersList[Players.MyIndex];
                     if (currentPlayer.MovesLeft > 0 && Game.CanMoveTo(currentPlayer, rowIndex, columnIndex))
+                    {
                         if (currentPlayer.Button != null)
                             currentPlayer.Button.BackgroundColor = Colors.Transparent;
                         currentPlayer.Button = targetBtn;
@@ -295,6 +325,7 @@ namespace ClueDo.ModelsLogic
                             nameof(Players),
                             Players,
                             OnComplete);
+                    }
                 }
             }
         }

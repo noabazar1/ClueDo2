@@ -7,10 +7,14 @@ namespace ClueDo.ViewModels
     public partial class AuthPageVM : ObservableObject
     {
         private readonly User user = new();
+        private readonly ModelsLogic.Connectivity _connectivity = new();
+        private bool isAlertShown = false;
         public ICommand AuthCommand { get; }
         public ICommand ToggleIsPasswordCommand { get; }
+        public ICommand ShowNoInternetCommand { get; }
         public bool IsBusy => user.IsBusy;
         public bool IsRegistered => user.IsRegistered;
+        public bool IsConnected => _connectivity.IsConnected;
         public string UserStateAction => user.IsRegistered ? Strings.Login : Strings.Register;
         public string Name
         {
@@ -54,6 +58,8 @@ namespace ClueDo.ViewModels
             AuthCommand = user.IsRegistered ? new Command(Login, CanAuth) : new Command(Register, CanAuth);
             ToggleIsPasswordCommand = new Command(ToggleIsPassword);
             user.OnAuthComplete += OnAuthComplete;
+            _connectivity.ConnectivityChanged += OnConnectivityChanged;
+            ShowNoInternetCommand = new Command(async () => await ShowNoInternet());
         }
         private async void OnAuthComplete(object? sender, bool success)
         {
@@ -82,6 +88,18 @@ namespace ClueDo.ViewModels
         {
             IsPassword = !IsPassword;
             OnPropertyChanged(nameof(IsPassword));
+        }
+        private void OnConnectivityChanged(object? sender, EventArgs e)
+        {
+            OnPropertyChanged(nameof(IsConnected));
+            if (!IsConnected && !isAlertShown)
+                ShowNoInternetCommand.Execute(null);
+        }
+        private async Task ShowNoInternet()
+        {
+            isAlertShown = true;
+            await Shell.Current.DisplayAlert(Strings.NoInternet, Strings.CheckConnection, Strings.Ok);
+            isAlertShown = false;
         }
     }
 }
