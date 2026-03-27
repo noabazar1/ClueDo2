@@ -1,13 +1,10 @@
 ﻿using ClueDo.Models;
-using ClueDo.Views;
-using CommunityToolkit.Maui.Views;
 using Plugin.CloudFirestore;
 
 namespace ClueDo.ModelsLogic
 {
     public class Game : GameModel
     {
-        private readonly Grid grdBoard;
         private GameBoard? boardLogic;
         private readonly Dice dice = new();
         private bool _gameOverPopupShown = false;
@@ -19,14 +16,12 @@ namespace ClueDo.ModelsLogic
         public Game(Grid grdBoard)
         {
             Created = DateTime.Now;
-            this.grdBoard = grdBoard;
             Player p = new(new User().Name, 0);
             Players.Add(p);
             InitBoard(grdBoard);
         }
         public Game()
         {
-            grdBoard = [];
             Players.TotalPlayers = 0;
         }
         public override void EnsureAnswerGenerated(string myUserId)
@@ -169,7 +164,7 @@ namespace ClueDo.ModelsLogic
         public override void EndGame()
         {
             IsGameOver = true;
-            WinnerName = Players.PlayersList[MyIndex].Name;
+            WinnerName = Players.PlayersList[CurrentTurnIndex].Name;
             Dictionary<string, object> dict = new()
             {
                 { nameof(IsGameOver), IsGameOver },
