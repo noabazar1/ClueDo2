@@ -59,7 +59,6 @@ namespace ClueDo.ModelsLogic
                     if (game.IsStarted || game.IsGameOver)
                         continue;
                     game.Id = ds.Id;
-                    Console.WriteLine(string.Format(Strings.GameStatus, game!.Id, game.IsGameOver));
                     GamesList.Add(game);
                 }
             }

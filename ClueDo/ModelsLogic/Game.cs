@@ -120,7 +120,7 @@ namespace ClueDo.ModelsLogic
                     if (btn.IsDoor)
                     {
                         Player me = Players.PlayersList[Players.MyIndex];
-                        if (me.MovesLeft > 0 && Game.CanMoveTo(me, btn.Row, btn.Column))
+                        if (me.MovesLeft > 0 && CanMoveTo(me, btn.Row, btn.Column))
                         {
                             CurrentRoom = btn.RoomName;
                             me.IsInRoom = true;

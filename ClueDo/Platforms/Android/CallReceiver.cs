@@ -4,20 +4,21 @@ using Android.Telephony;
 using ClueDo.Models;
 using CommunityToolkit.Mvvm.Messaging;
 
-[BroadcastReceiver(Enabled = true, Exported = true)]
-[IntentFilter(new[] { TelephonyManager.ActionPhoneStateChanged })]
-public class CallReceiver : BroadcastReceiver
+namespace ClueDo.Platforms.Android
 {
-    public override void OnReceive(Context? context, Intent? intent)
+    [BroadcastReceiver(Enabled = true, Exported = true)]
+    [IntentFilter([TelephonyManager.ActionPhoneStateChanged])]
+    public class CallReceiver : BroadcastReceiver
     {
-        var state = intent?.GetStringExtra(TelephonyManager.ExtraState);
-
-        if (state == TelephonyManager.ExtraStateRinging)
+        public override void OnReceive(Context? context, Intent? intent)
         {
-            System.Console.WriteLine("### RINGING DETECTED ###");
+            var state = intent?.GetStringExtra(TelephonyManager.ExtraState);
 
-            WeakReferenceMessenger.Default.Send(
-                new AppMessage<bool>(true));
+            if (state == TelephonyManager.ExtraStateRinging)
+            {
+                WeakReferenceMessenger.Default.Send(
+                    new AppMessage<bool>(true));
+            }
         }
     }
 }
