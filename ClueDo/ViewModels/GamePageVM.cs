@@ -1,5 +1,6 @@
 ﻿using ClueDo.Models;
 using ClueDo.ModelsLogic;
+using ClueDo.Services;
 using ClueDo.Views;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Views;
@@ -79,6 +80,7 @@ namespace ClueDo.ViewModels
             await Shell.Current.DisplayAlert(Strings.NoInternet, Strings.CheckConnection, Strings.Ok);
             isAlertShown = false;
         }
+
         public void Initialize()
         {
             gameChangedHandler = OnGameChanged;
@@ -87,11 +89,10 @@ namespace ClueDo.ViewModels
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);
             WeakReferenceMessenger.Default.UnregisterAll(this);
-            WeakReferenceMessenger.Default.Register<AppMessage<bool>>(this, (r, m) =>
+            WeakReferenceMessenger.Default.Register<AppMessage<string>>(this, (r, m) =>
             {
                 OnIncomingCall();
             });
-            game.AddSnapshotListener();
         }
         public void Cleanup()
         {

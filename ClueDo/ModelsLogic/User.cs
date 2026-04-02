@@ -35,7 +35,7 @@ namespace ClueDo.ModelsLogic
             IsBusy = false;
             if (task.IsCompletedSuccessfully)
             {
-                Preferences.Set("FirebaseUserId", FirebaseUserId);
+                Preferences.Set(Keys.FirebaseUserId, FirebaseUserId);
                 if (CurrentAction == Actions.Register)
                     SaveToPreferences();
                 OnAuthComplete?.Invoke(this, true);

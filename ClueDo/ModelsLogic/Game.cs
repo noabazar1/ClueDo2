@@ -1,4 +1,5 @@
 ﻿using ClueDo.Models;
+using ClueDo.Services;
 using Plugin.CloudFirestore;
 
 namespace ClueDo.ModelsLogic
@@ -76,7 +77,6 @@ namespace ClueDo.ModelsLogic
         {
             foreach (Player player in Players.PlayersList)
                 DrawPlayer(player);
-
         }
         public override void SetDocument(Action<Task> OnComplete)
         {

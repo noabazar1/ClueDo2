@@ -44,8 +44,7 @@ namespace ClueDo.Services
         public async Task<bool> IsFriendAsync(string phone)
         {
             List<FriendContact> friends = await GetFriendsAsync();
-            return friends.Any(f =>
-                Normalize(f.Phone) == Normalize(phone));
+            return friends.Any(f => Normalize(f.Phone) == Normalize(phone));
         }
         private static string Normalize(string? phone)
         {

@@ -12,7 +12,7 @@ namespace ClueDo.Platforms.Android
     {
         public override void OnReceive(Context? context, Intent? intent)
         {
-            var state = intent?.GetStringExtra(TelephonyManager.ExtraState);
+            string? state = intent?.GetStringExtra(TelephonyManager.ExtraState);
 
             if (state == TelephonyManager.ExtraStateRinging)
             {
