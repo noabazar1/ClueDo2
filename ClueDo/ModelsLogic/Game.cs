@@ -225,7 +225,7 @@ namespace ClueDo.ModelsLogic
         }
         public override List<int> GenerateDiceFrames(int totalFrames, long totalTime, long interval)
         {
-            List<int> frames = new List<int>();
+            List<int> frames = [];
             int iterations = (int)(totalTime / interval);
             double step = (double)totalFrames / iterations;
             double frameIndex = 0;
