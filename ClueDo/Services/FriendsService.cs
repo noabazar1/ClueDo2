@@ -8,7 +8,7 @@ namespace ClueDo.Services
         private readonly FirebaseClient _firebase;
         public FriendsService()
         {
-            _firebase = new FirebaseClient("https://cluedo-d29ec-default-rtdb.europe-west1.firebasedatabase.app/");
+            _firebase = new FirebaseClient(Keys.FbLink);
         }
         public async Task AddFriendAsync(FriendContact friend)
         {

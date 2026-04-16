@@ -37,5 +37,6 @@
         public const string TimerFormat = @"mm\:ss";
         public const string DiceImage = "Dice/dice1c.png";
         public const string DiceImageFormat = "Dice/dice{0}c.png";
+        public const string FbLink = "https://cluedo-d29ec-default-rtdb.europe-west1.firebasedatabase.app/";
     }
 }

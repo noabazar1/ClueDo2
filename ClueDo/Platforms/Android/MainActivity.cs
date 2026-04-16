@@ -1,12 +1,8 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Android.Telephony;
-using AndroidX.Core.Content;
 using ClueDo.Models;
 using CommunityToolkit.Mvvm.Messaging;
-using System.Runtime.Versioning;
-using Android.Util;
 
 namespace ClueDo.Platforms.Android
 {
@@ -33,7 +29,6 @@ namespace ClueDo.Platforms.Android
                 });
             }
         }
-
         private void OnMessageReceived(bool value)
         {
             if (value)
@@ -42,7 +37,6 @@ namespace ClueDo.Platforms.Android
                 mTimer = null;
             }
         }
-
         private void OnMessageReceived(TimerSettings value)
         {
             mTimer = new MyTimer(value.TotalTimeInMilliseconds, value.IntervalInMilliseconds);

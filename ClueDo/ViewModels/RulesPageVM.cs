@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace ClueDo.ViewModels
 {
-    public class RulesPageVM : ObservableObject
+    public partial class RulesPageVM : ObservableObject
     {
         private readonly ModelsLogic.Connectivity _connectivity = new();
         private bool isAlertShown = false;

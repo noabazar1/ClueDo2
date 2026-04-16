@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace ClueDo.ViewModels
 {
-    public class FriendsPageVM : ObservableObject
+    public partial class FriendsPageVM : ObservableObject
     {
         private readonly IContactsService _contactsService;
         private readonly IFriendsService _friendsService;

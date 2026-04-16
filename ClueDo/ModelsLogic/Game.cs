@@ -1,5 +1,4 @@
 ﻿using ClueDo.Models;
-using ClueDo.Services;
 using Plugin.CloudFirestore;
 
 namespace ClueDo.ModelsLogic

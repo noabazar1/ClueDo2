@@ -1,6 +1,5 @@
 ﻿using ClueDo.Models;
 using CommunityToolkit.Maui.Views;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 namespace ClueDo.ViewModels

@@ -1,6 +1,4 @@
 using ClueDo.ViewModels;
-using ClueDo.Views;
-using System.Threading.Tasks;
 
 namespace ClueDo
 {

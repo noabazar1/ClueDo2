@@ -22,8 +22,6 @@
     x:Name="BoardContainer"
     HorizontalOptions="Center"
     VerticalOptions="Center">
-
-            <!-- תמונת הלוח -->
             <Image
         x:Name="imgBoard"
         Source="board.png"

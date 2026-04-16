@@ -12,7 +12,6 @@ namespace ClueDo.ViewModels
         public Color WeaponColor { get; } = GetColor(weaponCorrect);
         public Color SuspectColor { get; } = GetColor(suspectCorrect);
         public ICommand CloseCommand { get; } = new Command(closeAction);
-
         private static string GetMark(bool isCorrect)
         {
             return isCorrect ? Keys.CheckMark : Keys.X;

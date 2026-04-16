@@ -5,29 +5,23 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="ClueDo.Views.SuggestionPopup"
     Color="Transparent">
-
     <Frame Padding="20"
            CornerRadius="20"
            BackgroundColor="#003c00"
            VerticalOptions="Center"
            HorizontalOptions="Center">
-
         <VerticalStackLayout Spacing="15">
-
             <Label Text="Make a suggestion"
                    FontSize="20"
                    FontFamily="ClueFont"
                    TextColor="White"
                    HorizontalOptions="Center"/>
-
             <Entry BackgroundColor="#003c00" FontFamily="ClueFont" TextColor="White" Text="{Binding Room}" IsReadOnly="True"/>
             <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="WeaponPicker" Title="weapon" ItemsSource="{Binding Weapons}" SelectedItem="{Binding SelectedWeapon}"/>
             <Picker BackgroundColor="#003c00" FontFamily="ClueFont" TitleColor="White" TextColor="White" x:Name="SuspectPicker" Title="suspect" ItemsSource="{Binding Suspects}" SelectedItem="{Binding SelectedSuspect}"/>
-
             <Button Text="send"
                     Command="{Binding ConfirmCommand}"
                     BackgroundColor="#E4BD40"/>
-
         </VerticalStackLayout>
     </Frame>
 </toolkit:Popup>
