@@ -50,15 +50,23 @@ namespace ClueDo.ModelsLogic
         }
         public override void JoinGame()
         {
-            if (CurrentPlayers + 1 == Players.TotalPlayers)
-                fbd.UpdateField(Keys.GamesCollection, Id, nameof(IsFull), true, OnComplete);
-            Players.MyIndex = CurrentPlayers;
-            Player p = new(MyName, CurrentPlayers);
-            Players.Add(p);
-            fbd.StartBatch();
-            fbd.BatchIncrementField(Keys.GamesCollection, Id, nameof(CurrentPlayers), 1);
-            fbd.BatchUpdateField(Keys.GamesCollection, Id, nameof(Players), Players);
-            fbd.CommitBatch(OnComplete);
+            if (Players.PlayersList.Count > 0)
+            {
+                int newIndex = Players.PlayersList.Count;
+                Players.MyIndex = newIndex;
+                Player p = new(MyName, newIndex);
+                Players.Add(p);
+                CurrentPlayers = Players.PlayersList.Count;
+                if (CurrentPlayers >= Players.TotalPlayers)
+                    IsFull = true;
+                Dictionary<string, object> dict = new()
+                {
+                    { nameof(CurrentPlayers), CurrentPlayers },
+                    { nameof(Players), Players },
+                    { nameof(IsFull), IsFull }
+                };
+                fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
+            }
         }
         public override Position GetPlayerPosition(int playerIndex)
         {
@@ -261,6 +269,9 @@ namespace ClueDo.ModelsLogic
                 {
                     int myIndex = Players.MyIndex;
                     Players = game.Players;
+                    CurrentPlayers = Players.PlayersList.Count;
+                    if (Players.MyIndex >= Players.PlayersList.Count)
+                        Players.MyIndex = Players.PlayersList.Count - 1;
                     Players.MyIndex = myIndex;
                     IsStarted = game.IsStarted;
                     IsHostTurn = game.IsHostTurn;

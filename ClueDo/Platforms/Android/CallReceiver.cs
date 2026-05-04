@@ -16,8 +16,10 @@ namespace ClueDo.Platforms.Android
 
             if (state == TelephonyManager.ExtraStateRinging)
             {
+                string? phone = intent?.Extras?.GetString("incoming_number");
+
                 WeakReferenceMessenger.Default.Send(
-                    new AppMessage<bool>(true));
+                    new AppMessage<string>(phone ?? ""));
             }
         }
     }

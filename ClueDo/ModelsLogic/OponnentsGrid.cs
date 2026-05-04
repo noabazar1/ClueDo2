@@ -26,17 +26,22 @@ namespace ClueDo.ModelsLogic
         {
             int lblIndex = 0;
             int myIndex = game.Players.MyIndex;
-            for (int i = 0; i < game.PlayersCount; i++)
+            for (int i = 0; i < game.Players.PlayersList.Count; i++)
             {
-                if (i == myIndex)
-                    continue;
-                Label lbl = lstOponnentsLabels[lblIndex];
-                lbl.Text = game.GetPlayerName(i);
-                if (game.IsOponnentTurn(i))
-                    lbl.BackgroundColor = game.GetPlayerColor(i);
-                else
-                    lbl.BackgroundColor = game.Players.PlayersList[i].Color;
-                lblIndex++;
+                if (i != myIndex)
+                {
+                    if (lblIndex < lstOponnentsLabels.Count)
+                    {
+                        Label lbl = lstOponnentsLabels[lblIndex];
+                        lbl.Text = game.GetPlayerName(i);
+                        if (game.IsOponnentTurn(i))
+                            lbl.BackgroundColor = game.GetPlayerColor(i);
+                        else
+                            lbl.BackgroundColor =
+                                game.Players.PlayersList[i].Color;
+                        lblIndex++;
+                    }
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using ClueDo.Models;
 using ClueDo.ModelsLogic;
+using ClueDo.Services;
 using ClueDo.Views;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Views;
@@ -16,6 +17,7 @@ namespace ClueDo.ViewModels
         private readonly OpponentsGrid grdOponnents;
         private readonly List<Label> lstOponnentsLabels = [];
         private readonly ModelsLogic.Connectivity _connectivity = new();
+        private readonly IFriendsService friendsService = new FriendsService();
         private bool popupOpen = false;
         private EventHandler? gameChangedHandler;
         private bool isAlertShown = false;
@@ -85,6 +87,7 @@ namespace ClueDo.ViewModels
             gameChangedHandler = OnGameChanged;
             game.OnGameChanged += gameChangedHandler;
             game.OnGameDeleted += OnGameDeleted;
+            game.AddSnapshotListener();
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);
             WeakReferenceMessenger.Default.UnregisterAll(this);
@@ -119,6 +122,7 @@ namespace ClueDo.ViewModels
                 game.IsStarted = true;
                 game.SetDocument(_ => { });
                 OnPropertyChanged(nameof(IsStartButtonVisible));
+
             }
         }
         private void OnIncomingCall()
