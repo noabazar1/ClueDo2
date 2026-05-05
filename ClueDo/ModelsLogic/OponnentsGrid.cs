@@ -34,7 +34,7 @@ namespace ClueDo.ModelsLogic
                     {
                         Label lbl = lstOponnentsLabels[lblIndex];
                         lbl.Text = game.GetPlayerName(i);
-                        if (game.IsOponnentTurn(i))
+                        if (game.IsOpponentTurn(i))
                             lbl.BackgroundColor = game.GetPlayerColor(i);
                         else
                             lbl.BackgroundColor =

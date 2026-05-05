@@ -1,5 +1,8 @@
 ﻿namespace ClueDo.Models
 {
+    /// <summary>
+    /// holds the data for the possible answers in the game.
+    /// </summary>
     public static class AnswerData
     {
         public static readonly List<string> Rooms =

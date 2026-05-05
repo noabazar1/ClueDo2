@@ -124,20 +124,6 @@ namespace ClueDo.ModelsLogic
                 roomsBuilt = true;
             }
         }
-        public override void OpponentTurn()
-        {
-            for (int row = 0; row < BoardSize; row++)
-            {
-                for (int col = 0; col < BoardSize; col++)
-                {
-                    if (!blocked[row, col])
-                    {
-                        blocked[row, col] = true;
-                        BlockArea(row, row, col, col);
-                    }
-                }
-            }
-        }
         public void DrawPlayers(Game game)
         {
             RestoreColors();

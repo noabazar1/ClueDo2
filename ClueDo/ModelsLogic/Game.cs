@@ -195,7 +195,7 @@ namespace ClueDo.ModelsLogic
         {
             return Players.MyIndex == CurrentTurnIndex;
         }
-        public override bool IsOponnentTurn(int oponnentIndex)
+        public override bool IsOpponentTurn(int oponnentIndex)
         {
             return Players.IsOponnentTurn(oponnentIndex);
         }
