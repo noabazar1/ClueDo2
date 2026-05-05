@@ -1,5 +1,12 @@
 ﻿namespace ClueDo.Models
 {
+    /// <summary>
+    /// class that holds the icons of the game, which are used in the UI to represent different actions 
+    /// and states. The icons are stored as Unicode characters, and they can be used in the UI by 
+    /// referencing the corresponding constant. The icons are organized in a way that makes it easy to
+    /// find the appropriate icon for a given action or state, and they can be easily updated or expanded
+    /// in the future if needed.
+    /// </summary>
     internal static class Icons
     {
         public const string Delete = "\ue872";

@@ -1,5 +1,8 @@
 ﻿namespace ClueDo.Models
 {
+    /// <summary>
+    /// class that holds all the constant keys used in the application.
+    /// </summary>
     internal static class Keys
     {
         public const string UsernameKey = "username";

@@ -1,5 +1,9 @@
 ﻿namespace ClueDo.Models
 {
+    /// <summary>
+    /// class that holds all the string constants used in the application, such as button labels, error
+    /// messages, and game rules.
+    /// </summary>
     internal static class Strings
     {
         public const string LogInButton = "log in";
