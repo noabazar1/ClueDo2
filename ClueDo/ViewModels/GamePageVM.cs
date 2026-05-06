@@ -91,7 +91,7 @@ namespace ClueDo.ViewModels
             if (!game.IsHostUser)
                 game.UpdateGuestUser(OnComplete);
             WeakReferenceMessenger.Default.UnregisterAll(this);
-            WeakReferenceMessenger.Default.Register<AppMessage<string>>(this, (r, m) =>
+            WeakReferenceMessenger.Default.Register<AppMessage<bool>>(this, (r, m) =>
             {
                 OnIncomingCall();
             });

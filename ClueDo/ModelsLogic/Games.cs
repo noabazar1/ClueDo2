@@ -36,6 +36,13 @@ namespace ClueDo.ModelsLogic
             ilr?.Remove();
             ilr = null;
         }
+        /// <summary>
+        /// method to add a new game to the games collection in the database. This method is called when 
+        /// the user clicks the "Add Game" button, and it creates a new game document in the games 
+        /// collection with the current user's name as the host. The method sets the IsBusy property to true
+        /// while the game is being created, and it calls the OnComplete method when the task is completed 
+        /// to handle the result of the operation. 
+        /// </summary>
         public override void AddGame()
         {
             IsBusy = true;
@@ -54,10 +61,27 @@ namespace ClueDo.ModelsLogic
                 OnComplete(task);
             });
         }
+        /// <summary>
+        /// method to handle changes in the games collection in the database. This method is called when a 
+        /// change is detected in the games collection, and it updates the GamesList property with the new 
+        /// data from the snapshot and raises the OnGamesChanged event to notify the UI of the changes. 
+        /// </summary>
+        /// <param name="snapshot"></param>
+        /// <param name="error"></param>
         protected override void OnChange(IQuerySnapshot snapshot, Exception error)
         {
             OnComplete(snapshot);
         }
+        /// <summary>
+        /// method to handle the completion of tasks related to adding games and listening for changes in 
+        /// the games collection. This method is called when a task is completed, and it checks the result
+        /// of the task to determine whether the operation was successful or if there was an error. If the
+        /// task is completed successfully and a new game was added, it raises the OnGameAdded event to 
+        /// notify the UI of the new game. If there was an error, it retrieves the error message and 
+        /// displays it as a toast notification to the user. The method also sets the IsBusy property to
+        /// false to indicate that the operation has completed.
+        /// </summary>
+        /// <param name="task"></param>
         protected override void OnComplete(Task task)
         {
             IsBusy = false;
@@ -69,6 +93,13 @@ namespace ClueDo.ModelsLogic
                     Toast.Make(fbd.GetErrorMessage(task.Exception.Message), CommunityToolkit.Maui.Core.ToastDuration.Long, 14).Show();
                 });
         }
+        /// <summary>
+        /// method to handle the completion of the initial snapshot listener for the games collection. This
+        /// method is called when the initial snapshot is received, and it updates the GamesList property 
+        /// with the data from the snapshot and raises the OnGamesChanged event to notify the UI that the 
+        /// initial data has been loaded.
+        /// </summary>
+        /// <param name="qs"></param>
         protected override void OnComplete(IQuerySnapshot qs)
         {
             GamesList!.Clear();
