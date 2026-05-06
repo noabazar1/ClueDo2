@@ -10,6 +10,16 @@ using System.Windows.Input;
 
 namespace ClueDo.ViewModels
 {
+    /// <summary>
+    /// class that represents the view model for the game page, which is responsible for managing the state 
+    /// of the game and providing the necessary data and commands to the game page view. It interacts with 
+    /// the Game model to retrieve the current state of the game, such as the players, their positions, and
+    /// the status of the game, and it provides commands for rolling the dice, starting the game, and
+    /// handling incoming calls. It also listens to changes in the game state and updates the UI 
+    /// accordingly, and it handles the end of the game by showing a victory or defeat popup to the user.
+    /// Additionally, it listens to changes in the internet connectivity and shows an alert if the device 
+    /// is not connected to the internet when trying to perform actions that require an internet connection. 
+    /// </summary>
     public partial class GamePageVM : ObservableObject
     {
         private readonly Game game;
@@ -60,6 +70,16 @@ namespace ClueDo.ViewModels
                 return result;
             }
         }
+        /// <summary>
+        /// constructor for the GamePageVM class, which initializes the game model, the game board, and the
+        /// opponents grid. It also subscribes to the GameEnded event of the game model to handle the end 
+        /// of the game and to the ConnectivityChanged event of the connectivity model to listen to changes 
+        /// in the internet connectivity. It also initializes the ShowNoInternetCommand to show an alert 
+        /// when the device is not connected to the internet.
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="grdOpponentsGrid"></param>
+        /// <param name="board"></param>
         public GamePageVM(Game game, Grid grdOpponentsGrid, GameBoard board)
         {
             this.game = game;
@@ -69,19 +89,36 @@ namespace ClueDo.ViewModels
             ShowNoInternetCommand = new Command(async () => await ShowNoInternet());
             _connectivity.ConnectivityChanged += OnConnectivityChanged;
         }
+        /// <summary>
+        /// method that is called when the connectivity changes, which updates the IsConnected property and
+        /// shows an alert if the device is not connected to the internet and the alert is not already 
+        /// shown. This method is subscribed to the ConnectivityChanged event of the connectivity model in
+        /// the constructor, and it is called whenever the connectivity changes, such as when the device 
+        /// connects or disconnects from the internet. The alert is shown using the Shell.Current.DisplayAlert
+        /// method, which displays a popup alert to the user with a title and a message, and an OK button to
+        /// dismiss the alert. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnConnectivityChanged(object? sender, EventArgs e)
         {
             OnPropertyChanged(nameof(IsConnected));
             if (!IsConnected && !isAlertShown)
                 ShowNoInternetCommand.Execute(null);
         }
+        /// <summary>
+        /// method that shows an alert to the user indicating that they need to check their internet 
+        /// connection. This method is called when the user tries to perform an action that requires an
+        /// internet connection while the device is not connected to the internet, and it is also called 
+        /// when the connectivity changes and the device becomes disconnected from the internet. 
+        /// </summary>
+        /// <returns></returns>
         private async Task ShowNoInternet()
         {
             isAlertShown = true;
             await Shell.Current.DisplayAlert(Strings.NoInternet, Strings.CheckConnection, Strings.Ok);
             isAlertShown = false;
         }
-
         public void Initialize()
         {
             gameChangedHandler = OnGameChanged;
