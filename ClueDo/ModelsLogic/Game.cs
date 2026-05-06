@@ -510,13 +510,28 @@ namespace ClueDo.ModelsLogic
             bool isWin = roomCorrect && weaponCorrect && suspectCorrect;
             return (roomCorrect, weaponCorrect, suspectCorrect, isWin);
         }
-
+        /// <summary>
+        /// method to update the game status based on whether it is the current player's turn or not. This
+        /// method sets the CurrentStatus property of the _status object to Play if it is the current 
+        /// player's turn, or to Wait if it is not the current player's turn. This method is called 
+        /// whenever there is a change in the game state that may affect whose turn it is, such as after a
+        /// player makes a move, ends their turn, or when the game state is updated from the database.
+        /// </summary>
         protected override void UpdateStatus()
         {
             _status.CurrentStatus = IsMyTurn()
                 ? GameStatus.Status.Play
                 : GameStatus.Status.Wait;
         }
+        /// <summary>
+        /// method to handle changes in the game document from the Firestore database. This method is
+        /// called whenever there is a change in the game document, and it takes an optional 
+        /// IDocumentSnapshot and an optional Exception as parameters. If the snapshot is not null and 
+        /// there is no error, it converts the snapshot to a Game object and updates the properties of the 
+        /// current game instance with the values from the snapshot.
+        /// </summary>
+        /// <param name="snapshot"></param>
+        /// <param name="error"></param>
         protected override void OnChange(IDocumentSnapshot? snapshot, Exception? error)
         {
             if (snapshot != null && error == null)
@@ -553,6 +568,19 @@ namespace ClueDo.ModelsLogic
                 }
             }
         }
+        /// <summary>
+        /// method to handle a play on the game board. This method takes the row and column indices of the
+        /// target button as parameters, and it checks if the boardLogic is not null, if the Players list 
+        /// is not null and has players, and if the current player's index is valid. If these conditions are
+        /// met it gets the target button from the boardLogic using the provided row and column indices, 
+        /// and if the button is not null, it checks if the current player has moves left and if they can 
+        /// move to the target position. If so, it updates the player's position, moves left, and the board
+        /// colors accordingly, and it updates the game state in the Firestore database with the new move 
+        /// information. This method is called when a player clicks on a button on the game board to make a 
+        /// move, and it manages the logic for validating and processing that move. 
+        /// </summary>
+        /// <param name="rowIndex"></param>
+        /// <param name="columnIndex"></param>
         protected override void Play(int rowIndex, int columnIndex)
         {
             if (boardLogic != null && Players?.PlayersList != null &&
@@ -591,6 +619,15 @@ namespace ClueDo.ModelsLogic
                 }
             }
         }
+        /// <summary>
+        /// method to update the game state in the Firestore database after a move is made. This method 
+        /// creates a dictionary containing the current turn index and the players list, and it calls the 
+        /// UpdateFields method of the FirestoreDatabase class, passing the collection name, the game ID, 
+        /// the dictionary of fields to update and the OnComplete callback to handle the completion of the 
+        /// update operation. This method is called after a player makes a move on the board to ensure that
+        /// the game state in the database is updated with the new turn information and the updated players
+        /// list, allowing other players to see the changes in real-time through their snapshot listeners.
+        /// </summary>
         protected override void UpdateFbMove()
         {
             Dictionary<string, object> dict = new()
@@ -600,6 +637,14 @@ namespace ClueDo.ModelsLogic
             };
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
+        /// <summary>
+        /// method to draw a player on the game board. This method takes a Player object as a parameter, and
+        /// it checks if the boardLogic is not null. If it is not null, it gets the button corresponding to
+        /// the player's position using the GetButton method of the boardLogic, and if the button is not 
+        /// null, it sets the background color of the button to the player's color and assigns the button to
+        /// the player's Button property.
+        /// </summary>
+        /// <param name="player"></param>
         private void DrawPlayer(Player player)
         {
             if (boardLogic != null)
@@ -612,6 +657,15 @@ namespace ClueDo.ModelsLogic
                 }
             }
         }
+        /// <summary>
+        /// method to update the game state in the Firestore database after a guest user joins the game. This method
+        /// creates a dictionary containing the current game state information, and it calls the UpdateFields method
+        /// of the FirestoreDatabase class, passing the collection name, the game ID, the dictionary of fields to
+        /// update and the OnComplete callback to handle the completion of the update operation. This method is called
+        /// when a guest user joins the game to ensure that the game state in the database is updated with the new
+        /// player information, allowing other players to see the changes in real-time through their snapshot listeners.
+        /// </summary>
+        /// <param name="OnComplete"></param>
         private void UpdateFbJoinGame(Action<Task> OnComplete)
         {
             Dictionary<string, object> dict = new()
@@ -622,6 +676,15 @@ namespace ClueDo.ModelsLogic
             action = Actions.Changed;
             fbd.UpdateFields(Keys.GamesCollection, Id, dict, OnComplete);
         }
+        /// <summary>
+        /// method to handle the completion of an asynchronous operation related to updating the game state
+        /// in the Firestore database. This method takes a Task object as a parameter, and it checks if the
+        /// task was completed successfully. If it was successful, it checks the value of the action 
+        /// variable to determine whether to raise the OnGameDeleted event or the OnGameChanged event. This
+        /// method is used as a callback for various database operations to ensure that the UI is updated 
+        /// accordingly based on the changes made to the game state in the database. 
+        /// </summary>
+        /// <param name="task"></param>
         private void OnComplete(Task task)
         {
             if (task.IsCompletedSuccessfully)
@@ -630,6 +693,20 @@ namespace ClueDo.ModelsLogic
                 else
                     OnGameChanged?.Invoke(this, EventArgs.Empty);
         }
+        /// <summary>
+        /// method to check if a player can move to a target position on the game board. This method takes
+        /// a Player object and the target row and column indices as parameters, and it calculates the 
+        /// absolute difference in rows and columns between the player's current position and the target 
+        /// position. It returns true if the sum of the absolute differences in rows and columns is equal 
+        /// to 1, which means that the target position is adjacent to the player's current position, 
+        /// allowing for a valid move. Otherwise, it returns false. This method is used to validate player
+        /// moves on the game board, ensuring that players can only move to adjacent positions according to
+        /// the rules of the game.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="targetRow"></param>
+        /// <param name="targetCol"></param>
+        /// <returns></returns>
         private static bool CanMoveTo(Player player, int targetRow, int targetCol)
         {
             int dRow = Math.Abs(player.Position.Row - targetRow);
