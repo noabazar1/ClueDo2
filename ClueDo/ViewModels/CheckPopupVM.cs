@@ -3,6 +3,7 @@ using System.Windows.Input;
 
 namespace ClueDo.ViewModels
 {
+
     public partial class CheckPopupVM(bool roomCorrect, bool weaponCorrect, bool suspectCorrect, Action closeAction) : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
     {
         public string RoomMark { get; } = GetMark(roomCorrect);

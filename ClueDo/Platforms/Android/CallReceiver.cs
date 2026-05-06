@@ -18,6 +18,16 @@ namespace ClueDo.Platforms.Android
     [IntentFilter([TelephonyManager.ActionPhoneStateChanged])]
     public class CallReceiver : BroadcastReceiver
     {
+        /// <summary>
+        /// method that is called when the CallReceiver receives a broadcast intent. It checks the state of 
+        /// the phone call by retrieving the ExtraState extra from the intent. If the state is
+        /// ExtraStateRinging (which indicates that a call is incoming), it sends a message using the 
+        /// WeakReferenceMessenger to notify the application that a call has been received. The message 
+        /// sent is an instance of AppMessage with the value set to true, indicating that a call is 
+        /// currently ringing.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="intent"></param>
         public override void OnReceive(Context? context, Intent? intent)
         {
             string? state = intent?.GetStringExtra(TelephonyManager.ExtraState);
