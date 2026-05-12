@@ -20,7 +20,6 @@ namespace ClueDo.Models
         public int MovesLeft { get; set; }
         public int DiceValue { get; set; }
         public bool IsInRoom { get; set; }
-        public bool IsEliminated { get; set; }
         [Ignored]
         public Color Color => playerColors[Index];
         /// <summary>

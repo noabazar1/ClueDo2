@@ -56,8 +56,6 @@ namespace ClueDo.ModelsLogic
             };
             currentGame.SetDocument(task =>
             {
-                if (task.IsCompletedSuccessfully)
-                    currentGame.EnsureAnswerGenerated(myUserId);
                 OnComplete(task);
             });
         }

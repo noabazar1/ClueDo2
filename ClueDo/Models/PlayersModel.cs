@@ -29,16 +29,6 @@ namespace ClueDo.Models
         /// <param name="p"></param>
         public abstract void Add(Player p);
         /// <summary>
-        /// abstract method to get the name of a player based on their index in the players list. 
-        /// This method takes an integer index as a parameter, and it returns the name of the player at 
-        /// that index in the players list. The implementation of this method will depend on how the 
-        /// player's information is stored in the game, and how the player's name is retrieved from the 
-        /// player's information.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        public abstract string GetPlayerName(int index);
-        /// <summary>
         /// abstract method to check if it's the opponent's turn based on their index in the players list.
         /// This method takes an integer index as a parameter, and it returns a boolean value indicating 
         /// whether it's the opponent's turn or not. 
@@ -46,12 +36,5 @@ namespace ClueDo.Models
         /// <param name="opponentIndex"></param>
         /// <returns></returns>
         public abstract bool IsOpponentTurn(int opponentIndex);
-        /// <summary>
-        /// abstract method to set the next player in the game. This method is called when a player 
-        /// finishes their turn, and it is used to update the next player in the game. The implementation 
-        /// of this method will depend on how the players are managed in the game, and how the next player 
-        /// is determined based on the current player's index and the total number of players in the game. 
-        /// </summary>
-        public abstract void SetNextPlayer();
     }
 }

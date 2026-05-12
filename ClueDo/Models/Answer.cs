@@ -10,26 +10,14 @@
         public string? Weapon { get; set; }
         public string? Suspect { get; set; }
         /// <summary>
-        /// constructor for the Answer class, which initializes the properties to null.
-        /// This constructor is used when creating an Answer object without specifying the values,
-        /// and the values will be set later using the Generate method.
+        /// constructor for the Answer class. This constructor is used when creating an Answer object and 
+        /// generating a random answer for the game.
         /// </summary>
-        public Answer() { }
-        /// <summary>
-        /// method to generate a random answer for the game, by randomly selecting a room, a weapon and
-        /// a suspect from the predefined lists in the AnswerData class.
-        /// </summary>
-        /// <returns>
-        /// a random Answer object
-        /// </returns>
-        public static Answer Generate()
+        public Answer() 
         {
-            return new Answer
-            {
-                Room = AnswerData.Rooms[rnd.Next(AnswerData.Rooms.Count)],
-                Weapon = AnswerData.Weapons[rnd.Next(AnswerData.Weapons.Count)],
-                Suspect = AnswerData.Suspects[rnd.Next(AnswerData.Suspects.Count)]
-            };
+            Room = AnswerData.Rooms[rnd.Next(AnswerData.Rooms.Count)];
+            Weapon = AnswerData.Weapons[rnd.Next(AnswerData.Weapons.Count)];
+            Suspect = AnswerData.Suspects[rnd.Next(AnswerData.Suspects.Count)];
         }
     }
 }

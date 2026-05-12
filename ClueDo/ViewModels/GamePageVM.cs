@@ -190,7 +190,6 @@ namespace ClueDo.ViewModels
                 game.IsStarted = true;
                 game.SetDocument(_ => { });
                 OnPropertyChanged(nameof(IsStartButtonVisible));
-
             }
         }
         /// <summary>
@@ -239,6 +238,7 @@ namespace ClueDo.ViewModels
             OnPropertyChanged(nameof(IsMyTurn));
             OnPropertyChanged(nameof(StatusMessage));
             OnPropertyChanged(nameof(DiceResult));
+            OnPropertyChanged(nameof(IsStarted));
             RollDiceCommand.NotifyCanExecuteChanged();
         }
         /// <summary>

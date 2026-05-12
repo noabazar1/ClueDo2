@@ -82,7 +82,6 @@ namespace ClueDo.ModelsLogic
             if (start > 0)
             {
                 end = errMessage.IndexOf(Keys.ErrorsKey, start);
-
                 string title = errMessage[(start + Keys.MessageKey.Length)..end]
                     .Replace(Keys.Apostrophe, string.Empty)
                     .Replace(Keys.Colon, string.Empty)

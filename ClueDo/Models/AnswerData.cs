@@ -7,15 +7,18 @@
     {
         public static readonly List<string> Rooms =
         [
-            Strings.Kitchen, Strings.Ballroom, Strings.Study, Strings.Library
+            Strings.Kitchen, Strings.Ballroom, Strings.Study, Strings.Library, Strings.BilliardRoom, 
+            Strings.Conservatory, Strings.Hall, Strings.Lounge, Strings.DiningRoom
         ];
         public static readonly List<string> Weapons =
         [
-            Strings.Knife, Strings.Rope, Strings.Candlestick, Strings.LeadPipe, Strings.Revolver, Strings.Wrench
+            Strings.Knife, Strings.Rope, Strings.Candlestick, Strings.LeadPipe, Strings.Revolver, 
+            Strings.Wrench
         ];
         public static readonly List<string> Suspects =
         [
-            Strings.MissScarlet, Strings.ColonelMustard, Strings.ProfessorPlum, Strings.MrsWhite, Strings.ReverendGreen, Strings.MrsPeacock 
+            Strings.MissScarlet, Strings.ColonelMustard, Strings.ProfessorPlum, Strings.MrsWhite, 
+            Strings.ReverendGreen, Strings.MrsPeacock 
         ];
     }
 }

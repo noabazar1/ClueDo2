@@ -51,24 +51,6 @@ namespace ClueDo.ModelsLogic
             Players.TotalPlayers = 0;
         }
         /// <summary>
-        /// method to ensure that the answer for the game is generated. This method checks if the answer is
-        /// null, if the current user is the host, and if the game ID is not empty. If these conditions are
-        /// met, it generates a new answer using the Answer.Generate() method, and it updates the Answer 
-        /// field in the Firestore database using the UpdateField method of the FirestoreDatabase class. 
-        /// The OnComplete callback is passed to handle the completion of the update operation. This method
-        /// is called to ensure that the answer for the game is generated and stored in the database when 
-        /// the host starts the game.
-        /// </summary>
-        /// <param name="myUserId"></param>
-        public override void EnsureAnswerGenerated(string myUserId)
-        {
-            if (Answer == null && myUserId == HostId && !string.IsNullOrEmpty(Id))
-            {
-                Answer = Answer.Generate();
-                fbd.UpdateField(Keys.GamesCollection, Id, nameof(Answer), Answer, OnComplete);
-            }
-        }
-        /// <summary>
         /// method to add a player to the game. This method takes the name of the player as a parameter, 
         /// and it creates a new Player object with the provided name and an index based on the current
         /// number of players in the game. The new player is added to the Players list, and the player's 
@@ -235,18 +217,6 @@ namespace ClueDo.ModelsLogic
         public override void DeleteDocument(Action<Task> OnComplete)
         {
             fbd.DeleteDocument(Keys.GamesCollection, Id, OnComplete);
-        }
-        /// <summary>
-        /// method to place a player on the board at the beginning of the game. This method takes the player's
-        /// index, and the row and column indices as parameters, and it updates the position of the player in
-        /// the Players list based on the provided row and column indices.
-        /// </summary>
-        /// <param name="playerIndex"></param>
-        /// <param name="row"></param>
-        /// <param name="col"></param>
-        public override void PlacePlayer(int playerIndex, int row, int col)
-        {
-            Players.PlayersList[playerIndex].Position = new Position(row, col);
         }
         /// <summary>
         /// method to initialize the game board. This method takes a Grid object as a parameter, and it 
@@ -433,7 +403,6 @@ namespace ClueDo.ModelsLogic
         {
             Player me = Players.PlayersList[Players.MyIndex];
             Players.PlayersList.Remove(me);
-            me.IsEliminated = true;
             if (Players.MyIndex >= Players.PlayersList.Count)
                 Players.MyIndex = 0;
             if (Players.PlayersList.Count == 1)
@@ -592,15 +561,14 @@ namespace ClueDo.ModelsLogic
                 if (targetBtn != null)
                 {
                     Player currentPlayer = Players.PlayersList[Players.MyIndex];
-                    if (currentPlayer.MovesLeft > 0 && Game.CanMoveTo(currentPlayer, rowIndex, columnIndex))
+                    if (currentPlayer.MovesLeft > 0 && CanMoveTo(currentPlayer, rowIndex, columnIndex))
                     {
-                        if (currentPlayer.Button != null)
-                            currentPlayer.Button.BackgroundColor = Colors.Transparent;
+                        IndexButton? oldButton = currentPlayer.Button;
+                        oldButton?.RestoreColor();
                         currentPlayer.Button = targetBtn;
                         currentPlayer.Position = new Position(rowIndex, columnIndex);
                         currentPlayer.MovesLeft--;
-                        boardLogic.ResetBoardColors();
-                        DrawAllPlayers();
+                        targetBtn.BackgroundColor = currentPlayer.Color;
                         boardLogic.MyTurn();
                         if (currentPlayer.MovesLeft == 0)
                         {
@@ -609,12 +577,6 @@ namespace ClueDo.ModelsLogic
                                 CurrentTurnIndex = 0;
                         }
                         UpdateFbMove();
-                        fbd.UpdateField(
-                            Keys.GamesCollection,
-                            Id,
-                            nameof(Players),
-                            Players,
-                            OnComplete);
                     }
                 }
             }
@@ -707,11 +669,15 @@ namespace ClueDo.ModelsLogic
         /// <param name="targetRow"></param>
         /// <param name="targetCol"></param>
         /// <returns></returns>
-        private static bool CanMoveTo(Player player, int targetRow, int targetCol)
+        private bool CanMoveTo(Player player, int targetRow, int targetCol)
         {
+            bool answer = false;
             int dRow = Math.Abs(player.Position.Row - targetRow);
             int dCol = Math.Abs(player.Position.Column - targetCol);
-            return dRow + dCol == 1;
+            if (!Players.PlayersList.Any(p => p.Position.Row == targetRow && p.Position.Column == targetCol)) 
+                if (dRow + dCol == 1)
+                answer = true;
+            return answer;
         }
     }
 }

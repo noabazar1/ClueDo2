@@ -55,7 +55,7 @@ namespace ClueDo.Models
         public string DiceResult { get; set; } = string.Empty;
         public Players Players { get; set; } = new();
         public string HostId { get; set; } = string.Empty;
-        public Answer? Answer { get; set; }
+        public Answer? Answer { get; set; } = new Answer();
         public bool IsStarted { get; set; }
         public bool IsGameOver { get; set; }
         public string? WinnerName { get; set; }
@@ -207,12 +207,6 @@ namespace ClueDo.Models
         /// <returns></returns>
         public abstract bool CheckSuspect(string suspect);
         /// <summary>
-        /// abstract method for ensuring that the answer for the game has been generated, it takes the user's
-        /// ID as a parameter and returns a boolean indicating whether the answer has been generated or not.
-        /// </summary>
-        /// <param name="myUserId"></param>
-        public abstract void EnsureAnswerGenerated(string myUserId);
-        /// <summary>
         /// abstract method for drawing all the players on the game board, it will be called to update the
         /// UI. it will be implemented in the Game class to draw all the players on the game board based
         /// on their current positions and colors. 
@@ -227,16 +221,6 @@ namespace ClueDo.Models
         /// </summary>
         /// <param name="OnComplete"></param>
         public abstract void UpdateGuestUser(Action<Task> OnComplete);
-        /// <summary>
-        /// abstract method for placing a player on the game board, it takes the player's index, row, and
-        /// column as parameters. The method will be implemented in the Game class to update the player's 
-        /// position on the game board based on the provided row and column coordinates, at the beginning 
-        /// of the game when players are initially placed on the board.
-        /// </summary>
-        /// <param name="playerIndex"></param>
-        /// <param name="row"></param>
-        /// <param name="col"></param>
-        public abstract void PlacePlayer(int playerIndex, int row, int col);
         /// <summary>
         /// abstract method for initializing the game board, it takes a Grid as a parameter. The method
         /// will be implemented in the Game class to set up the game board UI by populating the provided

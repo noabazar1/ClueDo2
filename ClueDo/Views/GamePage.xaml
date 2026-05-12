@@ -17,6 +17,7 @@
             FontFamily="ClueFont"
             HorizontalOptions="Center"
             Text="{Binding StatusMessage}"
+            IsVisible="{Binding IsStarted}"
             TextColor="White" />
         <Grid
     x:Name="BoardContainer"

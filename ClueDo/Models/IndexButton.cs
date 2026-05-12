@@ -26,11 +26,11 @@
         /// an IndexButton object with specified row and column indices.
         /// </summary>
         /// <param name="row"></param>
-        /// <param name="columnIndex"></param>
-        public IndexButton(int row, int columnIndex)
+        /// <param name="column"></param>
+        public IndexButton(int row, int column)
         {
             Row = row;
-            Column = columnIndex;
+            Column = column;
             BackgroundColor = baseColor;
             BorderWidth = 0.5;
             BorderColor = Colors.Black;
