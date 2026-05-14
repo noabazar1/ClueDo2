@@ -11,7 +11,6 @@ public partial class ChallengePopup : Popup
         InitializeComponent();
         vm = new ChallengePopupVM(this);
         BindingContext = vm;
-
         this.Closed += (_, __) => vm.Cleanup();
     }
 }

@@ -87,7 +87,6 @@ namespace ClueDo.ViewModels
         private async void OnAuthComplete(object? sender, bool success)
         {
             OnPropertyChanged(nameof(IsBusy));
-
             if (success)
             {
                 await Shell.Current.GoToAsync(Keys.MainArea);

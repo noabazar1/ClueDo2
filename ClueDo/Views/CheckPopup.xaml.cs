@@ -8,7 +8,6 @@ public partial class CheckPopup : Popup
     public CheckPopup(bool roomCorrect, bool weaponCorrect, bool suspectCorrect)
     {
         InitializeComponent();
-
         BindingContext = new CheckPopupVM(roomCorrect, weaponCorrect, suspectCorrect, () => Close());
     }
 }

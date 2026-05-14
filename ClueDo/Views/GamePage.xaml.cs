@@ -4,26 +4,20 @@ using ClueDo.ViewModels;
 using CommunityToolkit.Maui.Views;
 
 namespace ClueDo.Views;
+
 public partial class GamePage : ContentPage
 {
     private readonly GamePageVM? vm;
     private readonly GameBoard? board;
-
     public GamePage(Game game)
     {
         InitializeComponent();
-
         board = new GameBoard();
         board.Build(grdBoard, game.OnButtonClicked);
         game.InitBoard(grdBoard);
         game.DoorClicked += OnDoorClicked;
         vm = new GamePageVM(game, grdOponnents, board);
         BindingContext = vm;
-        vm.Initialize();
-    }
-    public GamePage()
-    {
-        InitializeComponent ();
     }
     private async void OnDoorClicked(string roomName)
     {
@@ -35,12 +29,9 @@ public partial class GamePage : ContentPage
         base.OnAppearing();
         vm?.Initialize();
     }
-
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-
-        if (BindingContext is GamePageVM vm)
-            vm.Cleanup();
+        vm?.Cleanup();
     }
 }

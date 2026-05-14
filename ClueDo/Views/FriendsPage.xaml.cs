@@ -14,10 +14,7 @@ public partial class FriendsPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-
-        FriendsPageVM? vm = BindingContext as FriendsPageVM;
-
-        if (vm != null)
+        if (BindingContext is FriendsPageVM vm)
         {
             await vm.LoadFriends();
         }

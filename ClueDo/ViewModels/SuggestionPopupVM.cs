@@ -34,16 +34,8 @@ namespace ClueDo.ViewModels
         {
             Room = room;
             this.popup = popup;
-            Weapons =
-            [
-                Strings.Knife, Strings.Rope, Strings.Candlestick, Strings.LeadPipe, Strings.Revolver,
-                Strings.Wrench
-            ];
-            Suspects =
-            [
-                Strings.MissScarlet, Strings.ColonelMustard, Strings.ProfessorPlum,
-                Strings.MrsWhite, Strings.ReverendGreen, Strings.MrsPeacock
-            ];
+            Weapons = [.. AnswerData.Weapons];
+            Suspects = [.. AnswerData.Suspects];
             ConfirmCommand = new Command(OnConfirm);
         }
         /// <summary>

@@ -25,9 +25,7 @@ namespace ClueDo.ViewModels
         private readonly Game game;
         private readonly GameBoard grdBoard;
         private readonly OpponentsGrid grdOponnents;
-        private readonly List<Label> lstOponnentsLabels = [];
         private readonly ModelsLogic.Connectivity _connectivity = new();
-        private readonly IFriendsService friendsService = new FriendsService();
         private bool popupOpen = false;
         private EventHandler? gameChangedHandler;
         private bool isAlertShown = false;
@@ -83,8 +81,8 @@ namespace ClueDo.ViewModels
         public GamePageVM(Game game, Grid grdOpponentsGrid, GameBoard board)
         {
             this.game = game;
-            this.grdBoard = board;
-            this.grdOponnents = new OpponentsGrid(grdOpponentsGrid, game);
+            grdBoard = board;
+            grdOponnents = new OpponentsGrid(grdOpponentsGrid, game);
             game.GameEnded += OnGameEnded;
             ShowNoInternetCommand = new Command(async () => await ShowNoInternet());
             _connectivity.ConnectivityChanged += OnConnectivityChanged;

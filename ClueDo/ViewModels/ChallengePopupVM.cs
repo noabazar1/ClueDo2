@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using System.Windows.Input;
 
 namespace ClueDo.ViewModels;
 /// <summary>
@@ -19,6 +20,7 @@ public partial class ChallengePopupVM : CommunityToolkit.Mvvm.ComponentModel.Obs
     private string timerText = Strings.TimerText;
     [ObservableProperty]
     private string counterText = Strings.CounterText;
+    public ICommand ClickCommand { get; }
     /// <summary>
     /// constructor for the ChallengePopupVM class. It takes a Popup object as a parameter and registers a
     /// message handler using the WeakReferenceMessenger to listen for messages of type AppMessage. When a
@@ -45,15 +47,13 @@ public partial class ChallengePopupVM : CommunityToolkit.Mvvm.ComponentModel.Obs
                 TimerText = time.ToString(Keys.TimerFormat);
             }
         });
+        ClickCommand = new Command(Click);
     }
     /// <summary>
     /// method that is called when the user clicks a button in the popup. It increments the count variable,
     /// updates the CounterText property with the new count value formatted as a string, and checks if the 
-    /// count has reached 20. If the count is equal to 20, it closes the popup. This method is decorated
-    /// with the RelayCommand attribute, which allows it to be used as a command in the view for handling
-    /// user interactions. 
+    /// count has reached 20. If the count is equal to 20, it closes the popup.
     /// </summary>
-    [RelayCommand]
     private void Click()
     {
         count++;
