@@ -89,7 +89,7 @@ namespace ClueDo.ModelsLogic
         /// </summary>
         public override void JoinGame()
         {
-            if (Players.PlayersList.Count > 0)
+            if (Players.PlayersList.Count > 0 && !IsFull)
             {
                 int newIndex = Players.PlayersList.Count;
                 Players.MyIndex = newIndex;
@@ -302,8 +302,6 @@ namespace ClueDo.ModelsLogic
                     int total = dice.Die1 + dice.Die2;
                     me.DiceValue = total;
                     me.MovesLeft = total;
-                    UpdateStatus();
-                    UpdateFbMove();
                     OnGameChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
@@ -671,13 +669,12 @@ namespace ClueDo.ModelsLogic
         /// <returns></returns>
         private bool CanMoveTo(Player player, int targetRow, int targetCol)
         {
-            bool answer = false;
             int dRow = Math.Abs(player.Position.Row - targetRow);
             int dCol = Math.Abs(player.Position.Column - targetCol);
-            if (!Players.PlayersList.Any(p => p.Position.Row == targetRow && p.Position.Column == targetCol)) 
+            if (!Players.PlayersList.Any(p => p.Position.Row == targetRow && p.Position.Column == targetCol))
                 if (dRow + dCol == 1)
-                answer = true;
-            return answer;
+                    return true;
+            return false;
         }
     }
 }

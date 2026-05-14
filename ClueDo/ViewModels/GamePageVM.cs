@@ -215,8 +215,6 @@ namespace ClueDo.ViewModels
                     object? result = await Shell.Current.CurrentPage.ShowPopupAsync(popup);
                     bool success = result is bool b && b;
                     bool stillInGame = game.HandleIncomingCallResult(success);
-                    if (!stillInGame)
-                        await Shell.Current.GoToAsync(Keys.MainArea);
                     popupOpen = false;
                 });
             }

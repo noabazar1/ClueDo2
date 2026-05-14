@@ -58,7 +58,7 @@
             CornerRadius = 0;
         }
         /// <summary>
-        /// method to restore the background color of the button to the base color, which is transparent. 
+        /// method to restore the background color of the button to the base color. 
         /// </summary>
         public void RestoreColor()
         {

@@ -31,7 +31,6 @@ namespace ClueDo.Platforms.Android
         public override void OnReceive(Context? context, Intent? intent)
         {
             string? state = intent?.GetStringExtra(TelephonyManager.ExtraState);
-
             if (state == TelephonyManager.ExtraStateRinging)
             {
                 WeakReferenceMessenger.Default.Send(
