@@ -15,12 +15,10 @@ namespace ClueDo
             base.OnAppearing();
             mpVM.AddSnapshotListener();
         }
-
         protected override void OnDisappearing()
         {
             mpVM.RemoveSnapshotListener();
             base.OnDisappearing();
         }
     }
-
 }

@@ -23,7 +23,7 @@ namespace ClueDo.ViewModels
     public partial class GamePageVM : ObservableObject
     {
         private readonly Game game;
-        private readonly GameBoard grdBoard;
+        private readonly GameBoard board;
         private readonly OpponentsGrid grdOponnents;
         private readonly ModelsLogic.Connectivity _connectivity = new();
         private bool popupOpen = false;
@@ -77,14 +77,21 @@ namespace ClueDo.ViewModels
         /// </summary>
         /// <param name="game"></param>
         /// <param name="grdOpponentsGrid"></param>
-        /// <param name="board"></param>
-        public GamePageVM(Game game, Grid grdOpponentsGrid, GameBoard board)
+        /// <param name="grdBoard"></param>
+        public GamePageVM(Game game, Grid grdBoard, Grid grdOpponentsGrid)
         {
             this.game = game;
-            grdBoard = board;
+            board = new GameBoard();
+            board.Build(grdBoard, game.OnButtonClicked);
+            game.InitBoard(grdBoard);
+            game.DoorClicked += async roomName =>
+            {
+                await HandleDoorAsync(roomName);
+            };
             grdOponnents = new OpponentsGrid(grdOpponentsGrid, game);
             game.GameEnded += OnGameEnded;
-            ShowNoInternetCommand = new Command(async () => await ShowNoInternet());
+            ShowNoInternetCommand =
+                new Command(async () => await ShowNoInternet());
             _connectivity.ConnectivityChanged += OnConnectivityChanged;
         }
         /// <summary>
@@ -247,7 +254,7 @@ namespace ClueDo.ViewModels
         /// </summary>
         private void UpdateGameGrid()
         {
-            grdBoard.DrawPlayers(game);
+            board.DrawPlayers(game);
         }
         /// <summary>
         /// method that is called when the game is deleted, which navigates back to the previous page and 

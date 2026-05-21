@@ -7,31 +7,22 @@ namespace ClueDo.Views;
 
 public partial class GamePage : ContentPage
 {
-    private readonly GamePageVM? vm;
-    private readonly GameBoard? board;
+    private readonly GamePageVM vm;
     public GamePage(Game game)
     {
         InitializeComponent();
-        board = new GameBoard();
-        board.Build(grdBoard, game.OnButtonClicked);
-        game.InitBoard(grdBoard);
-        game.DoorClicked += OnDoorClicked;
-        vm = new GamePageVM(game, grdOponnents, board);
+
+        vm = new GamePageVM(game, grdBoard, grdOponnents);
         BindingContext = vm;
-    }
-    private async void OnDoorClicked(string roomName)
-    {
-        if (BindingContext is GamePageVM vm)
-            await vm.HandleDoorAsync(roomName);
     }
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        vm?.Initialize();
+        vm.Initialize();
     }
     protected override void OnDisappearing()
     {
         base.OnDisappearing();
-        vm?.Cleanup();
+        vm.Cleanup();
     }
 }

@@ -19,5 +19,4 @@ public partial class FriendsPage : ContentPage
             await vm.LoadFriends();
         }
     }
-
 }

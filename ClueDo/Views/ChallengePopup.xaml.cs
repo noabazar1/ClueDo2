@@ -5,7 +5,6 @@ namespace ClueDo.Views;
 public partial class ChallengePopup : Popup
 {
     private readonly ChallengePopupVM vm;
-
     public ChallengePopup()
     {
         InitializeComponent();
