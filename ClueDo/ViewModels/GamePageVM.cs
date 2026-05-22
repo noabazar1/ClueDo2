@@ -1,6 +1,5 @@
 ﻿using ClueDo.Models;
 using ClueDo.ModelsLogic;
-using ClueDo.Services;
 using ClueDo.Views;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Views;

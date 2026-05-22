@@ -11,7 +11,6 @@ public partial class GamePage : ContentPage
     public GamePage(Game game)
     {
         InitializeComponent();
-
         vm = new GamePageVM(game, grdBoard, grdOponnents);
         BindingContext = vm;
     }
