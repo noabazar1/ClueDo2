@@ -21,6 +21,7 @@ namespace ClueDo.ViewModels
         public ICommand AddFriendCommand { get; }
         public ICommand LoadFriendsCommand { get; }
         public ICommand ShowNoInternetCommand { get; }
+        public ICommand DeleteFriendCommand { get; }
         public bool IsConnected => _connectivity.IsConnected;
         /// <summary>
         /// constructor for the FriendsPageVM class, which initializes the services, the contacts 
@@ -40,6 +41,7 @@ namespace ClueDo.ViewModels
             LoadFriendsCommand = new Command(async () => await LoadFriends());
             _connectivity.ConnectivityChanged += OnConnectivityChanged;
             ShowNoInternetCommand = new Command(async () => await ShowNoInternet());
+            DeleteFriendCommand = new Command<FriendContact>(async (friend) => await DeleteFriend(friend));
         }
         /// <summary>
         /// method that loads the user's friends list by calling the GetFriendsAsync method of the 
@@ -104,6 +106,13 @@ namespace ClueDo.ViewModels
             isAlertShown = true;
             await Shell.Current.DisplayAlert(Strings.NoInternet, Strings.CheckConnection, Strings.Ok);
             isAlertShown = false;
+        }
+        private async Task DeleteFriend(FriendContact friend)
+        {
+            if (friend == null)
+                return;
+            await _friendsService.DeleteFriendAsync(friend.Id!);
+            Contacts.Remove(friend);
         }
     }
 }
