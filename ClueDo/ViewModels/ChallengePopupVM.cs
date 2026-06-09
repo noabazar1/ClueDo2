@@ -59,7 +59,7 @@ public partial class ChallengePopupVM : CommunityToolkit.Mvvm.ComponentModel.Obs
         count++;
         CounterText = string.Format(Strings.CounterFormat, count);
         if (count == 20)
-            popup.Close();
+            popup.Close(true);
     }
     /// <summary>
     /// method that is called to clean up resources when the popup is closed. It unregisters all message

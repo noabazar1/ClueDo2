@@ -222,6 +222,10 @@ namespace ClueDo.ViewModels
                     bool success = result is bool b && b;
                     bool stillInGame = game.HandleIncomingCallResult(success);
                     popupOpen = false;
+                    if (!stillInGame)
+                    {
+                        await Shell.Current.GoToAsync(Keys.MainArea);
+                    }
                 });
             }
         }

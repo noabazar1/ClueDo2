@@ -403,6 +403,8 @@ namespace ClueDo.ModelsLogic
             Players.PlayersList.Remove(me);
             if (Players.MyIndex >= Players.PlayersList.Count)
                 Players.MyIndex = 0;
+            if (CurrentTurnIndex >= Players.PlayersList.Count)
+                CurrentTurnIndex = 0;
             if (Players.PlayersList.Count == 1)
             {
                 WinnerName = Players.PlayersList[0].Name;
@@ -411,6 +413,7 @@ namespace ClueDo.ModelsLogic
             Dictionary<string, object> dict = new()
             {
                 { nameof(Players), Players },
+                { nameof(CurrentTurnIndex), CurrentTurnIndex },
                 { nameof(IsGameOver), IsGameOver },
 
             };
@@ -506,12 +509,13 @@ namespace ClueDo.ModelsLogic
                 Game? game = snapshot.ToObject<Game>();
                 if (game != null)
                 {
-                    int myIndex = Players.MyIndex;
+                    string myName = MyName;
+
                     Players = game.Players;
-                    CurrentPlayers = Players.PlayersList.Count;
-                    if (Players.MyIndex >= Players.PlayersList.Count)
-                        Players.MyIndex = Players.PlayersList.Count - 1;
-                    Players.MyIndex = myIndex;
+
+                    Players.MyIndex = Players.PlayersList.FindIndex(
+                        p => p.Name == myName
+                    );
                     IsStarted = game.IsStarted;
                     IsHostTurn = game.IsHostTurn;
                     NextPlay = game.NextPlay;

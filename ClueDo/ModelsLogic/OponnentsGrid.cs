@@ -52,6 +52,11 @@ namespace ClueDo.ModelsLogic
         /// </summary>
         public override void DisplayOponnentsNames()
         {
+            foreach (Label lbl in lstOponnentsLabels)
+            {
+                lbl.Text = string.Empty;
+                lbl.BackgroundColor = Colors.Transparent;
+            }
             int lblIndex = 0;
             int myIndex = game.Players.MyIndex;
             for (int i = 0; i < game.Players.PlayersList.Count; i++)
