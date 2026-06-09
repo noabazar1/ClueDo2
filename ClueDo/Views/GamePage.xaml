@@ -7,8 +7,18 @@
     Title=""
     x:DataType="vm:GamePageVM"
     BackgroundImageSource="background.jpg"
-    Shell.TabBarIsVisible="False">
+    Shell.TabBarIsVisible="False"
+    Shell.NavBarIsVisible="False">
     <VerticalStackLayout BackgroundColor="Transparent">
+        <Button Text="←"
+                FontSize="40"
+                Padding="0,-18,0,0"
+                HorizontalOptions="Start"
+                WidthRequest="70"
+                HeightRequest="35"
+                Margin="10"
+                BackgroundColor="#003c00"
+                Command="{Binding ExitCommand}"/>
         <Grid 
             x:Name="grdOponnents" 
             HorizontalOptions="Center"/>

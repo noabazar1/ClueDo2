@@ -29,6 +29,7 @@ namespace ClueDo.ViewModels
         private EventHandler? gameChangedHandler;
         private bool isAlertShown = false;
         public ICommand ShowNoInternetCommand { get; }
+        public ICommand ExitCommand { get; }
         public bool IsConnected => _connectivity.IsConnected;
         public string MyName => game.MyName;
         public bool IsMyTurn => game.IsMyTurn();
@@ -91,6 +92,11 @@ namespace ClueDo.ViewModels
             game.GameEnded += OnGameEnded;
             ShowNoInternetCommand =
                 new Command(async () => await ShowNoInternet());
+            ExitCommand = new Command(async () =>
+            {
+                game.EliminateCurrentPlayer();
+                await Shell.Current.GoToAsync(Keys.MainArea);
+            });
             _connectivity.ConnectivityChanged += OnConnectivityChanged;
         }
         /// <summary>
