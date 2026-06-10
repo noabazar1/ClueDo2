@@ -33,7 +33,7 @@
                                 Text="{x:Static m:Keys.X}"
                                 WidthRequest="35"
                                 HeightRequest="35"
-                                Padding="0"
+                                Padding="0,-5,0,0"
                                 FontSize="24"
                                 BorderColor="White"
                                 BorderWidth="1"
